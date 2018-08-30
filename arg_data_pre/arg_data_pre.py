@@ -51,63 +51,63 @@ def tsv_to_csv():
     p = Popen('pwd' ,stdin =  PIPE,stdout = PIPE, stderr = PIPE,shell=True)  
     print (p.stdout.read())
     
-    cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.csv'
+    cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.txt'
     print(cmd) 
     p = Popen(cmd ,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)  
     
 
-    cmd='cat '+file_path+"deviceid_brand.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'deviceid_brand.csv'
+    cmd='cat '+file_path+"deviceid_brand.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'deviceid_brand.txt'
     print(cmd) 
     p = Popen(cmd ,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)  
     
     
-    cmd='echo device_id,app_id,start,close > '+file_path+'deviceid_package_start_close.csv'
+    cmd='echo device_id,app_id,start,close > '+file_path+'deviceid_package_start_close.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_package_start_close.tsv |awk '{print $1,\",\",$2,\",\",$3,\",\",$4}' >> "+file_path+'deviceid_package_start_close.csv'
+    cmd='cat '+file_path+"deviceid_package_start_close.tsv |awk '{print $1,\",\",$2,\",\",$3,\",\",$4}' >> "+file_path+'deviceid_package_start_close.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)  
     
 
 
-    cmd='echo app_id,t1,t2 > '+file_path+'package_label.csv'
+    cmd='echo app_id,t1,t2 > '+file_path+'package_label.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"package_label.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'package_label.csv'
+    cmd='cat '+file_path+"package_label.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'package_label.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id,add_id_list > '+file_path+'deviceid_packages.csv'
-    print(cmd) 
-    p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
-    
-
-    cmd='cat '+file_path+"deviceid_packages.tsv |awk '{print $1,\",\",$2}' >> "+file_path+'deviceid_packages.csv'
-    print(cmd) 
-    p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
-    
-    
-    cmd='echo device_id > '+file_path+'deviceid_test.csv'
+    cmd='echo device_id,add_id_list > '+file_path+'deviceid_packages.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_test.tsv |awk '{print $1}' >> "+file_path+'deviceid_test.csv'
+    cmd='cat '+file_path+"deviceid_packages.tsv |awk '{print $1,\",\",$2}' >> "+file_path+'deviceid_packages.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id > '+file_path+'deviceid_train.csv'
+    cmd='echo device_id > '+file_path+'deviceid_test.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1}' >> "+file_path+'deviceid_train.csv'
+    cmd='cat '+file_path+"deviceid_test.tsv |awk '{print $1}' >> "+file_path+'deviceid_test.txt'
+    print(cmd) 
+    p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
+    
+    
+    cmd='echo device_id > '+file_path+'deviceid_train.txt'
+    print(cmd) 
+    p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
+    
+
+    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1}' >> "+file_path+'deviceid_train.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
        
@@ -139,6 +139,25 @@ def pre_deviceid_packages():
     print(data_src.head(5))
     data_src.to_csv(file_path+'deviceid_packages.csv')
 
+def pre_data(file_name):
+    all_list=[]
+    file_name=file_name.replace('.csv','')
+    with open(file_path+file_name+'.txt','r') as fh:
+        col=fh.readline()
+        col_list=col.replace('\t',',').replace(' ',',').replace('\n','').split(',')
+        for line in fh: 
+            line_list=line.replace('\t',',').replace(' ',',').replace('\n','').split(',')
+            print(line_list)
+            id_dict={}
+            for i,x in enumerate(line_list):
+                id_dict[col_list[i]]=x
+            
+            all_list.append(id_dict)
+           
+    data_src=pd.DataFrame(x for x in all_list)
+    
+    print(data_src.head(5))
+    data_src.to_csv(file_path+'deviceid_packages.csv')
 
 def data_into_mysql(file_name):
     data_src=pd.read_csv(file_path+file_name)
@@ -151,8 +170,10 @@ def data_into_mysql(file_name):
 if __name__=='__main__':
 #1、
     tsv_to_csv()
+    pre_deviceid_packages()
 #2、
     for file_name in csv_file_names:
+        pre_data(file_name)
         data_into_mysql(file_name)
     
 # id,
