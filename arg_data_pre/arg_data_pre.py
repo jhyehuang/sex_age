@@ -169,6 +169,7 @@ def data_into_mysql(file_name):
     
 
 if __name__=='__main__':
+    start_time=time.time()
 #1、
     tsv_to_csv()
     pre_deviceid_packages()
@@ -181,6 +182,8 @@ if __name__=='__main__':
 #    for file_name in csv_file_names:
 #        data_into_mysql(file_name)
 # id,
+    end_time=time.time()
+    print('耗时:',end_time-start_time)
 
 
 
