@@ -141,7 +141,7 @@ def pre_deviceid_packages():
 
 
 def data_into_mysql(file_name):
-    data_src=pd.read_csv(file_path+file_name)
+    data_src=pd.read_csv(file_path+file_name,delimiter="\t")
     table_name=file_name.replace('.csv','')
     print(table_name)
     print(data_src.head(5))
