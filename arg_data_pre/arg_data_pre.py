@@ -145,7 +145,8 @@ def pre_data(file_name):
     file_name=file_name.replace('.csv','')
     with open(file_path+file_name+'.txt','r') as fh:
         col=fh.readline()
-        col_list=col.replace('\t',',').replace(' ',',').replace('\n','').split(',')
+        col_list=col.replace('\t',',').replace(' ','').replace('\n','').split(',')
+        print(col_list)
         for line in fh: 
             line_list=line.replace('\t',',').replace(' ','').replace('\n','').split(',')
             print(line_list)
