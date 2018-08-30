@@ -44,12 +44,12 @@ print(file_names)
 def tsv_to_csv():
     cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.csv'
     print(cmd) 
-    p = Popen(cmd, stdin =  PIPE,stdout = PIPE, stderr = PIPE )  
+    p = Popen(cmd )  
     p.close() 
 
     cmd='cat '+file_path+"deviceid_brand.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'deviceid_brand.csv'
     print(cmd) 
-    p = Popen(cmd, stdin =  PIPE,stdout = PIPE, stderr = PIPE )  
+    p = Popen(cmd )  
     p.close() 
     
     cmd='echo device_id,app_id,start,close > '+file_path+'deviceid_package_start_close.csv'
