@@ -23,10 +23,10 @@ class mysql_conn(object):
             charset='utf8',
             cursorclass = pymysql.cursors.DictCursor
         )
-        return self.db_conn
+
     def __del__(self):
         self.db_conn.close()
-db=mysql_conn()
+db=mysql_conn().db_conn
 cursor=db.cursor()
 #sql="select * from documents"
 #try:
