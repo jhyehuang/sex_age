@@ -144,7 +144,7 @@ def data_into_mysql(file_name):
     data_src=pd.read_csv(file_path+file_name)
     table_name=file_name.replace('.csv','')
     print(table_name)
-    print(data_src.head(3))
+    print(data_src.head(5))
     data_src.to_sql(table_name, engine,if_exists='append', index= False)
     
 
