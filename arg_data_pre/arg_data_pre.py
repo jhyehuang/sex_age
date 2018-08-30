@@ -32,12 +32,16 @@ def file_exists(filename):
 
 file_path='/home/zhijiehuang/github/data/sex_age/'
 files=os.listdir(file_path)
-file_names=[]
+tsv_file_names=[]
+csv_file_names=[]
+
 for file in files:
     file_name=file_path+'/'+file
+    csv_file_name=file.replace('tsv','csv')
     file_exists(file_name.replace('tsv','csv'))
-    file_names.append(file_name)
-print(file_names)
+    tsv_file_names.append(file_name)
+    csv_file_names.append(csv_file_name)
+print(csv_file_names)
 
 cwd='/home/zhijiehuang/github/sex_age/arg_data_pre'
 
@@ -136,11 +140,19 @@ def pre_deviceid_packages():
     data_src.to_csv(file_path+'deviceid_packages.csv')
 
 
-def data_into_mysql():
-    data_src=pd.read_csv(file_path+'package_label.csv')
-    data_src.to_sql('package_label', engine, index= False)
+def data_into_mysql(file_name):
+    data_src=pd.read_csv(file_path+file_name)
+    table_name=file_name.replace('.csv','')
+    data_src.to_sql(table_name, engine, index= False)
     
-tsv_to_csv()
+
+if __name__=='__main__':
+#1、
+#    tsv_to_csv()
+#2、
+    for file_name in csv_file_names:
+        data_into_mysql(file_name)
+    
 # id,
 
 
