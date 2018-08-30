@@ -174,8 +174,11 @@ if __name__=='__main__':
 #2、
     for file_name in csv_file_names:
         pre_data(file_name)
-        data_into_mysql(file_name)
-    
+#        data_into_mysql(file_name)
+   
+#3、
+#    for file_name in csv_file_names:
+#        data_into_mysql(file_name)
 # id,
 
 
