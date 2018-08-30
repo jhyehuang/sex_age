@@ -138,7 +138,7 @@ def pre_deviceid_packages():
     #data_src=pd.read_csv(file_path+'package_label.csv')
     
     print(data_src.head(5))
-    data_src.to_csv(file_path+'deviceid_packages.txt')
+    data_src.to_csv(file_path+'deviceid_packages.txt',index= False)
 
 def pre_data(file_name):
     all_list=[]
@@ -159,7 +159,7 @@ def pre_data(file_name):
     data_src=pd.DataFrame(x for x in all_list)
     
     print(data_src.head(5))
-    data_src.to_csv(file_path+'deviceid_packages.csv')
+    data_src.to_csv(file_path+file_name+'.csv',index= False)
 
 def data_into_mysql(file_name):
     data_src=pd.read_csv(file_path+file_name)
@@ -172,13 +172,13 @@ def data_into_mysql(file_name):
 if __name__=='__main__':
     start_time=time.time()
 #1、
-#    tsv_to_csv()
-#    pre_deviceid_packages()
+    tsv_to_csv()
+    pre_deviceid_packages()
 #2、
-#    csv_file_names.remove('deviceid_packages.csv')
-#    for file_name in csv_file_names:
-#        pre_data(file_name)
-#        data_into_mysql(file_name)
+    csv_file_names.remove('deviceid_packages.csv')
+    for file_name in csv_file_names:
+        pre_data(file_name)
+        data_into_mysql(file_name)
    
 #3、
     for file_name in csv_file_names:
