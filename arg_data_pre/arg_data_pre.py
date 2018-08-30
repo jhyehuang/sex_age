@@ -30,7 +30,7 @@ def file_exists(filename):
     if not os.path.exists(filename):
         os.system(r"touch {}".format(filename))#调用系统命令行来创建文件
 
-file_path='../../data/sex_age/'
+file_path='/home/zhijiehuang/github/data/sex_age/'
 files=os.listdir(file_path)
 file_names=[]
 for file in files:
