@@ -41,17 +41,17 @@ def data_from_mysql(sql):
 def define_n_class():
     sql='alter table package_label add n_class int(4) default 0'
     ret=data_from_mysql(sql)
-    print(ret)
+    print(ret.head(3))
     
     sql='select * from package_label'
     ret=data_from_mysql(sql)
-    print(ret)
+    print(ret.head(3))
     
 if __name__=='__main__':
     start_time=time.time()
     sql='select * from package_label'
     ret=data_from_mysql(sql)
-    print(ret)
+    print(ret.head(3))
 
 
 
