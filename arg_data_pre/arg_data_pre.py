@@ -26,13 +26,20 @@ sys.path.append('..')
 
 engine = create_engine('mysql+pymysql://root:root@localhost:3306/sex_age')
 
+def file_exists(filename):
+    if not os.path.exists(filename):
+        os.system(r"touch {}".format(filename))#调用系统命令行来创建文件
+
 file_path='../../data/sex_age/'
 files=os.listdir(file_path)
 file_names=[]
 for file in files:
     file_name=file_path+'/'+file
+    file_exists(file_name.replace('tsv','csv'))
     file_names.append(file_name)
 print(file_names)
+
+
 
 def tsv_to_csv():
     cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.csv'
