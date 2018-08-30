@@ -18,13 +18,10 @@ from subprocess import *
 mydb 
 '''
 
-
-from sqlalchemy import create_engine
-
-
 sys.path.append('..')
+from db.conn_db import db,cursor
 
-engine = create_engine('mysql+pymysql://root:root@localhost:3306/sex_age')
+
 
 def file_exists(filename):
     if not os.path.exists(filename):
@@ -34,23 +31,26 @@ file_path='/home/zhijiehuang/github/data/sex_age/'
 
 
 def data_from_mysql(sql):
-# 执行SQL
-# cur = engine.execute('select * from hosts')
-# 获取第一行数据
-# cur.fetchone()
-# 获取第n行数据
-# cur.fetchmany(3)
-# 获取所有数据
-# cur.fetchall()
-    cur = engine.execute(sql)
+
+    cur = cursor.execute(sql)
     ret=cur.fetchall()
     return ret
 
+def define_n_class():
+    sql='alter table package_label add n_class int(4) default 0'
+    ret=data_from_mysql(sql)
+    print(ret)
+    
+    sql='select * from package_label'
+    ret=data_from_mysql(sql)
+    print(ret)
+    
 if __name__=='__main__':
     start_time=time.time()
     sql='select * from package_label'
     ret=data_from_mysql(sql)
     print(ret)
+
 
 
 # id,
