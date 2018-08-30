@@ -138,7 +138,7 @@ def pre_deviceid_packages():
     #data_src=pd.read_csv(file_path+'package_label.csv')
     
     print(data_src.head(5))
-    data_src.to_csv(file_path+'deviceid_packages.csv')
+    data_src.to_csv(file_path+'deviceid_packages.txt')
 
 def pre_data(file_name):
     all_list=[]
@@ -175,6 +175,7 @@ if __name__=='__main__':
     tsv_to_csv()
     pre_deviceid_packages()
 #2、
+    csv_file_names.remove('deviceid_packages.csv')
     for file_name in csv_file_names:
         pre_data(file_name)
 #        data_into_mysql(file_name)
