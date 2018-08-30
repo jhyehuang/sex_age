@@ -46,7 +46,6 @@ def tsv_to_csv():
     
     p = Popen('pwd' ,stdin =  PIPE,stdout = PIPE, stderr = PIPE)  
     print (p.stdout.read())
-    p.close()
     
     cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.csv'
     print(cmd) 
