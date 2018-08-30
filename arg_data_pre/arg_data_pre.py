@@ -39,6 +39,7 @@ for file in files:
     file_names.append(file_name)
 print(file_names)
 
+cwd='/home/zhijiehuang/github/sex_age/arg_data_pre'
 
 
 def tsv_to_csv():
@@ -49,63 +50,63 @@ def tsv_to_csv():
     
     cmd='echo device_id,brand,type_no > '+file_path+'deviceid_brand.csv'
     print(cmd) 
-    p = Popen(cmd ,shell=True)  
+    p = Popen(cmd ,shell=True,cwd=cwd)  
     p.close() 
 
     cmd='cat '+file_path+"deviceid_brand.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'deviceid_brand.csv'
     print(cmd) 
-    p = Popen(cmd ,shell=True)
+    p = Popen(cmd ,shell=True,cwd=cwd)  
     p.close() 
     
     cmd='echo device_id,app_id,start,close > '+file_path+'deviceid_package_start_close.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
 
     cmd='cat '+file_path+"deviceid_package_start_close.tsv |awk '{print $1,\",\",$2,\",\",$3,\",\",$4}' >> "+file_path+'deviceid_package_start_close.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)  
     p.close() 
 
 
     cmd='echo app_id,t1,t2 > '+file_path+'package_label.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
 
     cmd='cat '+file_path+"package_label.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'package_label.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
     
     cmd='echo device_id,add_id_list > '+file_path+'deviceid_packages.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
 
     cmd='cat '+file_path+"deviceid_packages.tsv |awk '{print $1,\",\",$2}' >> "+file_path+'deviceid_packages.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
     
     cmd='echo device_id > '+file_path+'deviceid_test.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
 
     cmd='cat '+file_path+"deviceid_test.tsv |awk '{print $1}' >> "+file_path+'deviceid_test.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
     
     cmd='echo device_id > '+file_path+'deviceid_train.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close() 
 
     cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1}' >> "+file_path+'deviceid_train.csv'
     print(cmd) 
-    p = Popen(cmd,shell=True)  
+    p = Popen(cmd,shell=True,cwd=cwd)    
     p.close()    
     
     
