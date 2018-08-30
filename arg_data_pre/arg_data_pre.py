@@ -141,7 +141,7 @@ def pre_deviceid_packages():
 
 def pre_data(file_name):
     all_list=[]
-    file_name=file_name.replace('.csv','')
+    file_name=file_name.replace('.txt','')
     with open(file_path+file_name+'.txt','r') as fh:
         col=fh.readline()
         col_list=col.replace('\t',',').replace(' ',',').replace('\n','').split(',')
