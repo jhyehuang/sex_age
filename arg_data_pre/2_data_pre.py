@@ -31,9 +31,10 @@ file_path='/home/zhijiehuang/github/data/sex_age/'
 
 
 def data_from_mysql(sql):
-
-    cur = cursor.execute(sql)
-    ret=cur.fetchall()
+    db.ping(reconnect=True)
+    cursor.execute(sql)
+    db.commit()
+    ret=cursor.fetchall()
     return ret
 
 def define_n_class():
