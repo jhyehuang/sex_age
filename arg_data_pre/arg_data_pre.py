@@ -37,7 +37,7 @@ csv_file_names=[]
 
 for file in files:
     file_name=file_path+'/'+file
-    csv_file_name=file.replace('tsv','csv')
+    csv_file_name=file.replace('tsv','csv').replace('txt','csv')
     file_exists(file_name.replace('tsv','csv'))
     tsv_file_names.append(file_name)
     csv_file_names.append(csv_file_name)
