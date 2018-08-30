@@ -41,7 +41,7 @@ for file in files:
     file_exists(file_name.replace('tsv','csv'))
     tsv_file_names.append(file_name)
     csv_file_names.append(csv_file_name)
-print(csv_file_names)
+print(list(set(csv_file_names)))
 
 cwd='/home/zhijiehuang/github/sex_age/arg_data_pre'
 
