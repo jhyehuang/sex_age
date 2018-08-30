@@ -50,8 +50,9 @@ def define_n_class():
 if __name__=='__main__':
     start_time=time.time()
     sql='select * from package_label'
-    ret=data_from_mysql(sql)
-    print(ret.head(3))
+#    ret=data_from_mysql(sql)
+#    print(ret.head(3))
+    define_n_class()
 
 
 
