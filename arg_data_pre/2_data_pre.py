@@ -35,6 +35,7 @@ def data_from_mysql(sql):
     cursor.execute(sql)
     db.commit()
     ret=cursor.fetchall()
+    ret=pd.DataFrame(line for line in ret)
     return ret
 
 def define_n_class():
