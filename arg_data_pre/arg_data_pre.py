@@ -146,7 +146,7 @@ def pre_data(file_name):
         col=fh.readline()
         col_list=col.replace('\t',',').replace(' ',',').replace('\n','').split(',')
         for line in fh: 
-            line_list=line.replace('\t',',').replace(' ',',').replace('\n','').split(',')
+            line_list=line.replace('\t',',').replace(' ','').replace('\n','').split(',')
             print(line_list)
             id_dict={}
             for i,x in enumerate(line_list):
