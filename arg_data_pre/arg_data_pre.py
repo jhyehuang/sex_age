@@ -41,7 +41,8 @@ for file in files:
     file_exists(file_name.replace('tsv','csv'))
     tsv_file_names.append(file_name)
     csv_file_names.append(csv_file_name)
-print(list(set(csv_file_names)))
+csv_file_names=list(set(csv_file_names))
+print(csv_file_names)
 
 cwd='/home/zhijiehuang/github/sex_age/arg_data_pre'
 
@@ -141,7 +142,7 @@ def pre_deviceid_packages():
 
 def pre_data(file_name):
     all_list=[]
-    file_name=file_name.replace('.txt','')
+    file_name=file_name.replace('.csv','')
     with open(file_path+file_name+'.txt','r') as fh:
         col=fh.readline()
         col_list=col.replace('\t',',').replace(' ',',').replace('\n','').split(',')
