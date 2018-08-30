@@ -92,22 +92,22 @@ def tsv_to_csv():
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id > '+file_path+'deviceid_test.csv'
+    cmd='echo device_id, > '+file_path+'deviceid_test.csv'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_test.tsv |awk '{print $1}' >> "+file_path+'deviceid_test.csv'
+    cmd='cat '+file_path+"deviceid_test.tsv |awk '{print $1,\",\"}' >> "+file_path+'deviceid_test.csv'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id > '+file_path+'deviceid_train.csv'
+    cmd='echo device_id, > '+file_path+'deviceid_train.csv'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1}' >> "+file_path+'deviceid_train.csv'
+    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1,\",\"}' >> "+file_path+'deviceid_train.csv'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
        
@@ -141,7 +141,7 @@ def pre_deviceid_packages():
 
 
 def data_into_mysql(file_name):
-    data_src=pd.read_csv(file_path+file_name,delimiter="\t")
+    data_src=pd.read_csv(file_path+file_name)
     table_name=file_name.replace('.csv','')
     print(table_name)
     print(data_src.head(5))
@@ -150,7 +150,7 @@ def data_into_mysql(file_name):
 
 if __name__=='__main__':
 #1、
-#    tsv_to_csv()
+    tsv_to_csv()
 #2、
     for file_name in csv_file_names:
         data_into_mysql(file_name)
