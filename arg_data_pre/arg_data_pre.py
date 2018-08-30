@@ -29,9 +29,10 @@ with open(file_path+'deviceid_packages.tsv','r') as fh:
         id_dict={}
         id_no=line_list[0]
         app_list=line_list[1:]
-        id_dict['id']=id_no
-        for i,x in enumerate(line_list):
-            id_dict['app_'+str(i)]=x
+        id_dict['device_id']=id_no
+        id_dict['add_id_list']='|'.join(app_list)
+#        for i,x in enumerate(line_list):
+#            id_dict['app_'+str(i)]=x
         
         all_list.append(id_dict)
        
@@ -41,6 +42,8 @@ data_src=pd.DataFrame(x for x in all_list)
 print(data_src.head(5))
 data_src.to_csv(file_path+'deviceid_packages.csv')
 
+
+# id,
 
 
 
