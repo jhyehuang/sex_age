@@ -10,6 +10,10 @@ import sys
 sys.path.append('..')
 from flags import FLAGS, unparsed
 
+from sqlalchemy import create_engine
+
+engine = create_engine('mysql+pymysql://'+FLAGS.user+':'+FLAGS.passwd+'@'+FLAGS.host+':3306/sex_age')
+
 
 class mysql_conn(object):
     def __init__(self):

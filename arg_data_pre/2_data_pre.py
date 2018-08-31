@@ -19,7 +19,7 @@ mydb
 '''
 
 sys.path.append('..')
-from db.conn_db import db,cursor
+from db.conn_db import db,cursor,engine
 from flags import FLAGS, unparsed
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -52,9 +52,24 @@ def define_n_class():
     sql='select * from package_label'
     package_label=data_from_mysql(sql)
     
-    package_label['t1'].unique()
+    sex=package_label['t1'].unique()
+    age=package_label['t2'].unique()
+    label=[]
+    for i in sex:
+        for j in age:
+            label.append(str(i)+'-'+str(j))
+    label_dict={}
+    for i,x in enumerate(label):
+        label_dict[x]=i
+    label_pd=pd.DataFrame(label_dict)
+    label_pd.to_csv(file_path+'label.csv')
+    def map_label(t1,t2):
+        return label_dict[str(t1)+'-'+str(t2)]
+        
+    package_label['n_class']=package_label.apply(lambda line:map_label(line['t1'],line['t2']))
+    truncate_table('package_label')
     
-    package_label['n_class']=package_label.apply(lambda line:)
+    pd.io.sql.to_sql(package_label,'package_label', engine,if_exists='append', index= False)
     
     print(ret.head(3))
     

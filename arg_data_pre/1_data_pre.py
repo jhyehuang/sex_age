@@ -11,11 +11,11 @@ import numpy as np
 import os
 from subprocess import *
 
-from sqlalchemy import create_engine
 
 
 sys.path.append('..')
 from flags import FLAGS, unparsed
+from db.conn_db import db,cursor,engine
 
 #reload(sys)
 #sys.setdefaultencoding('utf8')
@@ -27,7 +27,6 @@ from flags import FLAGS, unparsed
 mydb 
 '''
 
-engine = create_engine('mysql+pymysql://'+FLAGS.user+':'+FLAGS.passwd+'@'+FLAGS.host+':3306/sex_age')
 
 def file_exists(filename):
     if not os.path.exists(filename):
@@ -39,6 +38,8 @@ tsv_file_names=[]
 csv_file_names=[]
 
 for file in files:
+    if '.tsv' not in file:
+        continue
     file_name=file_path+'/'+file
     csv_file_name=file.replace('tsv','csv').replace('txt','csv')
     file_exists(file_name.replace('tsv','csv'))
