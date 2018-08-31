@@ -6,20 +6,19 @@ Created on Thu Aug 30 20:12:49 2018
 """
 
 import pymysql
+import sys
+sys.path.append('..')
+from flags import FLAGS, unparsed
+
 
 class mysql_conn(object):
     def __init__(self):
-        host='localhost'
-        user='root'
-        passwd='root'
-        port=3306
-        db='sex_age'
         self.db_conn=pymysql.connect(
-            host=host,
-            user=user,
-            passwd=passwd,
-            db=db,
-            port=port,
+            host=FLAGS.host,
+            user=FLAGS.user,
+            passwd=FLAGS.passwd,
+            db=FLAGS.db,
+            port=FLAGS.port,
             charset='utf8',
             cursorclass = pymysql.cursors.DictCursor
         )

@@ -11,6 +11,15 @@ import numpy as np
 import os
 from subprocess import *
 
+from sqlalchemy import create_engine
+
+
+sys.path.append('..')
+from flags import FLAGS, unparsed
+
+#reload(sys)
+#sys.setdefaultencoding('utf8')
+
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
 密码:root, 端口：3306,
@@ -18,19 +27,13 @@ from subprocess import *
 mydb 
 '''
 
-
-from sqlalchemy import create_engine
-
-
-sys.path.append('..')
-
-engine = create_engine('mysql+pymysql://root:root@localhost:3306/sex_age')
+engine = create_engine('mysql+pymysql://'+FLAGS.user+':'+FLAGS.passwd+'@'+FLAGS.host+':3306/sex_age')
 
 def file_exists(filename):
     if not os.path.exists(filename):
         os.system(r"touch {}".format(filename))#调用系统命令行来创建文件
 
-file_path='/home/zhijiehuang/github/data/sex_age/'
+file_path=FLAGS.file_path
 files=os.listdir(file_path)
 tsv_file_names=[]
 csv_file_names=[]
@@ -44,7 +47,7 @@ for file in files:
 csv_file_names=list(set(csv_file_names))
 print(csv_file_names)
 
-cwd='/home/zhijiehuang/github/sex_age/arg_data_pre'
+cwd=FLAGS.cwd
 
 
 def tsv_to_csv():
