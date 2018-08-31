@@ -21,8 +21,7 @@ mydb
 sys.path.append('..')
 from db.conn_db import db,cursor,engine
 from flags import FLAGS, unparsed
-reload(sys)
-sys.setdefaultencoding('utf8')
+
 
 
 def file_exists(filename):
