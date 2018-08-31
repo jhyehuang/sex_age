@@ -72,7 +72,6 @@ def define_n_class():
     
     pd.io.sql.to_sql(package_label,'package_label', engine,if_exists='append', index= False)
     
-    print(ret.head(3))
     
 if __name__=='__main__':
     start_time=time.time()
