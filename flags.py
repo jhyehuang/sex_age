@@ -9,7 +9,7 @@ FLAGS, unparsed='',''
 
 #pad='win'
 #pad='tiny'
-pad='win'
+pad='linux'
 
 tz = pytz.timezone('Asia/Shanghai')
 current_time = datetime.datetime.now(tz)
