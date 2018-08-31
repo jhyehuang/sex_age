@@ -107,12 +107,12 @@ def tsv_to_csv():
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id > '+file_path+'deviceid_train.txt'
+    cmd='echo device_id,sex,age > '+file_path+'deviceid_train.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
 
-    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1}' >> "+file_path+'deviceid_train.txt'
+    cmd='cat '+file_path+"deviceid_train.tsv |awk '{print $1,\",\",$2,\",\",$3}' >> "+file_path+'deviceid_train.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
        
