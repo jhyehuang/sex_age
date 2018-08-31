@@ -20,6 +20,9 @@ def parse_args(check=True):
     parser.add_argument('--cwd', type=str, default='/home/zhijiehuang/github/sex_age/arg_data_pre',
                         help='path to  tool.')
     
+    parser.add_argument('--file_path', type=str, default='/home/zhijiehuang/github/data/sex_age/',
+                        help='gevent.')
+    
     parser.add_argument('--host', type=str, default='localhost',
                         help='localhost.')
     
