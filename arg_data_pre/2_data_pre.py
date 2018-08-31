@@ -44,15 +44,15 @@ def data_from_mysql(sql):
     return ret
 
 def define_n_class():
-    sql='alter table deviceid_train add n_class int(4) default 0'
-    ret=data_from_mysql(sql)
-    print(ret.head(3))
+#    sql='alter table deviceid_train add n_class int(4) default 0'
+#    ret=data_from_mysql(sql)
+#    print(ret.head(3))
     
     sql='select * from deviceid_train'
     package_label=data_from_mysql(sql)
     
-    sex=package_label['t1'].unique()
-    age=package_label['t2'].unique()
+    sex=package_label['sex'].unique()
+    age=package_label['age'].unique()
     label=[]
     for i in sex:
         for j in age:
@@ -67,7 +67,7 @@ def define_n_class():
         
     print(package_label.head(3))
     
-    package_label['n_class']=package_label.apply(lambda line:map_label(line['t1'],line['t2']),axis=1)
+    package_label['n_class']=package_label.apply(lambda line:map_label(line['sex'],line['age']),axis=1)
     truncate_table('deviceid_train')
     
     pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
