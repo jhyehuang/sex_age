@@ -80,8 +80,6 @@ if __name__=='__main__':
 #    print(ret.head(3))
     define_n_class()
 
-
-
 # id,
     end_time=time.time()
     print('耗时:',end_time-start_time)

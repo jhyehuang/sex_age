@@ -8,7 +8,7 @@ Created on Thu Aug 30 20:12:49 2018
 import pymysql
 import sys
 sys.path.append('..')
-from flags import FLAGS, unparsed
+from flags import FLAGS
 
 from sqlalchemy import create_engine
 

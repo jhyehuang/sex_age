@@ -26,7 +26,7 @@ def parse_args(check=True):
     parser.add_argument('--user', type=str, default='root',
                         help='user.')
     
-    parser.add_argument('--passwd', type=str, default='passwd',
+    parser.add_argument('--passwd', type=str, default='root',
                         help='passwd.')
     
     parser.add_argument('--port', type=int, default=3306,
@@ -55,7 +55,7 @@ def win_parse_args(check=True):
     parser.add_argument('--user', type=str, default='root',
                         help='user.')
     
-    parser.add_argument('--passwd', type=str, default='passwd',
+    parser.add_argument('--passwd', type=str, default='root',
                         help='passwd.')
     
     parser.add_argument('--port', type=int, default=3306,
