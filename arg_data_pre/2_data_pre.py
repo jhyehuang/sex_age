@@ -44,9 +44,9 @@ def data_from_mysql(sql):
     return ret
 
 def define_n_class():
-    sql='alter table package_label add n_class int(4) default 0'
-    ret=data_from_mysql(sql)
-    print(ret.head(3))
+#    sql='alter table package_label add n_class int(4) default 0'
+#    ret=data_from_mysql(sql)
+#    print(ret.head(3))
     
     sql='select * from package_label'
     package_label=data_from_mysql(sql)
