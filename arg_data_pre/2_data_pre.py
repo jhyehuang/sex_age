@@ -65,7 +65,9 @@ def define_n_class():
     def map_label(t1,t2):
         return label_dict[str(t1)+'-'+str(t2)]
         
-    package_label['n_class']=package_label.apply(lambda line:map_label(line['t1'],line['t2']))
+    print(package_label.head(3))
+    
+    package_label['n_class']=package_label.apply(lambda line:map_label(line['t1'],line['t2']),axis=1)
     truncate_table('package_label')
     
     pd.io.sql.to_sql(package_label,'package_label', engine,if_exists='append', index= False)
