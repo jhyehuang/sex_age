@@ -51,11 +51,11 @@ def define_n_class():
     sql='select * from deviceid_train'
     package_label=data_from_mysql(sql)
     
-    sex=package_label['sex'].unique()
-    age=package_label['age'].unique()
+#    sex=package_label['sex'].unique()
+#    age=package_label['age'].unique()
     label=[]
-    for i in sex:
-        for j in age:
+    for i in [1,2]:
+        for j in range(11):
             label.append(str(i)+'-'+str(j))
     label_dict={}
     for i,x in enumerate(label):
