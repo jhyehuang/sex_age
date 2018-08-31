@@ -180,10 +180,10 @@ if __name__=='__main__':
 #    pre_deviceid_packages()
 #2、
     csv_file_names.remove('deviceid_packages.csv')
-    for file_name in csv_file_names:
-        pre_data(file_name)
 #    for file_name in csv_file_names:
-#        data_into_mysql(file_name)
+#        pre_data(file_name)
+    for file_name in csv_file_names:
+        data_into_mysql(file_name)
    
 #3、
 #    for file_name in csv_file_names:
