@@ -60,7 +60,7 @@ def define_n_class():
     label_dict={}
     for i,x in enumerate(label):
         label_dict[x]=i
-    label_pd=pd.DataFrame(label_dict)
+    label_pd=pd.DataFrame(x for x in [label_dict])
     label_pd.to_csv(file_path+'label.csv')
     def map_label(t1,t2):
         return label_dict[str(t1)+'-'+str(t2)]
