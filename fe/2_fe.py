@@ -55,6 +55,7 @@ def app_get_tx(app_list):
         t1_dict['app_id']=app_id
         tx_list.append(t1_dict)
     tx_pd=pd.DataFrame(x for x in tx_list)
+    print(tx_pd)
     tx_group_by(tx_pd,'t1')
     tx_group_by(tx_pd,'t2')
     result_t1={}
