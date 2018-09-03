@@ -33,7 +33,7 @@ def dev_id_train():
 def tx_group_by(tx_pd,col='t1'):
     
     _key_codes = tx_pd[col].values
-    grp1=tx_pd.groupby(_key_codes)
+    grp1=tx_pd['app_id'].groupby(_key_codes)
     cnt1 = grp1.aggregate(np.size)
     _cnt = cnt1[_key_codes].values
     _cnt[np.isnan(_cnt)] = 0
