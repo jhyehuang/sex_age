@@ -129,8 +129,8 @@ def devid_app_times_tx(deviceid_packages,package_label):
 #        print (app_list)
         return app_list
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    deviceid_packages['t1_app_time']=deviceid_packages.apply(lambda line:app_get_t1(line['device_id'],line['add_list']),axid=1)
-    deviceid_packages['t2_app_time']=deviceid_packages.apply(lambda line:app_get_t2(line['device_id'],line['add_list']),axid=1)
+    deviceid_packages['t1_app_time']=deviceid_packages.apply(lambda line:app_get_t1(line['device_id'],line['add_list']),axis=1)
+    deviceid_packages['t2_app_time']=deviceid_packages.apply(lambda line:app_get_t2(line['device_id'],line['add_list']),axis=1)
     
     columns=[]
     logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
@@ -217,7 +217,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
     
     package_label=pd.read_csv(file_path+'package_label.csv')
     package_label['t1']=package_label['t1'].astype('category').values.codes
