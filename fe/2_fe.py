@@ -42,7 +42,7 @@ def tx_group_by(tx_pd,col='t1'):
     tx_pd[col+'_size'] = _cnt
 
 
-def app_get_tx(app_list):
+def app_get_t1(app_list):
     if len(app_list)<1:
         return None,None
     tx_list=[]
@@ -61,15 +61,40 @@ def app_get_tx(app_list):
     if tx_pd.shape[0]<1:
         return None,None
     tx_group_by(tx_pd,'t1')
-    tx_group_by(tx_pd,'t2')
+
     print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
         result_t1[t1]=tx_pd.ix[tx_pd.t1.values==t1,'t1_size'].sum()
+
+    return result_t1
+
+
+def app_get_t2(app_list):
+    if len(app_list)<1:
+        return None,None
+    tx_list=[]
+    for app_id in app_list:
+        t1_dict={}
+        t2=get_package_dict(app_id,'t1,t2')
+        print(t2)
+        if len(t2)<1:
+            continue
+        t2=t2[0]
+        t1_dict['t1']=t2.get('t1','0')
+        t1_dict['t2']=t2.get('t2','0')
+        t1_dict['app_id']=app_id
+        tx_list.append(t1_dict)
+    tx_pd=pd.DataFrame(x for x in tx_list)
+    if tx_pd.shape[0]<1:
+        return None,None
+    tx_group_by(tx_pd,'t2')
+    print(tx_pd)
+
     result_t2={}
     for t2 in tx_pd.t2.unique():
         result_t2[t2]=tx_pd.ix[tx_pd.t2.values==t2,'t2_size'].sum()
-    return result_t1,result_t2
+    return result_t2
 
 
 def devid_app_tx(deviceid_packages,package_label):
@@ -79,7 +104,8 @@ def devid_app_tx(deviceid_packages,package_label):
 #        print (app_list)
         return app_list
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    deviceid_packages['t1_app_len'],deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_tx(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
     
     columns=[]
     for x in FLAGS.t1_feature.replaces('\'').plit(','):
