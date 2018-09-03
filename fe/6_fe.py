@@ -104,6 +104,7 @@ def get_dev_hour_info_t1(dev_id,app_id_list):
         if len(app_hour_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
         t1_dict['t2']=t2.get('t2','0')
         t1_dict['app_id']=app_id
@@ -141,6 +142,7 @@ def get_dev_hour_info_t2(dev_id,app_id_list):
         if len(app_hour_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t2_dict['t1']=t2.get('t1','0')
         t2_dict['t2']=t2.get('t2','0')
         t2_dict['app_id']=app_id
@@ -281,6 +283,7 @@ def get_dev_day_info_t1(dev_id,app_id_list):
         if len(app_day_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
         t1_dict['t2']=t2.get('t2','0')
         t1_dict['app_id']=app_id
@@ -318,6 +321,7 @@ def get_dev_day_info_t2(dev_id,app_id_list):
         if len(app_day_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t2_dict['t1']=t2.get('t1','0')
         t2_dict['t2']=t2.get('t2','0')
         t2_dict['app_id']=app_id
@@ -455,6 +459,7 @@ def get_dev_mon_info_t1(dev_id,app_id_list):
         if len(app_mon_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
         t1_dict['t2']=t2.get('t2','0')
         t1_dict['app_id']=app_id
@@ -492,6 +497,7 @@ def get_dev_mon_info_t2(dev_id,app_id_list):
         if len(app_mon_info)<1:
 #            print(t2)
             continue
+        t2=t2[0]
         t2_dict['t1']=t2.get('t1','0')
         t2_dict['t2']=t2.get('t2','0')
         t2_dict['app_id']=app_id
