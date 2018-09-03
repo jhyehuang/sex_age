@@ -53,21 +53,21 @@ def time_to_hour(timeStamp):
 #    print(timeArray)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_hour   # 2013
+    return str(timeArray.tm_hour)   # 2013
 
 def time_to_day(timeStamp):
     # 字符类型的时间
     timeArray = time.localtime(timeStamp)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_mday   # 2013
+    return str(timeArray.tm_mday)   # 2013
 
 def time_to_mon(timeStamp):
     # 字符类型的时间
     timeArray = time.localtime(timeStamp)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_mon   # 2013
+    return str(timeArray.tm_mon)   # 2013
 # 结果如下
 # time.struct_time(tm_year=2013, tm_mon=10, tm_mday=10, tm_hour=23, tm_min=40, tm_sec=0, tm_wday=3, tm_yday=283, tm_isdst=-1)
 
@@ -632,7 +632,7 @@ def compute_date():
     deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
     print(deviceid_packages.head(5))
     
-    deviceid_packages.to_csv(file_path+'04_deviceid_packages.csv', index= False)
+    deviceid_packages.to_csv(file_path+'06_deviceid_packages.csv', index= False)
     
     
 if __name__=='__main__':
