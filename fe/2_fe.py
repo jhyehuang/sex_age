@@ -42,7 +42,8 @@ def tx_group_by(tx_pd,col='t1'):
 
 
 def app_get_tx(app_list):
-    
+    if len(app_list)<1:
+        return None,None
     tx_list=[]
     for app_id in app_list:
         t1_dict={}
@@ -213,7 +214,7 @@ def compute_date():
     package_label['t1']=package_label['t1'].astype('category').values.codes
     package_label['t2']=package_label['t2'].astype('category').values.codes
     result = []
-    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
+#    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     pool.close()
     pool.join()
