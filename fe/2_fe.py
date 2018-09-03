@@ -50,7 +50,7 @@ def tx_group_by(tx_pd,col='t1'):
 
 def app_get_t1(app_list):
     if len(app_list)<1:
-        return None,None
+        return {}
     tx_list=[]
     for app_id in app_list:
         t1_dict={}
@@ -66,7 +66,7 @@ def app_get_t1(app_list):
         tx_list.append(t1_dict)
     tx_pd=pd.DataFrame(x for x in tx_list)
     if tx_pd.shape[0]<1:
-        return None,None
+        return {}
     tx_group_by(tx_pd,'t1')
 
 #    print(tx_pd)
@@ -79,7 +79,7 @@ def app_get_t1(app_list):
 
 def app_get_t2(app_list):
     if len(app_list)<1:
-        return None,None
+        return {}
     tx_list=[]
     for app_id in app_list:
         t1_dict={}
@@ -94,7 +94,7 @@ def app_get_t2(app_list):
         tx_list.append(t1_dict)
     tx_pd=pd.DataFrame(x for x in tx_list)
     if tx_pd.shape[0]<1:
-        return None,None
+        return {}
     tx_group_by(tx_pd,'t2')
 #    print(tx_pd)
 
