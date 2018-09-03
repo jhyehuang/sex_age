@@ -171,6 +171,7 @@ def devid_app_tx(deviceid_packages,package_label):
 #        print(filte)
         deviceid_packages.ix[filte,'app_len_t2_'+str(x)]=values
     columns.append('device_id')
+    logging.debug(columns)
     
     return deviceid_packages.ix[:, columns]
     
