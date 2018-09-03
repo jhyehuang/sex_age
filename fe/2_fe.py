@@ -50,8 +50,9 @@ def app_get_tx(app_list):
         t1_dict={}
         t2=get_package_dict(app_id,'t1,t2')
         print(t2)
-        if t2.shape[0]<1:
+        if len(t2)<1:
             continue
+        t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
         t1_dict['t2']=t2.get('t2','0')
         t1_dict['app_id']=app_id
