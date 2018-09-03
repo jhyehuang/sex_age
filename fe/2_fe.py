@@ -266,7 +266,7 @@ def compute_date():
     
     print(deviceid_packages.head(5))
     
-    deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv', columns=['device_id','app_len','t1_code','t2_code','t1_app_len','t1_app_len'],index= False)
+    deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv',index= False)
     
     
 if __name__=='__main__':
