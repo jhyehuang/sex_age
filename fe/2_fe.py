@@ -49,6 +49,7 @@ def tx_group_by(tx_pd,col='t1'):
 
 
 def app_get_t1(app_list):
+    logging.debug(app_list)
     if len(app_list)<1:
         return {}
     tx_list=[]
@@ -57,7 +58,7 @@ def app_get_t1(app_list):
         t2=get_package_dict(app_id,'t1,t2')
         
         if len(t2)<1:
-            print(t2)
+#            print(t2)
             continue
         t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
@@ -78,6 +79,7 @@ def app_get_t1(app_list):
 
 
 def app_get_t2(app_list):
+    logging.debug(app_list)
     if len(app_list)<1:
         return {}
     tx_list=[]
@@ -85,7 +87,7 @@ def app_get_t2(app_list):
         t1_dict={}
         t2=get_package_dict(app_id,'t1,t2')
         if len(t2)<1:
-            print(t2)
+#            print(t2)
             continue
         t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
@@ -123,10 +125,10 @@ def devid_app_tx(deviceid_packages,package_label):
         columns.append('app_len_t2_'+str(x))
         
     for x in package_label['t1'].unique():
-        deviceid_packages['app_len_t1_'+str(x)]=0
+        deviceid_packages['app_len_t1_'+str(x)]=int(0)
 
-    for x in package_label['t1'].unique():
-        deviceid_packages['app_len_t2_'+str(x)]=0
+    for x in package_label['t2'].unique():
+        deviceid_packages['app_len_t2_'+str(x)]=int(0)
     
     for x in package_label['t1'].unique():
         _x=[]
@@ -136,7 +138,7 @@ def devid_app_tx(deviceid_packages,package_label):
         _x=pd.DataFrame({'a':_x},dtype='category')
 
         def c(a,b):
-            print(a,b)
+#            print(a,b)
             ert=(str(a) in b.keys())
 #            print(ert)
             return ert
@@ -156,7 +158,7 @@ def devid_app_tx(deviceid_packages,package_label):
         _x=[]
         for i in range(deviceid_packages.shape[0]):
             _x.append(str(x))
-        print(_x)
+#        print(_x)
         _x=pd.DataFrame({'a':_x},dtype='category')
 
         def c(a,b):
@@ -179,7 +181,6 @@ def devid_app_tx(deviceid_packages,package_label):
 
 def devid_app_count(deviceid_packages,package_label):
 
-
     def app_count(text):
         app_list=text.split('|')
         return len(app_list)
@@ -195,7 +196,8 @@ def devid_app_count(deviceid_packages,package_label):
 #    print(package_label['t2'].max())
     
     def get_label_t1_1(l):
-        print(l)
+#        print(l)
+        logging.debug(l)
         ret=list(map(get_label_2_t1,l))
         condition = lambda t: t != ""
         ret= list(filter(condition, ret))
@@ -205,7 +207,8 @@ def devid_app_count(deviceid_packages,package_label):
         return ''.join(ret)
   
     def get_label_t2_1(l):
-        print(l)
+#        print(l)
+        logging.debug(l)
         ret=list(map(get_label_2_t2,l))
         condition = lambda t: t != ""
         ret= list(filter(condition, ret))
@@ -215,6 +218,7 @@ def devid_app_count(deviceid_packages,package_label):
         return ''.join(ret)
   
     def get_label_2_t1(l):
+        
         filer=package_label['app_id'].astype('category').values==l
         label=package_label.ix[filer,'t1'].values.tolist()
         if len(label)<1:
@@ -255,7 +259,7 @@ def compute_date():
     package_label['t1']=package_label['t1'].astype('category').values.codes
     package_label['t2']=package_label['t2'].astype('category').values.codes
     result = []
-#    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
+    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     pool.close()
     pool.join()
