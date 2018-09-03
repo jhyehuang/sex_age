@@ -49,7 +49,7 @@ def def_time_label(hour):
 
 def time_to_hour(timeStamp):
     # 字符类型的时间
-    timeArray = time.localtime(timeStamp)
+    timeArray = time.localtime(int(timeStamp))
 #    print(timeArray)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
@@ -57,14 +57,14 @@ def time_to_hour(timeStamp):
 
 def time_to_day(timeStamp):
     # 字符类型的时间
-    timeArray = time.localtime(timeStamp)
+    timeArray = time.localtime(int(timeStamp))
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
     return str(timeArray.tm_mday)   # 2013
 
 def time_to_mon(timeStamp):
     # 字符类型的时间
-    timeArray = time.localtime(timeStamp)
+    timeArray = time.localtime(int(timeStamp))
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
     return str(timeArray.tm_mon)   # 2013
