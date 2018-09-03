@@ -263,10 +263,8 @@ def compute_date():
     result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     pool.close()
     pool.join()
-    for res in result:
-        ret=res.get()
-        print('============================================',ret.head(2))
-        deviceid_packages=pd.merge(deviceid_packages,ret,on=['device_id'],how='left') 
+        
+    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left') 
     
     print(deviceid_packages.head(5))
     
