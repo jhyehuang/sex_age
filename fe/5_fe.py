@@ -20,7 +20,7 @@ mydb
 '''
 
 sys.path.append('..')
-from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,dev_id_train
+from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,dev_id_train,get_package_label
 from flags import FLAGS, unparsed
 from functools import reduce
 
@@ -56,12 +56,7 @@ def time_to_mon(timeStamp):
 
 
 
-def get_package_label(app_id,t):
-    sql='select '+t+' from package_label where app_id=\"'
-    sql=sql+app_id+'\"'
-#    print (sql)
-    ret=data_from_mysql(sql)
-    return ret
+
 
 
 

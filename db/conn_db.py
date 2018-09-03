@@ -49,3 +49,10 @@ def dev_id_train():
     sql='select * from deviceid_train'
     deviceid_train=data_from_mysql(sql)
     return deviceid_train
+
+def get_package_label(app_id,t):
+    sql='select '+t+' from package_label where app_id=\"'
+    sql=sql+app_id+'\"'
+#    print (sql)
+    ret=data_from_mysql(sql)
+    return ret
