@@ -31,43 +31,33 @@ def file_exists(filename):
 file_path=FLAGS.file_path
 
 
-def define_n_class():
+def hot_package_label():
 #    sql='alter table deviceid_train add n_class int(4) default 0'
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
+    package_label=pd.read_csv(file_path+'package_label.csv')
+    package_label['t1']=package_label['t1'].astype('category').values.codes
+    package_label['t2']=package_label['t2'].astype('category').values.codes
+    print(len(package_label['t1'].unique()))
+    print(len(package_label['t2'].unique()))
+    package_label.to_csv(file_path+'package_label.csv',columns=['app_id','t1','t2'],index= False)
     
-    sql='select * from deviceid_train'
-    package_label=data_from_mysql(sql)
-    
-#    sex=package_label['sex'].unique()
-#    age=package_label['age'].unique()
-    label=[]
-    for i in [1,2]:
-        for j in range(11):
-            label.append(str(i)+'-'+str(j))
-    label_dict={}
-    for i,x in enumerate(label):
-        label_dict[x]=i
-    label_pd=pd.DataFrame(x for x in [label_dict])
-    label_pd.to_csv(file_path+'label.csv')
-    def map_label(t1,t2):
-        return label_dict[str(t1)+'-'+str(t2)]
-        
-    print(package_label.head(3))
-    
-    package_label['n_class']=package_label.apply(lambda line:map_label(line['sex'],line['age']),axis=1)
-    truncate_table('deviceid_train')
-    
-    pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
-    
+def package_label_into_mysql():
+    data_src=pd.read_csv(file_path+'package_label.csv')
+    table_name='package_label'
+    truncate_table(table_name)
+    print(table_name)
+    print(data_src.head(5))
+    pd.io.sql.to_sql(data_src,table_name, engine,if_exists='append', index= False)
     
 if __name__=='__main__':
     start_time=time.time()
-    sql='select * from package_label'
+
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
-    define_n_class()
-
+    hot_package_label()
+    package_label_into_mysql()
+    
 # id,
     end_time=time.time()
     print('耗时:',end_time-start_time)

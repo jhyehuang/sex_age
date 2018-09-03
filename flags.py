@@ -23,6 +23,9 @@ def parse_args(check=True):
     parser.add_argument('--file_path', type=str, default='/home/zhijiehuang/github/data/sex_age/',
                         help='gevent.')
     
+    parser.add_argument('--tmp_data_path', type=str, default='/data/sex_age/',
+                        help='path to QuanSongCi.txt')
+    
     parser.add_argument('--host', type=str, default='localhost',
                         help='localhost.')
     

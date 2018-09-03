@@ -7,6 +7,7 @@ Created on Thu Aug 30 20:12:49 2018
 
 import pymysql
 import sys
+import pandas as pd
 sys.path.append('..')
 from flags import FLAGS
 
@@ -31,14 +32,20 @@ class mysql_conn(object):
         self.db_conn.close()
 db=mysql_conn().db_conn
 cursor=db.cursor()
-#sql="select * from documents"
-#try:
-#    cursor.execute(sql)
-#    result=cursor.fetchall()
-#    for i in result:
-#        for j in i:
-#            print(j,"=>",i[j])
-#            print(" ")
-#except:
-#    print('error')
-#db.close()
+
+def truncate_table(table_name):
+    sql='truncate table '+table_name
+    return data_from_mysql(sql)
+
+def data_from_mysql(sql):
+    db.ping(reconnect=True)
+    cursor.execute(sql)
+    db.commit()
+    ret=cursor.fetchall()
+    ret=pd.DataFrame(line for line in ret)
+    return ret
+
+def dev_id_train():
+    sql='select * from deviceid_train'
+    deviceid_train=data_from_mysql(sql)
+    return deviceid_train
