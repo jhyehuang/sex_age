@@ -41,7 +41,7 @@ def parse_args(check=True):
     parser.add_argument('--db', type=str, default='sex_age',
                         help='db.')
 
-    parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,,31,17,19,4',
+    parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,31,17,19,4',
                         help='d')
 
     parser.add_argument('--t2_feature', type=str, default='132,11,124,251,223,94,158,83,246,187,218,103,159,37,200,243,102',
@@ -84,5 +84,7 @@ if pad=='win':
     FLAGS, unparsed = win_parse_args()
 elif pad=='linux':
     FLAGS, unparsed = parse_args()
+
+#print(FLAGS.t2_feature.replace('\'','').split(','))
 
 
