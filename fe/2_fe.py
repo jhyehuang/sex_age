@@ -108,9 +108,9 @@ def devid_app_tx(deviceid_packages,package_label):
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
     
     columns=[]
-    for x in FLAGS.t1_feature.replaces('\'').plit(','):
+    for x in FLAGS.t1_feature.replace('\'').plit(','):
         columns.append('app_len_t1_'+str(x))
-    for x in FLAGS.t1_feature.replaces('\'').plit(','):
+    for x in FLAGS.t1_feature.replace('\'').plit(','):
         columns.append('app_len_t2_'+str(x))
         
     for x in package_label['t1'].unique():
