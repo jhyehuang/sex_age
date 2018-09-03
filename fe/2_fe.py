@@ -58,15 +58,16 @@ def app_get_tx(app_list):
         t1_dict['app_id']=app_id
         tx_list.append(t1_dict)
     tx_pd=pd.DataFrame(x for x in tx_list)
-    print(tx_pd)
+    
     tx_group_by(tx_pd,'t1')
     tx_group_by(tx_pd,'t2')
+    print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
-        result_t1[t1]=tx_pd[tx_pd.t1.values==t1,:].groupby('t1')['t1_size'].sum()
+        result_t1[t1]=tx_pd[tx_pd.t1.values==t1,'t1_size'].sum()
     result_t2={}
     for t2 in tx_pd.t2.unique():
-        result_t2[t2]=tx_pd[tx_pd.t2.values==t2,:].groupby('t2')['t2_size'].sum()
+        result_t2[t2]=tx_pd[tx_pd.t2.values==t2,'t2_size'].sum()
     return result_t1,result_t2
 
 
