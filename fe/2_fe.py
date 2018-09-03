@@ -64,10 +64,10 @@ def app_get_tx(app_list):
     print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
-        result_t1[t1]=tx_pd[tx_pd.t1.values==t1,'t1_size'].sum()
+        result_t1[t1]=tx_pd.ix[tx_pd.t1.values==t1,'t1_size'].sum()
     result_t2={}
     for t2 in tx_pd.t2.unique():
-        result_t2[t2]=tx_pd[tx_pd.t2.values==t2,'t2_size'].sum()
+        result_t2[t2]=tx_pd.ix[tx_pd.t2.values==t2,'t2_size'].sum()
     return result_t1,result_t2
 
 
