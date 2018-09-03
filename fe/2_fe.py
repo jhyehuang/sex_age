@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import os
 from subprocess import *
+import logging
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
@@ -26,6 +27,11 @@ from functools import reduce
 
 file_path=FLAGS.file_path
 
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
+
+
+
 def dev_id_train():
     sql='select * from deviceid_train'
     deviceid_train=data_from_mysql(sql)
@@ -34,7 +40,7 @@ def dev_id_train():
 def tx_group_by(tx_pd,col='t1'):
     
     _key_codes = tx_pd[col].values
-    print(_key_codes)
+#    print(_key_codes)
     cnt1=tx_pd['app_id'].groupby(_key_codes).size()
 #    cnt1 = grp1.aggregate(np.size)
     _cnt = cnt1[_key_codes].values
@@ -49,8 +55,9 @@ def app_get_t1(app_list):
     for app_id in app_list:
         t1_dict={}
         t2=get_package_dict(app_id,'t1,t2')
-        print(t2)
+        
         if len(t2)<1:
+            print(t2)
             continue
         t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
@@ -62,11 +69,11 @@ def app_get_t1(app_list):
         return None,None
     tx_group_by(tx_pd,'t1')
 
-    print(tx_pd)
+#    print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
         result_t1[t1]=tx_pd.ix[tx_pd.t1.values==t1,'t1_size'].sum()
-
+    logging.debug(result_t1)
     return result_t1
 
 
@@ -77,8 +84,8 @@ def app_get_t2(app_list):
     for app_id in app_list:
         t1_dict={}
         t2=get_package_dict(app_id,'t1,t2')
-        print(t2)
         if len(t2)<1:
+            print(t2)
             continue
         t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
@@ -89,11 +96,12 @@ def app_get_t2(app_list):
     if tx_pd.shape[0]<1:
         return None,None
     tx_group_by(tx_pd,'t2')
-    print(tx_pd)
+#    print(tx_pd)
 
     result_t2={}
     for t2 in tx_pd.t2.unique():
         result_t2[t2]=tx_pd.ix[tx_pd.t2.values==t2,'t2_size'].sum()
+    logging.debug(result_t2)
     return result_t2
 
 
@@ -123,10 +131,11 @@ def devid_app_tx(deviceid_packages,package_label):
         _x=[]
         for i in range(deviceid_packages.shape[0]):
             _x.append(str(x))
-        print(_x)
+#        print(_x)
         _x=pd.DataFrame({'a':_x},dtype='category')
 
         def c(a,b):
+            print(a,b)
             ert=(str(a) in b.keys())
 #            print(ert)
             return ert
