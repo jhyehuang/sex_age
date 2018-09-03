@@ -237,6 +237,7 @@ def devid_hour(deviceid_packages,package_label):
         deviceid_packages.ix[filte,'hour_t1_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
         deviceid_packages.ix[filte,'hour_t1_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
 
+
     for x in package_label['t2'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
@@ -263,6 +264,14 @@ def devid_hour(deviceid_packages,package_label):
 
     columns.append('device_id')
     logging.debug(columns)
+    
+    for x in package_label['t1'].unique():
+        for suffix in ['close_hour','start_hour','start_hour_len','start_hour_size']:
+            deviceid_packages['hour_t1_'+suffix+'_'+str(x)]=deviceid_packages['hour_t1_'+suffix+'_'+str(x)].astype('category').values.codes
+
+    for x in package_label['t2'].unique():
+        for suffix in ['close_hour','start_hour','start_hour_len','start_hour_size']:
+            deviceid_packages['hour_t2_'+suffix+'_'+str(x)]=deviceid_packages['hour_t2_'+suffix+'_'+str(x)].astype('category').values.codes
     
     return deviceid_packages.ix[:, columns]
 
@@ -439,6 +448,13 @@ def devid_day(deviceid_packages,package_label):
 
     columns.append('device_id')
     logging.debug(columns)
+    for x in package_label['t1'].unique():
+        for suffix in ['close_day','start_day','start_day_len','start_day_size']:
+            deviceid_packages['day_t1_'+suffix+'_'+str(x)]=deviceid_packages['day_t1_'+suffix+'_'+str(x)].astype('category').values.codes
+
+    for x in package_label['t2'].unique():
+        for suffix in ['close_day','start_day','start_day_len','start_day_size']:
+            deviceid_packages['day_t2_'+suffix+'_'+str(x)]=deviceid_packages['day_t2_'+suffix+'_'+str(x)].astype('category').values.codes
     
     return deviceid_packages.ix[:, columns]
     
@@ -615,6 +631,14 @@ def devid_mon(deviceid_packages,package_label):
 
     columns.append('device_id')
     logging.debug(columns)
+    
+    for x in package_label['t1'].unique():
+        for suffix in ['close_mon','start_mon','start_mon_len','start_mon_size']:
+            deviceid_packages['mon_t1_'+suffix+'_'+str(x)]=deviceid_packages['mon_t1_'+suffix+'_'+str(x)].astype('category').values.codes
+
+    for x in package_label['t2'].unique():
+        for suffix in ['close_mon','start_mon','start_mon_len','start_mon_size']:
+            deviceid_packages['mon_t2_'+suffix+'_'+str(x)]=deviceid_packages['mon_t2_'+suffix+'_'+str(x)].astype('category').values.codes
     
     return deviceid_packages.ix[:, columns]
     
