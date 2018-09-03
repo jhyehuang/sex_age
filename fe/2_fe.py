@@ -19,7 +19,8 @@ mydb
 '''
 
 sys.path.append('..')
-from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,get_package_label
+from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,get_package_label, \
+    get_package_dict
 from flags import FLAGS, unparsed
 from functools import reduce
 
@@ -47,12 +48,12 @@ def app_get_tx(app_list):
     tx_list=[]
     for app_id in app_list:
         t1_dict={}
-        t2=get_package_label(app_id,'t1,t2')
+        t2=get_package_dict(app_id,'t1,t2')
         print(t2)
         if t2.shape[0]<1:
             continue
-        t1_dict['t1']=t2['t1'].values
-        t1_dict['t2']=t2['t2'].values
+        t1_dict['t1']=t2.get('t1','0')
+        t1_dict['t2']=t2.get('t2','0')
         t1_dict['app_id']=app_id
         tx_list.append(t1_dict)
     tx_pd=pd.DataFrame(x for x in tx_list)

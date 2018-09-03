@@ -45,6 +45,13 @@ def data_from_mysql(sql):
     ret=pd.DataFrame(line for line in ret)
     return ret
 
+def dict_from_mysql(sql):
+    db.ping(reconnect=True)
+    cursor.execute(sql)
+    db.commit()
+    ret=cursor.fetchall()
+    return ret
+
 def dev_id_train():
     sql='select * from deviceid_train'
     deviceid_train=data_from_mysql(sql)
@@ -55,4 +62,11 @@ def get_package_label(app_id,t):
     sql=sql+app_id+'\"'
 #    print (sql)
     ret=data_from_mysql(sql)
+    return ret
+
+def get_package_dict(app_id,t):
+    sql='select '+t+' from package_label where app_id=\"'
+    sql=sql+app_id+'\"'
+#    print (sql)
+    ret=dict_from_mysql(sql)
     return ret
