@@ -252,9 +252,8 @@ def done(istrain,X_train,y_train,flag):
             dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
             columns=[]
-            for i in [1,2]:
-                for j in range(11):
-                    columns.append(str(i)+'-'+str(j))
+            for i in dtrain_predprob.shape[1]:
+                columns.append(str(i))
             y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
             def c(line):
                 return [round(x,6) for x in line]
