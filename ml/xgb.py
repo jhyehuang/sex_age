@@ -271,6 +271,7 @@ def done(istrain='train'):
         print(X_eval.shape)
         y_eval = X_eval['n_class']
         X_eval.drop('n_class',axis=1,inplace=True)
+        logging.debug(X_eval.shape)
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
