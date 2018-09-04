@@ -295,5 +295,6 @@ def lightgbm_data_get_test():
 
     return deviceid_test
 
-gdbt_data_get_train()
+if __name__ == "__main__":
+    gdbt_data_get_train()
 
