@@ -59,7 +59,8 @@ def test_score(_y, y):
     y=y.apply(lambda x:label_map[x])
     
     for col in label:
-        filte=(y.values==label)
+        logging.debug(y)
+        filte=(y.values==col)
         logging.debug(filte)
         label_pd.ix[filte,col]=1
     
