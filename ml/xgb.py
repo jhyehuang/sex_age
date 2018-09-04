@@ -235,7 +235,7 @@ def done(istrain='train'):
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     logging.debug(istrain) 
-    op=['n_estimators']
+    op=['fin']
     if istrain=='train':
         train_save = gdbt_data_get_train()
         
@@ -329,7 +329,7 @@ def done(istrain='train'):
         
         
 if __name__ == "__main__":
-#    done(istrain='train')
+    done(istrain='train')
     done(istrain='eval')
 #    done(istrain='test')
         
