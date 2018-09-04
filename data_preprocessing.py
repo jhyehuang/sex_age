@@ -52,7 +52,7 @@ def test_score(_y, y):
     n=_y.shape[0]
     label_pd=pd.DataFrame(a1,columns=label)
     
-    label_map=pd.read_csv(FLAGS.file_path+'label.csv').to_dict(orient='records')
+    label_map=pd.read_csv(FLAGS.file_path+'label.csv').to_dict(orient='records')[0]
     
     label_map={v: k for k, v in label_map.items()}
     
