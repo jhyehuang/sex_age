@@ -67,7 +67,7 @@ def test_score(_y, y):
 #    _y = list(map(lambda x:np.maximum(1e-7, np.minimum(1 - 1e-7, x)),_y))
     labels=label_pd.values
     
-    return - np.sum(  (labels * np.log(_y)))/n
+    return - np.sum(  np.sum(labels * np.log(_y)))/n
 
 def data_augmentation(deviceid_train):
     all_class=deviceid_train['n_class'].value_counts( sort=True,).tolist()
