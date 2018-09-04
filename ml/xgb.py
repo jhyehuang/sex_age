@@ -86,7 +86,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('my_preds_maxdepth_min_child_weights_1.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
@@ -99,7 +99,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('my_preds_maxdepth_min_child_weights_1.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
@@ -114,7 +114,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('my_preds_subsampleh_colsample_bytree_1.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_subsampleh_colsample_bytree_1.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
@@ -129,7 +129,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('reg_alpha_vs_reg_lambda1.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'reg_alpha_vs_reg_lambda1.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
@@ -157,7 +157,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('scale_pos_weight.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'scale_pos_weight.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
@@ -172,7 +172,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('rate_drop.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'rate_drop.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
