@@ -64,7 +64,7 @@ def test_score(_y, y):
         logging.debug(filte)
         label_pd.ix[filte,col]=1
     
-    _y = list(map(lambda x:np.maximum(1e-7, np.minimum(1 - 1e-7, x)),_y))
+#    _y = list(map(lambda x:np.maximum(1e-7, np.minimum(1 - 1e-7, x)),_y))
     labels=label_pd.values
     
     return - np.sum(  (labels * np.log(_y)))/n
