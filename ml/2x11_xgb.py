@@ -244,7 +244,6 @@ def done(istrain,X_train,y_train,flag):
             logging.debug(ret)
             gc.collect()
         del X_train
-        del X_train
         del y_train
     elif istrain=='eval':
         for oper in op:
