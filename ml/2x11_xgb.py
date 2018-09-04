@@ -264,7 +264,7 @@ def done(istrain,X_train,y_train,flag):
     
     
             logging.debug('-'*30)
-            logging.debug(test_score(y_pred,y_train))
+            
         
 
         del X_train
