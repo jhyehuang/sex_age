@@ -326,8 +326,8 @@ def done(istrain=True):
         
         
 if __name__ == "__main__":
-#    done('train')
-    done('eval')
-#    done('test')
+#    done(istrain='train')
+    done(istrain='eval')
+#    done(istrain='test')
         
 
