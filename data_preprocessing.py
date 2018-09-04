@@ -120,7 +120,7 @@ def gdbt_data_get_train():
     logging.debug(deviceid_train.shape)
 
 
-
+    deviceid_train=data_augmentation(deviceid_train)
     try:
         deviceid_train.drop('device_id', axis=1,inplace = True)
 #        deviceid_train.drop('sex', axis=1,inplace = True)
@@ -134,7 +134,7 @@ def gdbt_data_get_train():
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
-    deviceid_train=data_augmentation(deviceid_train)
+    
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
     logging.debug(deviceid_train.head(2))
