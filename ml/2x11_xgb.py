@@ -205,7 +205,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 gbtree_param =dict(learning_rate =0.1,
     booster='gbtree',
     num_class=None,
-    n_estimators=75,
+    n_estimators=1000,
 #        n_estimators=1219,
 #        n_estimators=1,
     max_depth=6,
@@ -227,7 +227,7 @@ kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 def done(istrain,X_train,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
-    op=['fin']
+    op=['n_estimators']
     if istrain!='test':
         gbtree_param.update(dict(num_class=len(y_train.unique().tolist())))
     if istrain=='train':
