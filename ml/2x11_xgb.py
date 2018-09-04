@@ -228,7 +228,7 @@ def done(istrain,train_save,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     op=['fin']
-    gbtree_param.update(dict(num_class=len(y_train.unique().tolist)))
+    gbtree_param.update(dict(num_class=len(y_train.unique().tolist())))
     if istrain=='train':
         xgb1 = XGBClassifier(**gbtree_param,
         objective='multi:softprob',
