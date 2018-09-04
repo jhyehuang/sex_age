@@ -266,30 +266,31 @@ def done(istrain='train'):
         del X_train
         del y_train
     elif istrain=='eval':
+        
         X_eval = gdbt_data_get_eval()
         print(X_eval.shape)
         y_eval = X_eval['n_class']
         X_eval.drop('n_class',axis=1,inplace=True)
-
-        xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
-        logging.debug(xgb1.get_params()['n_estimators'])
-        dtrain_predprob = xgb1.predict_proba(X_eval)
-        logging.debug(dtrain_predprob.shape)
-        columns=[]
-        for i in [1,2]:
-            for j in range(11):
-                columns.append(str(i)+'-'+str(j))
-        y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
-        def c(line):
-            return [round(x,6) for x in line]
-        y_pred.apply(lambda line:c(line),axis=1)
-
-
-        logging.debug('-'*30)
-        logging.debug(test_score(y_pred,y_eval))
+        for oper in op:
+            xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+            logging.debug(xgb1.get_params()['n_estimators'])
+            dtrain_predprob = xgb1.predict_proba(X_eval)
+            logging.debug(dtrain_predprob.shape)
+            columns=[]
+            for i in [1,2]:
+                for j in range(11):
+                    columns.append(str(i)+'-'+str(j))
+            y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
+            def c(line):
+                return [round(x,6) for x in line]
+            y_pred.apply(lambda line:c(line),axis=1)
+    
+    
+            logging.debug('-'*30)
+            logging.debug(test_score(y_pred,y_eval))
         
 
-        del X_test
+        del X_eval
     elif istrain=='test':
         X_test = gdbt_data_get_test()
         print(X_test.shape)
