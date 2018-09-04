@@ -309,15 +309,17 @@ def headle_sex(flag):
     train_save = gdbt_data_get_train()
     print(train_save.shape)
     y_train = train_save[flag]
-    train_save.drop(flag,axis=1,inplace=True)
+    train_save.drop('sex',axis=1,inplace=True)
+    train_save.drop('age', axis=1,inplace = True)
     done('train',train_save,y_train,flag)
     
     X_eval = gdbt_data_get_eval()
     print(X_eval.shape)
     y_eval = X_eval[flag]
-    X_eval.drop(flag,axis=1,inplace=True)
+#    X_eval.drop(flag,axis=1,inplace=True)
     logging.debug(X_eval.shape)
-    
+    X_eval.drop('sex',axis=1,inplace=True)
+    X_eval.drop('age', axis=1,inplace = True)
     done('eval',X_eval,y_eval,flag)
     
     X_test = gdbt_data_get_test()

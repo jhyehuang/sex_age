@@ -125,6 +125,7 @@ def gdbt_data_get_train():
         deviceid_train.drop('device_id', axis=1,inplace = True)
 #        deviceid_train.drop('sex', axis=1,inplace = True)
 #        deviceid_train.drop('age', axis=1,inplace = True)
+        deviceid_train.drop('n_class', axis=1,inplace = True)
         
 #        deviceid_train.drop('t1_code', axis=1,inplace = True)
 #        deviceid_train.drop('t2_code', axis=1,inplace = True)
@@ -167,6 +168,7 @@ def gdbt_data_get_eval():
         deviceid_train.drop('device_id', axis=1,inplace = True)
 #        deviceid_train.drop('sex', axis=1,inplace = True)
 #        deviceid_train.drop('age', axis=1,inplace = True)
+        deviceid_train.drop('n_class', axis=1,inplace = True)
         
 #        deviceid_train.drop('t1_code', axis=1,inplace = True)
 #        deviceid_train.drop('t2_code', axis=1,inplace = True)
