@@ -56,7 +56,7 @@ def test_score(_y, y):
     
     label_map={v: k for k, v in label_map.items()}
     
-    y=y.apply(lambda x:label_map(x))
+    y=y.apply(lambda x:label_map[x])
     
     for col in label:
         filte=(y.values==label)
