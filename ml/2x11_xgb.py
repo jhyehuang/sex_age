@@ -224,7 +224,7 @@ gbtree_param =dict(learning_rate =0.1,
 
 kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 
-def done(istrain,train_save,y_train,flag):
+def done(istrain,X_train,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     op=['fin']
@@ -243,14 +243,14 @@ def done(istrain,train_save,y_train,flag):
             ret=dump(xgb1, FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat') 
             logging.debug(ret)
             gc.collect()
-        del train_save
+        del X_train
         del X_train
         del y_train
     elif istrain=='eval':
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+flag+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
-            dtrain_predprob = xgb1.predict_proba(X_eval)
+            dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
             columns=[]
             for i in [1,2]:
@@ -263,16 +263,16 @@ def done(istrain,train_save,y_train,flag):
     
     
             logging.debug('-'*30)
-            logging.debug(test_score(y_pred,y_eval))
+            logging.debug(test_score(y_pred,y_train))
         
 
-        del X_eval
+        del X_train
     elif istrain=='test':
 
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+flag+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
-            dtrain_predprob = xgb1.predict_proba(X_test)
+            dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
             columns=[]
             for i in dtrain_predprob.shape[1]:
@@ -296,7 +296,7 @@ def done(istrain,train_save,y_train,flag):
 
             
             fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
-        del X_test
+        del X_train
         return fin
         
         
