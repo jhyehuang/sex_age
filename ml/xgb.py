@@ -9,6 +9,7 @@ import xgboost as xgb
 from sklearn.metrics import log_loss
 
 from matplotlib import pyplot
+pyplot.switch_backend('agg')
 import pylab 
 import sys
 sys.path.append('..')
@@ -211,7 +212,7 @@ dart_param = {'booster': 'dart',
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=2000,
+        n_estimators=1219,
 #        n_estimators=1,
         max_depth=6,
 #        min_child_weight=5,
@@ -235,7 +236,7 @@ def done(istrain='train'):
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     logging.debug(istrain) 
-    op=['n_estimators']
+    op=['fin']
     if istrain=='train':
         train_save = gdbt_data_get_train()
         
