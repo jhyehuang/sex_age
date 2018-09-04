@@ -329,6 +329,7 @@ def headle_sex(flag):
     done('test',X_test,y,flag)
         
 def test_concat(df1,df2):
+    columns=[]
     for i in [1,2]:
         for j in range(11):
             col=str(i)+'-'+str(j)
@@ -337,9 +338,9 @@ def test_concat(df1,df2):
     columns.append('DeviceID')
     df1.to_csv(FLAGS.tmp_data_path+'2x11_xgboost.test.csv',columns=columns,index=False)
 if __name__ == "__main__":
-    result=[]
-    for col in ['sex','age']:
-        result.append(headle_sex(col))
+#    result=[]
+#    for col in ['sex','age']:
+#        result.append(headle_sex(col))
         
     test_concat(result[0],result[1])
     
