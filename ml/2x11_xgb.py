@@ -247,7 +247,7 @@ def done(istrain,X_train,y_train,flag):
         del y_train
     elif istrain=='eval':
         for oper in op:
-            xgb1 = load(FLAGS.tmp_data_path+flag+'xgboost.cv_'+oper+'.model.joblib_dat')
+            xgb1 = load(FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
             dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
@@ -269,7 +269,7 @@ def done(istrain,X_train,y_train,flag):
     elif istrain=='test':
 
         for oper in op:
-            xgb1 = load(FLAGS.tmp_data_path+flag+'xgboost.cv_'+oper+'.model.joblib_dat')
+            xgb1 = load(FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
             dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
