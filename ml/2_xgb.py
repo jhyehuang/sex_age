@@ -45,8 +45,8 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 
 
-def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=173):
-    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
+def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=0):
+    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.6,random_state = random_state)
     if cv_type=='n_estimators':
         xgb_param = alg.get_xgb_params()
 #        xgb_param['num_class'] = 2
@@ -54,7 +54,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         xgtrain = xgb.DMatrix(X_train, label = y_train)
         
         cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], folds =cv_folds,
-                         metrics='mlogloss', early_stopping_rounds=early_stopping_rounds)
+                         metrics='auc', early_stopping_rounds=early_stopping_rounds)
         
         n_estimators = cvresult.shape[0]
         alg.set_params(n_estimators = n_estimators)
@@ -65,19 +65,19 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         cvresult.to_csv( FLAGS.tmp_data_path+'n_estimators.csv', index_label = 'n_estimators')
         
         # plot
-        test_means = cvresult['test-mlogloss-mean']
-        test_stds = cvresult['test-mlogloss-std'] 
+#        test_means = cvresult['test-logloss-mean']
+#        test_stds = cvresult['test-logloss-std'] 
         
-        train_means = cvresult['train-mlogloss-mean']
-        train_stds = cvresult['train-mlogloss-std'] 
+#        train_means = cvresult['train-logloss-mean']
+#        train_stds = cvresult['train-logloss-std'] 
 
-        x_axis = range(0, n_estimators)
-        pyplot.errorbar(x_axis, test_means, yerr=test_stds ,label='Test')
-        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
-        pyplot.title("XGBoost n_estimators vs Log Loss")
-        pyplot.xlabel( 'n_estimators' )
-        pyplot.ylabel( 'Log Loss' )
-        pyplot.savefig(  FLAGS.tmp_data_path+'n_estimators4_2_3_699.png' )
+#        x_axis = range(0, n_estimators)
+#        pyplot.errorbar(x_axis, test_means, yerr=test_stds ,label='Test')
+#        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
+#        pyplot.title("XGBoost n_estimators vs Log Loss")
+#        pyplot.xlabel( 'n_estimators' )
+#        pyplot.ylabel( 'Log Loss' )
+#        pyplot.savefig(  FLAGS.tmp_data_path+'n_estimators4_2_3_699.png' )
         
     elif cv_type=='max_depth':
 #        xgb_param = alg.get_xgb_params()
@@ -85,7 +85,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
 #        min_child_weight = range(1,6,1)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -98,7 +98,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         min_child_weight = range(1,6,1)
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -113,7 +113,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         colsample_bytree = [i/10.0 for i in range(6,10)]
         param_cv = dict(subsample=subsample, colsample_bytree=colsample_bytree)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_subsampleh_colsample_bytree_1.csv')
     #  
@@ -128,7 +128,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
         param_cv = dict(reg_alpha=reg_alpha, reg_lambda=reg_lambda)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'reg_alpha_vs_reg_lambda1.csv')
     #  
@@ -142,7 +142,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
         param_cv = dict(gamma=gamma)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv('gamma.csv')
     #  
@@ -156,7 +156,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
         param_cv = dict(scale_pos_weight=scale_pos_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'scale_pos_weight.csv')
     #  
@@ -171,7 +171,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
         param_cv = dict(rate_drop=rate_drop,skip_drop=skip_drop)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'rate_drop.csv')
     #  
@@ -181,7 +181,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
             alg.set_params(**{key:value})
     #Fit the algorithm on the data
 #    alg.set_params(cvresult.best_params_)
-    alg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)],eval_metric=['auc'],)
+    alg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)],eval_metric='auc',)
         
     #Predict training set:
     
@@ -202,24 +202,21 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         pass
 
 
-gbtree_param =dict(learning_rate =0.2,
-    booster='gbtree',
-    num_class=11,
-    n_estimators=1000,
-#        n_estimators=1219,
+gbtree_param =dict(learning_rate =0.1,
+        booster='gbtree',
+        n_estimators=89,
 #        n_estimators=1,
-    max_depth=6,
-#        min_child_weight=5,
-#        gamma=0.1,
-#        subsample=0.6,
-#        colsample_bytree=0.9,
-#        return_train_score=True,
-#    scoring='roc_auc',
+        max_depth=6,
+        min_child_weight=1,
+        gamma=0.1,
+        subsample=0.6,
+        colsample_bytree=0.9,
+        scoring='roc_auc',
 #        scale_pos_weight=1,
-#    reg_alpha=8,
-#    reg_lambda=0.7,
-#    rate_drop= 0.3,
-#    skip_drop= 0.5,
+        reg_alpha=6.1,
+        reg_lambda=0.5,
+#        rate_drop= 0.3,
+#        skip_drop= 0.5
     )
 
 kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
@@ -227,14 +224,17 @@ kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 def done(istrain,X_train,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
-    op=['n_estimators']
-
+    op=['fin']
+#    if istrain!='test':
+#        gbtree_param.update(dict(num_class=2))
+#    if flag=='age':
+#        gbtree_param.update(dict(n_estimators=500,learning_rate=0.1,max_depth=6))
     if istrain=='train':
         xgb1 = XGBClassifier(**gbtree_param,
-        objective='multi:softprob',
+        objective='binary:logistic',
         eval_metric=['auc'],
         nthread=-1,
-        verbose=1,
+        verbose=2,
         seed=27,
         silent=True,**gpu_dict)
         for i,oper in enumerate(op):
@@ -323,6 +323,9 @@ def headle_sex(flag):
     y_train = train_save[flag]
     train_save.drop('sex',axis=1,inplace=True)
     train_save.drop('age', axis=1,inplace = True)
+    
+    logging.debug(train_save.shape)
+    logging.debug(y_train.unique())
     done('train',train_save,y_train,flag)
     
     X_eval = gdbt_data_get_eval()
@@ -340,23 +343,10 @@ def headle_sex(flag):
 
     done('test',X_test,y,flag)
         
-def test_concat(df1,df2):
-    columns=[]
-    columns.append('DeviceID')
-    for i in [1,2]:
-        for j in range(11):
-            col=str(i)+'-'+str(j)
-            columns.append(col)
-            df1[col]=df1[str(i)]*df2[str(j)]
-    def c(line):
-        return [round(x,6) for x in line[1:]]
-    df1.apply(lambda line:c(line),axis=1)
-    df1.to_csv(FLAGS.tmp_data_path+'2x11_xgboost.test.csv',columns=columns,index=False)
+
 if __name__ == "__main__":
     result=[]
-    for col in ['age']:
+    for col in ['sex']:
         result.append(headle_sex(col))
-#    df1=pd.read_csv(FLAGS.tmp_data_path+'sex_fin-xgboost.test.csv')
-#    df2=pd.read_csv(FLAGS.tmp_data_path+'age_fin-xgboost.test.csv')
-#    test_concat(df1,df2)
+
     
