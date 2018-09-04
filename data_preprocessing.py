@@ -40,18 +40,50 @@ def logloss(_y, y, weight=None):
     
     return 'logloss',- np.sum(weight * (labels * np.log(_y))) / np.sum(weight)
 
+def data_augmentation(deviceid_train):
+    all_class=deviceid_train['n_class'].value_counts( sort=True,).tolist()
+    
+    max_line=all_class[0]
+    logging.debug(all_class[1:])
+    for x in deviceid_train.n_class.unique().tolist():
+        filte=deviceid_train.n_class.values==x
+        tmp_deviceid_train=deviceid_train.ix[filte,:]
+        logging.debug(deviceid_train.n_class.values)
+        c=tmp_deviceid_train.shape[0]
+        n=max_line-tmp_deviceid_train.shape[0]
+        logging.debug(x)
+        logging.debug(n)
+        logging.debug(c)
+        logging.debug(int(n/c))
+        reed=int(n/c)
+        if n<c and c < 3000:
+            reed=1
+        for i in (range(reed)):
+#            sample_deviceid_train=tmp_deviceid_train.sample(n=n*x)
+            deviceid_train=pd.concat([deviceid_train,tmp_deviceid_train])
+    logging.debug(deviceid_train.shape)
+    logging.debug(deviceid_train['n_class'].value_counts( sort=True,))
+    return deviceid_train
+
+
+
 def gdbt_data_get_train():
     
     deviceid_train=dev_id_train()
     
+#    return
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_train.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
 
@@ -64,15 +96,16 @@ def gdbt_data_get_train():
         
         deviceid_train.drop('t1_code', axis=1,inplace = True)
         deviceid_train.drop('t2_code', axis=1,inplace = True)
-        deviceid_train.drop('add_list_x', axis=1,inplace = True)
-        deviceid_train.drop('add_list_y', axis=1,inplace = True)
+        deviceid_train.drop('add_list', axis=1,inplace = True)
+
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
+    deviceid_train=data_augmentation(deviceid_train)
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
     logging.debug(deviceid_train.head(2))
-    logging.debug(deviceid_train['n_class'].unique())
+    
     return deviceid_train
 
 
@@ -80,14 +113,18 @@ def gdbt_data_get_test():
     
     deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_train.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_06,on=['device_id'],how='left')
     logging.debug(deviceid_test.columns)
     logging.debug(deviceid_test.shape)
 
@@ -98,8 +135,7 @@ def gdbt_data_get_test():
         
         deviceid_test.drop('t1_code', axis=1,inplace = True)
         deviceid_test.drop('t2_code', axis=1,inplace = True)
-        deviceid_test.drop('add_list_x', axis=1,inplace = True)
-        deviceid_test.drop('add_list_y', axis=1,inplace = True)
+        deviceid_test.drop('add_list', axis=1,inplace = True)
     except:
         error_msg = traceback.format_exc()
         print(error_msg)

@@ -80,11 +80,11 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
     elif cv_type=='max_depth':
 #        xgb_param = alg.get_xgb_params()
-        max_depth = range(6,9,1)
+        max_depth = range(4,7,1)
 #        min_child_weight = range(1,6,1)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=3,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv('my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -97,7 +97,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         min_child_weight = range(1,6,1)
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=3,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv('my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -108,7 +108,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
 
     elif cv_type=='subsample':
-        subsample = [i/10.0 for i in range(3,9)]
+        subsample = [i/10.0 for i in range(6,9)]
         colsample_bytree = [i/10.0 for i in range(6,10)]
         param_cv = dict(subsample=subsample, colsample_bytree=colsample_bytree)
 
@@ -170,7 +170,7 @@ def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv
         
         param_cv = dict(rate_drop=rate_drop,skip_drop=skip_drop)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=3,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv('rate_drop.csv')
     #  
@@ -211,19 +211,20 @@ dart_param = {'booster': 'dart',
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=86,
+        n_estimators=1000,
 #        n_estimators=1,
         max_depth=6,
-        min_child_weight=5,
-        gamma=0.1,
-        subsample=0.8,
-        colsample_bytree=0.6,
-#        scoring='roc_auc',
+#        min_child_weight=5,
+#        gamma=0.1,
+#        subsample=0.7,
+#        colsample_bytree=0.8,
+#        return_train_score=True,
+        scoring='roc_auc',
 #        scale_pos_weight=1,
-#        reg_alpha=8,
-#        reg_lambda=0.7,
-#        rate_drop= 0.3,
-#        skip_drop= 0.5,
+        reg_alpha=8,
+        reg_lambda=0.7,
+        rate_drop= 0.3,
+        skip_drop= 0.5,
         )
 
 #gbtree_param.update(dart_param)
@@ -233,7 +234,7 @@ def done(istrain=True):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
-    op=['gamma','fin']
+    op=['n_estimators']
     if istrain:
         train_save = gdbt_data_get_train()
         
@@ -279,7 +280,7 @@ def done(istrain=True):
                     columns.append(str(i)+'-'+str(j))
             y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
             def c(line):
-                return [round(x,4) for x in line]
+                return [round(x,6) for x in line]
             y_pred.apply(lambda line:c(line),axis=1)
 
 
@@ -288,7 +289,8 @@ def done(istrain=True):
             logging.debug(y_pred)
             test_id=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
             logging.debug(test_id['device_id'].shape)
-            test_id['DeviceID']=test_id['device_id'].map(str)
+            test_id['device_id']=test_id['device_id'].map(str)
+            test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
             fin=pd.concat([test_id,y_pred],axis=1)
             print(fin)
 
@@ -298,7 +300,7 @@ def done(istrain=True):
         
         
 if __name__ == "__main__":
-#    done()
+    done()
     done(False)
         
 
