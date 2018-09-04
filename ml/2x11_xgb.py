@@ -224,7 +224,7 @@ gbtree_param =dict(learning_rate =0.1,
 
 kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 
-def done(istrain='train',train_save,y_train,flag):
+def done(istrain,train_save,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     op=['fin']
@@ -305,7 +305,7 @@ def headle_sex(flag):
     print(train_save.shape)
     y_train = train_save[flag]
     train_save.drop(flag,axis=1,inplace=True)
-    done(istrain='train',train_save,y_train,flag)
+    done('train',train_save,y_train,flag)
     
     X_eval = gdbt_data_get_eval()
     print(X_eval.shape)
@@ -313,13 +313,13 @@ def headle_sex(flag):
     X_eval.drop(flag,axis=1,inplace=True)
     logging.debug(X_eval.shape)
     
-    done(istrain='eval',X_eval,y_eval,flag)
+    done('eval',X_eval,y_eval,flag)
     
     X_test = gdbt_data_get_test()
     print(X_test.shape)
     y=None
 
-    done(istrain='test',X_test,y,flag)
+    done('test',X_test,y,flag)
         
 def test_concat(df1,df2):
     for i in [1,2]:
