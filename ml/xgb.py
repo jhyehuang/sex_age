@@ -44,8 +44,8 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 
 
-def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=0):
-    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.6,random_state = random_state)
+def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=173):
+    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
     if cv_type=='n_estimators':
         xgb_param = alg.get_xgb_params()
 #        xgb_param['num_class'] = 2
@@ -235,7 +235,7 @@ def done(istrain=True):
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     op=['n_estimators']
-    if istrain:
+    if istrain=='train':
         train_save = gdbt_data_get_train()
         
 #        np.random.seed(999)
@@ -250,7 +250,7 @@ def done(istrain=True):
         xgb1 = XGBClassifier(**gbtree_param,
         
         objective='multi:softprob',
-        eval_metric=['mlogloss'],
+        eval_metric=['mlogloss','auc'],
         nthread=-1,
         verbose=2,
         seed=27,
@@ -264,7 +264,32 @@ def done(istrain=True):
         del train_save
         del X_train
         del y_train
-    else:
+    elif istrain=='eval':
+        X_eval = gdbt_data_get_eval()
+        print(X_eval.shape)
+        y_eval = X_eval['n_class']
+        X_eval.drop('n_class',axis=1,inplace=True)
+
+        xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+        logging.debug(xgb1.get_params()['n_estimators'])
+        dtrain_predprob = xgb1.predict_proba(X_eval)
+        logging.debug(dtrain_predprob.shape)
+        columns=[]
+        for i in [1,2]:
+            for j in range(11):
+                columns.append(str(i)+'-'+str(j))
+        y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
+        def c(line):
+            return [round(x,6) for x in line]
+        y_pred.apply(lambda line:c(line),axis=1)
+
+
+        logging.debug('-'*30)
+        logging.debug(test_score(y_pred,y_eval))
+        
+
+        del X_test
+    elif istrain=='test':
         X_test = gdbt_data_get_test()
         print(X_test.shape)
 #        X_test.drop('click',axis=1,inplace=True)
@@ -292,6 +317,7 @@ def done(istrain=True):
             test_id['device_id']=test_id['device_id'].map(str)
             test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
             fin=pd.concat([test_id,y_pred],axis=1)
+            
             print(fin)
 
             
@@ -300,7 +326,8 @@ def done(istrain=True):
         
         
 if __name__ == "__main__":
-    done()
-    done(False)
+#    done('train')
+    done('eval')
+#    done('test')
         
 

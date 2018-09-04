@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import traceback
 from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 import lightgbm as lgb 
 
 import logging
@@ -40,6 +41,32 @@ def logloss(_y, y, weight=None):
     
     return 'logloss',- np.sum(weight * (labels * np.log(_y))) / np.sum(weight)
 
+def test_score(_y, y):
+    # y=[1,2,3]
+    label=[]
+#    _y.drop('DeviceID', axis=1,inplace = True)
+    for i in [1,2]:
+        for j in range(11):
+            label.append(str(i)+'-'+str(j))
+    a1 = np.zeros(_y.shape) 
+    n=_y.shape[0]
+    label_pd=pd.DataFrame(a1,columns=label)
+    
+    label_map=pd.read_csv(FLAGS.file_path+'label.csv').to_dict(orient='records')
+    
+    label_map={v: k for k, v in label_map.items()}
+    
+    y=y.apply(lambda x:label_map(x))
+    
+    for col in label:
+        filte=(y.values==label)
+        label_pd.ix[filte,col]=1
+    
+    _y = list(map(lambda x:np.maximum(1e-7, np.minimum(1 - 1e-7, x)),_y))
+    labels=label_pd.values
+    
+    return - np.sum(  (labels * np.log(_y)))/n
+
 def data_augmentation(deviceid_train):
     all_class=deviceid_train['n_class'].value_counts( sort=True,).tolist()
     
@@ -56,6 +83,8 @@ def data_augmentation(deviceid_train):
         logging.debug(c)
         logging.debug(int(n/c))
         reed=int(n/c)
+        if c >4000:
+            continue
         if n<c and c < 3000:
             reed=1
         for i in (range(reed)):
@@ -63,6 +92,7 @@ def data_augmentation(deviceid_train):
             deviceid_train=pd.concat([deviceid_train,tmp_deviceid_train])
     logging.debug(deviceid_train.shape)
     logging.debug(deviceid_train['n_class'].value_counts( sort=True,))
+    deviceid_train=shuffle(deviceid_train)
     return deviceid_train
 
 
@@ -94,8 +124,8 @@ def gdbt_data_get_train():
         deviceid_train.drop('sex', axis=1,inplace = True)
         deviceid_train.drop('age', axis=1,inplace = True)
         
-        deviceid_train.drop('t1_code', axis=1,inplace = True)
-        deviceid_train.drop('t2_code', axis=1,inplace = True)
+#        deviceid_train.drop('t1_code', axis=1,inplace = True)
+#        deviceid_train.drop('t2_code', axis=1,inplace = True)
         deviceid_train.drop('add_list', axis=1,inplace = True)
 
     except:
@@ -108,6 +138,48 @@ def gdbt_data_get_train():
     
     return deviceid_train
 
+
+def gdbt_data_get_eval():
+    
+    deviceid_train=dev_id_train()
+    
+#    return
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_train.csv',)
+    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
+    logging.debug(deviceid_train.columns)
+    logging.debug(deviceid_train.shape)
+
+
+
+    try:
+        deviceid_train.drop('device_id', axis=1,inplace = True)
+        deviceid_train.drop('sex', axis=1,inplace = True)
+        deviceid_train.drop('age', axis=1,inplace = True)
+        
+#        deviceid_train.drop('t1_code', axis=1,inplace = True)
+#        deviceid_train.drop('t2_code', axis=1,inplace = True)
+        deviceid_train.drop('add_list', axis=1,inplace = True)
+
+    except:
+        error_msg = traceback.format_exc()
+        print(error_msg)
+#    deviceid_train=data_augmentation(deviceid_train)
+    logging.debug(deviceid_train.columns)
+    logging.debug(deviceid_train.shape)
+    logging.debug(deviceid_train.head(2))
+    deviceid_train=deviceid_train.sample(frac=0.3)
+    
+    return deviceid_train
 
 def gdbt_data_get_test():
     
@@ -133,8 +205,8 @@ def gdbt_data_get_test():
         deviceid_test.drop('device_id', axis=1,inplace = True)
         
         
-        deviceid_test.drop('t1_code', axis=1,inplace = True)
-        deviceid_test.drop('t2_code', axis=1,inplace = True)
+#        deviceid_test.drop('t1_code', axis=1,inplace = True)
+#        deviceid_test.drop('t2_code', axis=1,inplace = True)
         deviceid_test.drop('add_list', axis=1,inplace = True)
     except:
         error_msg = traceback.format_exc()
