@@ -140,7 +140,7 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
 
         cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('gamma.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'gamma.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
