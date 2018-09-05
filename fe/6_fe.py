@@ -54,7 +54,8 @@ def def_time_label(hour):
 
 
 def word_to_tfidf(word):
-    print(word)
+    logging.debug(word.shape)
+    logging.debug(word)
     if word.shape[0]<1:
         return 0
     transformer=TfidfVectorizer()
@@ -284,7 +285,7 @@ def devid_hour(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-        if filte.shape[0]<1:
+        if filte.shape[0]<2:
             continue
         values=deviceid_packages.ix[filte,'t2_hour_time'].apply(lambda x:get_values(x))
 
