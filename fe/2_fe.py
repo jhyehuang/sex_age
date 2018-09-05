@@ -55,6 +55,7 @@ def word_to_lda(word):
                                     max_iter=50,
                                     learning_method='batch')
     docres = lda.fit_transform(tf)
+    logging.debug(docres)
     lda_pd=pd.DataFrame(docres,columns=['app_lda_t2_'+str(i) for i in range(1,6)])
     return lda_pd
 
