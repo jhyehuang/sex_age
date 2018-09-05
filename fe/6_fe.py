@@ -54,6 +54,7 @@ def def_time_label(hour):
 
 
 def word_to_tfidf(word):
+    print(word)
     transformer=TfidfVectorizer()
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
