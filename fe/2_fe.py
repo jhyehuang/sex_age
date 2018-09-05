@@ -11,7 +11,7 @@ import numpy as np
 import os
 from subprocess import *
 import logging
-import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
