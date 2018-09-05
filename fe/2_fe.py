@@ -56,7 +56,7 @@ def word_to_lda(word):
                                     learning_method='batch')
     docres = lda.fit_transform(tf)
     logging.debug(docres)
-    lda_pd=pd.DataFrame(data=docres,columns=['app_lda_t2_'+str(i) for i in range(1,6)])
+    lda_pd=pd.DataFrame(data=np.array(docres),columns=['app_lda_t2_'+str(i) for i in range(1,6)])
     return lda_pd
 
 def tx_group_by(tx_pd,col='t1'):
