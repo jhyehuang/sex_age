@@ -7,9 +7,9 @@ import pytz
 
 FLAGS, unparsed='',''
 
-#pad='win'
+pad='win'
 #pad='tiny'
-pad='linux'
+#pad='linux'
 
 tz = pytz.timezone('Asia/Shanghai')
 current_time = datetime.datetime.now(tz)
@@ -58,7 +58,7 @@ def win_parse_args(check=True):
     parser.add_argument('--cwd', type=str, default='d:/GitHub/sex_age/arg_data_pre',
                         help='path to  tool.')
     
-    parser.add_argument('--file_path', type=str, default='d:/GitHub/data/sex_age/',
+    parser.add_argument('--file_path', type=str, default='F:/GitHub/data/sex_age/',
                         help='gevent.')
     
     parser.add_argument('--host', type=str, default='172.18.18.175',
@@ -75,6 +75,12 @@ def win_parse_args(check=True):
     
     parser.add_argument('--db', type=str, default='sex_age',
                         help='db.')
+    
+    parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,31,17,19,4',
+                        help='d')
+
+    parser.add_argument('--t2_feature', type=str, default='132,11,124,251,223,94,158,83,246,187,218,103,159,37,200,243,102',
+                        help='d')
     
     FLAGS, unparsed = parser.parse_known_args()
 

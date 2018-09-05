@@ -98,8 +98,8 @@ def data_augmentation(deviceid_train):
     return deviceid_train
 
 
-
-def gdbt_data_get_train():
+# flag  in ['all','sex','age','device_id']
+def gdbt_data_get_train(flag):
     
     deviceid_train=dev_id_train()
     
@@ -122,10 +122,14 @@ def gdbt_data_get_train():
 
     deviceid_train=data_augmentation(deviceid_train)
     try:
-        deviceid_train.drop('device_id', axis=1,inplace = True)
-#        deviceid_train.drop('sex', axis=1,inplace = True)
-#        deviceid_train.drop('age', axis=1,inplace = True)
-        deviceid_train.drop('n_class', axis=1,inplace = True)
+        if flag!='device_id':
+            deviceid_train.drop('device_id', axis=1,inplace = True)
+        if flag!='sex':
+            deviceid_train.drop('sex', axis=1,inplace = True)
+        if flag!='age':
+            deviceid_train.drop('age', axis=1,inplace = True)
+        if flag!='n_class':
+            deviceid_train.drop('n_class', axis=1,inplace = True)
         
 #        deviceid_train.drop('t1_code', axis=1,inplace = True)
 #        deviceid_train.drop('t2_code', axis=1,inplace = True)
@@ -142,7 +146,7 @@ def gdbt_data_get_train():
     return deviceid_train
 
 
-def gdbt_data_get_eval():
+def gdbt_data_get_eval(flag):
     
     deviceid_train=dev_id_train()
     
@@ -165,14 +169,14 @@ def gdbt_data_get_eval():
 
 
     try:
-#        deviceid_train.drop('device_id', axis=1,inplace = True)
-#        deviceid_train.drop('sex', axis=1,inplace = True)
-#        deviceid_train.drop('age', axis=1,inplace = True)
-        deviceid_train.drop('n_class', axis=1,inplace = True)
-        
-#        deviceid_train.drop('t1_code', axis=1,inplace = True)
-#        deviceid_train.drop('t2_code', axis=1,inplace = True)
-        deviceid_train.drop('add_list', axis=1,inplace = True)
+#        if flag!='device_id':
+#            deviceid_train.drop('device_id', axis=1,inplace = True)
+        if flag!='sex':
+            deviceid_train.drop('sex', axis=1,inplace = True)
+        if flag!='age':
+            deviceid_train.drop('age', axis=1,inplace = True)
+        if flag!='n_class':
+            deviceid_train.drop('n_class', axis=1,inplace = True)
 
     except:
         error_msg = traceback.format_exc()

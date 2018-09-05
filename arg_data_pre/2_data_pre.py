@@ -32,9 +32,9 @@ file_path=FLAGS.file_path
 
 
 def define_n_class():
-#    sql='alter table deviceid_train add n_class int(4) default 0'
-#    ret=data_from_mysql(sql)
-#    print(ret.head(3))
+    sql='alter table deviceid_train add n_class int(4) default 0'
+    ret=data_from_mysql(sql)
+    print(ret.head(3))
     
     sql='select * from deviceid_train'
     package_label=data_from_mysql(sql)

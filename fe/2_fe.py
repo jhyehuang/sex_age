@@ -11,6 +11,7 @@ import numpy as np
 import os
 from subprocess import *
 import logging
+import TfidfVectorizer
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
@@ -37,6 +38,12 @@ def dev_id_train():
     deviceid_train=data_from_mysql(sql)
     return deviceid_train
 
+def word_to_tfidf(word):
+    transformer=TfidfVectorizer()
+    tfidf=transformer.fit_transform(word)
+    weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
+    return weight
+
 def tx_group_by(tx_pd,col='t1'):
     
     _key_codes = tx_pd[col].values
@@ -47,7 +54,11 @@ def tx_group_by(tx_pd,col='t1'):
     _cnt[np.isnan(_cnt)] = 0
     tx_pd[col+'_size'] = _cnt
 
-
+def app_list(text):
+    app_list=text.split('|')
+#        print (app_list)
+    return app_list
+    
 def app_get_t1(app_list):
     logging.debug(app_list)
     if len(app_list)<1:
@@ -109,10 +120,6 @@ def app_get_t2(app_list):
 
 def devid_app_tx(deviceid_packages,package_label):
     
-    def app_list(text):
-        app_list=text.split('|')
-#        print (app_list)
-        return app_list
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
     deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
@@ -186,10 +193,7 @@ def devid_app_count(deviceid_packages,package_label):
         return len(app_list)
     deviceid_packages['app_len']=deviceid_packages['add_id_list'].apply(lambda line:app_count(line))
 
-    def app_list(text):
-        app_list=text.split('|')
-#        print (app_list)
-        return app_list
+
     app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
 #    app_mtrix=app_mtrix['add_id_list']
 #    print(package_label['t1'].max())
@@ -249,11 +253,121 @@ def devid_app_count(deviceid_packages,package_label):
     
     return deviceid_packages.ix[:, ['device_id','app_len','t1_code','t2_code']]
     
+def devid_app_tfidf(deviceid_packages,package_label):
+    def list_to_text(l):
+        text=' '.join(l)
+    #        print (app_list)
+        return text
+
+    deviceid_packages['add_id_text']=deviceid_packages['add_id_list'].apply(lambda line:list_to_text(app_list(line)))
+    word=deviceid_packages['add_id_text'].values.tolist()    
+    deviceid_packages['app_id_weight']=word_to_tfidf(word)
+
+    
+    def get_label_t1_1(l):
+#        print(l)
+        logging.debug(l)
+        ret=list(map(get_label_2_t1,l))
+        condition = lambda t: t != ""
+        ret= list(filter(condition, ret))
+        ret=list(map(str,ret))
+        if len(ret)<1:
+            ret.append('0')
+        return ' '.join(ret)
+  
+    def get_label_t2_1(l):
+#        print(l)
+        logging.debug(l)
+        ret=list(map(get_label_2_t2,l))
+        condition = lambda t: t != ""
+        ret= list(filter(condition, ret))
+        ret=list(map(str,ret))
+        if len(ret)<1:
+            ret.append('0')
+        return ' '.join(ret)
+  
+    def get_label_2_t1(l):
+        
+        filer=package_label['app_id'].astype('category').values==l
+        label=package_label.ix[filer,'t1'].values.tolist()
+        if len(label)<1:
+            return ''
+        return label.pop()
+    
+    def get_label_2_t2(l):
+        filer=package_label['app_id'].astype('category').values==l
+        label=package_label.ix[filer,'t2'].values.tolist()
+        if len(label)<1:
+            return ''
+        return label.pop()
+    app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    t1_mtrix=list(map(get_label_t1_1,app_mtrix))
+    t2_mtrix=list(map(get_label_t2_1,app_mtrix))
+    deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
+
+    
+    return deviceid_packages.ix[:, ['device_id','app_id_weight','app_t1_weight','app_t2_weight']]
+
+
+def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
+    def list_to_text(l):
+        text=' '.join(l)
+    #        print (app_list)
+        return text
+    
+    def get_brand_1(l):
+#        print(l)
+        logging.debug(l)
+        ret=list(map(get_brand,l))
+        condition = lambda t: t != ""
+        ret= list(filter(condition, ret))
+        ret=list(map(str,ret))
+        if len(ret)<1:
+            ret.append('0')
+        return ' '.join(ret)
+  
+    def get_type_no_1(l):
+#        print(l)
+        logging.debug(l)
+        ret=list(map(get_type_no,l))
+        condition = lambda t: t != ""
+        ret= list(filter(condition, ret))
+        ret=list(map(str,ret))
+        if len(ret)<1:
+            ret.append('0')
+        return ' '.join(ret)
+  
+    def get_brand(l):
+        
+        filer=deviceid_brand['app_id'].astype('category').values==l
+        label=deviceid_brand.ix[filer,'brand'].values.tolist()
+        if len(label)<1:
+            return ''
+        return label.pop()
+    
+    def get_type_no(l):
+        filer=deviceid_brand['app_id'].astype('category').values==l
+        label=deviceid_brand.ix[filer,'type_no'].values.tolist()
+        if len(label)<1:
+            return ''
+        return label.pop()
+    app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    t1_mtrix=list(map(get_brand_1,app_mtrix))
+    t2_mtrix=list(map(get_type_no_1,app_mtrix))
+    deviceid_packages['app_brand_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['app_type_no_weight']=word_to_tfidf(t2_mtrix)
+
+    
+    return deviceid_packages.ix[:, ['device_id','app_brand_weight','app_type_no_weight']]
+
+
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    pool = multiprocessing.Pool(processes=4)
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
     package_label=pd.read_csv(file_path+'package_label.csv')
     package_label['t1']=package_label['t1'].astype('category').values.codes
@@ -261,11 +375,15 @@ def compute_date():
     result = []
     result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
+    result.append(pool.apply_async(devid_app_tfidf, (deviceid_packages,package_label, )))
+    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
     pool.close()
     pool.join()
         
-    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left') 
-    
+    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left')
+    deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
+    deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
+    deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
     
     deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv',index= False)

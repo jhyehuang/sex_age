@@ -176,18 +176,17 @@ def data_into_mysql(file_name):
 if __name__=='__main__':
     start_time=time.time()
 #1、
-#    tsv_to_txt()
+    tsv_to_txt()
     pre_deviceid_packages()
 #2、
-#    csv_file_names.remove('deviceid_packages.csv')
-#    for file_name in csv_file_names:
-#        pre_data(file_name)
-#    for file_name in csv_file_names:
-#        data_into_mysql(file_name)
+    csv_file_names.remove('deviceid_packages.csv')
+    for file_name in csv_file_names:
+        pre_data(file_name)
+
    
 #3、
-#    for file_name in csv_file_names:
-#        data_into_mysql(file_name)
+    for file_name in csv_file_names:
+        data_into_mysql(file_name)
 # id,
     end_time=time.time()
     print('耗时:',end_time-start_time)
