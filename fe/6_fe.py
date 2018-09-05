@@ -55,6 +55,8 @@ def def_time_label(hour):
 
 def word_to_tfidf(word):
     print(word)
+    if word.shape[0]<1:
+        return 0
     transformer=TfidfVectorizer()
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
@@ -253,6 +255,8 @@ def devid_hour(deviceid_packages,package_label):
             return t1_dict[str(x)]
         def get_sub_values(v_dict,col):
             return v_dict[col]
+        if filte.shape[0]<1:
+            continue
             
         values=deviceid_packages.ix[filte,'t1_hour_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour'))
@@ -280,7 +284,8 @@ def devid_hour(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-            
+        if filte.shape[0]<1:
+            continue
         values=deviceid_packages.ix[filte,'t2_hour_time'].apply(lambda x:get_values(x))
 
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour'))
@@ -443,7 +448,8 @@ def devid_day(deviceid_packages,package_label):
             return t1_dict[str(x)]
         def get_sub_values(v_dict,col):
             return v_dict[col]
-            
+        if filte.shape[0]<1:
+            continue  
         values=deviceid_packages.ix[filte,'t1_day_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day'))
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day'))
@@ -470,7 +476,8 @@ def devid_day(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-            
+        if filte.shape[0]<1:
+            continue
         values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day'))
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day'))
@@ -631,7 +638,8 @@ def devid_mon(deviceid_packages,package_label):
             return t1_dict[str(x)]
         def get_sub_values(v_dict,col):
             return v_dict[col]
-            
+        if filte.shape[0]<1:
+            continue    
         values=deviceid_packages.ix[filte,'t1_mon_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon'))
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon'))
@@ -657,7 +665,8 @@ def devid_mon(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-            
+        if filte.shape[0]<1:
+            continue 
         values=deviceid_packages.ix[filte,'t2_mon_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon'))
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon'))
