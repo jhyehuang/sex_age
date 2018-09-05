@@ -13,6 +13,9 @@ from subprocess import *
 import logging
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
 密码:root, 端口：3306,
@@ -44,6 +47,16 @@ def word_to_tfidf(word):
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
     return weight
+
+def word_to_lda(word):
+    vectorizer=CountVectorizer()
+    tf = vectorizer.fit_transform(word)
+    lda = LatentDirichletAllocation(n_topics=5,
+                                    max_iter=50,
+                                    learning_method='batch')
+    docres = lda.fit_transform(tf)
+    lda_pd=pd.DataFrame(docres,columns=['app_lda_t2_'+str(i) for i in range(1,6)])
+    return lda_pd
 
 def tx_group_by(tx_pd,col='t1'):
     
@@ -306,9 +319,11 @@ def devid_app_tfidf(deviceid_packages,package_label):
     t2_mtrix=list(map(get_label_t2_1,app_mtrix))
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
+    deviceid_packages=pd.concat([deviceid_packages,word_to_lda(t2_mtrix)],axis=1)
+    
 
     
-    return deviceid_packages.ix[:, ['device_id','app_id_weight','app_t1_weight','app_t2_weight']]
+    return deviceid_packages.ix[:, ['device_id','app_id_weight','app_t1_weight','app_t2_weight']+['app_lda_t2_'+str(i) for i in range(1,6)]]
 
 
 def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
@@ -346,7 +361,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=4)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
     deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
     package_label=pd.read_csv(file_path+'package_label.csv')
