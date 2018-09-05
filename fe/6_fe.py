@@ -260,8 +260,8 @@ def devid_hour(deviceid_packages,package_label):
             continue
             
         values=deviceid_packages.ix[filte,'t1_hour_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
         deviceid_packages.ix[filte,'hour_t1_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t1_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
@@ -289,8 +289,8 @@ def devid_hour(deviceid_packages,package_label):
             continue
         values=deviceid_packages.ix[filte,'t2_hour_time'].apply(lambda x:get_values(x))
 
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
         deviceid_packages.ix[filte,'hour_t2_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t2_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
@@ -452,8 +452,8 @@ def devid_day(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue  
         values=deviceid_packages.ix[filte,'t1_day_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()   
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
         deviceid_packages.ix[filte,'hour_t1_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t1_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
@@ -480,8 +480,8 @@ def devid_day(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue
         values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
         deviceid_packages.ix[filte,'hour_t2_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t2_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
@@ -642,8 +642,8 @@ def devid_mon(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue    
         values=deviceid_packages.ix[filte,'t1_mon_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
         deviceid_packages.ix[filte,'hour_t1_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t1_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
@@ -669,8 +669,8 @@ def devid_mon(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue 
         values=deviceid_packages.ix[filte,'t2_mon_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon'))
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon'))
+        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
+        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
         deviceid_packages.ix[filte,'hour_t2_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
         deviceid_packages.ix[filte,'hour_t2_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
         deviceid_packages.ix[filte,'mon_t2_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
