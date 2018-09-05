@@ -55,9 +55,9 @@ def word_to_lda(word):
                                     max_iter=50,
                                     learning_method='batch')
     docres = lda.fit_transform(tf)
-    logging.debug(docres)
+#    logging.debug(docres)
     lda_pd=pd.DataFrame(data=np.array(docres),columns=['app_lda_t2_'+str(i) for i in range(1,6)])
-    logging.debug(lda_pd)
+#    logging.debug(lda_pd)
     return lda_pd
 
 def tx_group_by(tx_pd,col='t1'):
@@ -198,6 +198,7 @@ def devid_app_tx(deviceid_packages,package_label):
         deviceid_packages.ix[filte,'app_len_t2_'+str(x)]=values
     columns.append('device_id')
     logging.debug(columns)
+    deviceid_packages.fillna(0)
     
     return deviceid_packages.ix[:, columns]
     
@@ -260,6 +261,7 @@ def devid_app_count(deviceid_packages,package_label):
     
     deviceid_packages['t1_code']=deviceid_packages['t1_code'].astype('category').values.codes
     deviceid_packages['t2_code']=deviceid_packages['t2_code'].astype('category').values.codes
+    deviceid_packages.fillna(0)
     
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     
@@ -322,12 +324,13 @@ def devid_app_tfidf(deviceid_packages,package_label):
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
-    logging.debug(lda_pd)
-    logging.debug(lda_pd['app_lda_t2_1'].values)
+#    logging.debug(lda_pd)
+#    logging.debug(lda_pd['app_lda_t2_1'].values)
     for x in ['app_lda_t2_'+str(i) for i in range(1,6)]:
         deviceid_packages[x]=lda_pd[x].values
 #    deviceid_packages=pd.concat([deviceid_packages,lda_pd],axis=1, join_axes=[deviceid_packages.index])
-    logging.debug(deviceid_packages)
+#    logging.debug(deviceid_packages)
+    deviceid_packages.fillna(0)
     
 
     
@@ -360,6 +363,7 @@ def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
     t2_mtrix=list(map(get_type_no,app_mtrix))
     deviceid_packages['dev_brand_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['dev_type_no_weight']=word_to_tfidf(t2_mtrix)
+    deviceid_packages.fillna(0)
 
     
     return deviceid_packages.ix[:, ['device_id','dev_brand_weight','dev_type_no_weight']]
