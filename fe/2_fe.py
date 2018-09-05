@@ -324,6 +324,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     lda_pd=word_to_lda(t2_mtrix)
     logging.debug(lda_pd)
     deviceid_packages=pd.concat([deviceid_packages,lda_pd],axis=1, join_axes=[deviceid_packages.index])
+    logging.debug(deviceid_packages)
     
 
     
