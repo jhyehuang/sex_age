@@ -58,7 +58,7 @@ def word_to_tfidf(word):
     if len(word)<1:
         return 0
     elif len(word)==1:
-       word[0]= word[0]+' 12'
+       word[0]= word[0]+' 12 0'
     transformer=TfidfVectorizer()
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
@@ -694,7 +694,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=3)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
 #    deviceid_train=dev_id_train()
     package_label=pd.read_csv(file_path+'package_label.csv')
     package_label['t1']=package_label['t1'].astype('category').values.codes
