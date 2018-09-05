@@ -54,8 +54,8 @@ def def_time_label(hour):
 
 
 def word_to_tfidf(word):
-    logging.debug(word.shape)
     logging.debug(word)
+#    logging.debug(word)
     if word.shape[0]<1:
         return 0
     transformer=TfidfVectorizer()
