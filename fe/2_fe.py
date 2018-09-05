@@ -323,7 +323,9 @@ def devid_app_tfidf(deviceid_packages,package_label):
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
     logging.debug(lda_pd)
-    deviceid_packages=pd.concat([deviceid_packages,lda_pd],axis=1, join_axes=[deviceid_packages.index])
+    for x in ['app_lda_t2_'+str(i) for i in range(1,6)]:
+        deviceid_packages[x]=lda_pd[x]
+#    deviceid_packages=pd.concat([deviceid_packages,lda_pd],axis=1, join_axes=[deviceid_packages.index])
     logging.debug(deviceid_packages)
     
 
