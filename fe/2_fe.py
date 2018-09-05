@@ -317,50 +317,29 @@ def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
     #        print (app_list)
         return text
     
-    def get_brand_1(l):
-#        print(l)
-        logging.debug(l)
-        ret=list(map(get_brand,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ' '.join(ret)
-  
-    def get_type_no_1(l):
-#        print(l)
-        logging.debug(l)
-        ret=list(map(get_type_no,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ' '.join(ret)
   
     def get_brand(l):
         
-        filer=deviceid_brand['app_id'].astype('category').values==l
+        filer=deviceid_brand['device_id'].astype('category').values==l
         label=deviceid_brand.ix[filer,'brand'].values.tolist()
         if len(label)<1:
             return ''
         return label.pop()
     
     def get_type_no(l):
-        filer=deviceid_brand['app_id'].astype('category').values==l
+        filer=deviceid_brand['device_id'].astype('category').values==l
         label=deviceid_brand.ix[filer,'type_no'].values.tolist()
         if len(label)<1:
             return ''
         return label.pop()
-    app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    t1_mtrix=list(map(get_brand_1,app_mtrix))
-    t2_mtrix=list(map(get_type_no_1,app_mtrix))
-    deviceid_packages['app_brand_weight']=word_to_tfidf(t1_mtrix)
-    deviceid_packages['app_type_no_weight']=word_to_tfidf(t2_mtrix)
+    app_mtrix=deviceid_packages['device_id'].tolist()
+    t1_mtrix=list(map(get_brand,app_mtrix))
+    t2_mtrix=list(map(get_type_no,app_mtrix))
+    deviceid_packages['dev_brand_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['dev_type_no_weight']=word_to_tfidf(t2_mtrix)
 
     
-    return deviceid_packages.ix[:, ['device_id','app_brand_weight','app_type_no_weight']]
+    return deviceid_packages.ix[:, ['device_id','dev_brand_weight','dev_type_no_weight']]
 
 
 def compute_date():
