@@ -75,7 +75,7 @@ gbtree_param =dict(learning_rate =0.1,
 
 
 def done(istrain='train'):
-    columns=['brand_cnt','type_no_cnt','app_id_weight','app_id_weight','app_t1_weight','app_t2_weight'] \
+    columns=['brand_cnt','type_no_cnt','app_id_weight','app_t1_weight','app_t2_weight'] \
     +['app_lda_t2_1','app_lda_t2_2','app_lda_t2_3','app_lda_t2_4','app_lda_t2_5',] \
     +['dev_brand_weight','dev_type_no_weight'] \
     +['times_len']
