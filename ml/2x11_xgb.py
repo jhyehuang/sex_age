@@ -16,6 +16,8 @@ from model_cv import modelfit_multi_cv
 import logging
 
 from flags import FLAGS, unparsed
+from sklearn.metrics import accuracy_score,f1_score
+
 
 
 logging.basicConfig(
@@ -69,35 +71,16 @@ def done(istrain,X_train,y_train,flag):
         del y_train
     elif istrain=='eval':
         for oper in op:
-            device_id = X_train.ix[:,['device_id']]
-        #    X_eval.drop(flag,axis=1,inplace=True)
-            logging.debug(device_id.head(2))
-            X_train.drop('device_id',axis=1,inplace=True)
             xgb1 = load(FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
-            dtrain_predprob = xgb1.predict_proba(X_train)
-            logging.debug(dtrain_predprob.shape)
-            columns=[]
-            for i in range(dtrain_predprob.shape[1]):
-                if flag=='sex':
-                    columns.append(str(i+1))
-                else:
-                    columns.append(str(i))
-            y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
-            def c(line):
-                return [round(x,6) for x in line]
-            y_pred.apply(lambda line:c(line),axis=1)
+#            dtrain_predprob = xgb1.predict_proba(X_train)
+            y_pred = xgb1.predict(X_train)
+        
+            acc = accuracy_score(y_train, y_pred)
+            logging.debug('acc:'+str( acc*100.0)+'%')
     
     
             logging.debug('-'*30)
-            device_id['device_id']=device_id['device_id'].map(str)
-            device_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
-            fin=pd.concat([device_id,y_pred],axis=1)
-            
-            print(fin)
-
-            
-            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.eval.csv',index=False)
             
         
 
@@ -139,16 +122,16 @@ def done(istrain,X_train,y_train,flag):
         
         
 def headle_age(flag):
-    train_save = gdbt_data_get_train(flag)
-    print(train_save.shape)
-    train_save[flag]=train_save[flag].astype('category').values.codes
-    y_train = train_save[flag]
-    train_save.drop(flag,axis=1,inplace=True)
-
-    
-    logging.debug(train_save.shape)
-    logging.debug(y_train.unique())
-    done('train',train_save,y_train,flag)
+#    train_save = gdbt_data_get_train(flag)
+#    print(train_save.shape)
+#    train_save[flag]=train_save[flag].astype('category').values.codes
+#    y_train = train_save[flag]
+#    train_save.drop(flag,axis=1,inplace=True)
+#
+#    
+#    logging.debug(train_save.shape)
+#    logging.debug(y_train.unique())
+#    done('train',train_save,y_train,flag)
     
     X_eval = gdbt_data_get_eval(flag)
     print(X_eval.shape)
