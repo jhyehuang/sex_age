@@ -33,7 +33,7 @@ gbtree_param =dict(learning_rate =0.2,
     n_estimators=1000,
 #        n_estimators=1219,
 #        n_estimators=1,
-    max_depth=6,
+    max_depth=7,
 #        min_child_weight=5,
 #        gamma=0.1,
 #        subsample=0.6,
@@ -117,21 +117,23 @@ def done(istrain,X_train,y_train,flag):
 
             
             fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
+            df1=pd.read_csv(FLAGS.tmp_data_path+'sex_fin-xgboost.test.csv')
+            test_concat(df1,fin)
         del X_train
         return fin
         
         
 def headle_age(flag):
-#    train_save = gdbt_data_get_train(flag)
-#    print(train_save.shape)
-#    train_save[flag]=train_save[flag].astype('category').values.codes
-#    y_train = train_save[flag]
-#    train_save.drop(flag,axis=1,inplace=True)
-#
-#    
-#    logging.debug(train_save.shape)
-#    logging.debug(y_train.unique())
-#    done('train',train_save,y_train,flag)
+    train_save = gdbt_data_get_train(flag)
+    print(train_save.shape)
+    train_save[flag]=train_save[flag].astype('category').values.codes
+    y_train = train_save[flag]
+    train_save.drop(flag,axis=1,inplace=True)
+
+    
+    logging.debug(train_save.shape)
+    logging.debug(y_train.unique())
+    done('train',train_save,y_train,flag)
     
     X_eval = gdbt_data_get_eval(flag)
     print(X_eval.shape)
@@ -161,7 +163,5 @@ def test_concat(df1,df2):
     df1.to_csv(FLAGS.tmp_data_path+'2x11_xgboost.test.csv',columns=columns,index=False)
 if __name__ == "__main__":
     headle_age('age')
-#    df1=pd.read_csv(FLAGS.tmp_data_path+'sex_fin-xgboost.test.csv')
-#    df2=pd.read_csv(FLAGS.tmp_data_path+'age_fin-xgboost.test.csv')
-#    test_concat(df1,df2)
+
     
