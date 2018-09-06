@@ -52,7 +52,7 @@ dart_param = {'booster': 'dart',
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=600,
+        n_estimators=1000,
 #        n_estimators=1219,
 #        n_estimators=1,
 #        max_depth=7,
@@ -83,7 +83,7 @@ def done(istrain='train'):
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     logging.debug(istrain) 
-    op=['max_depth']
+    op=['n_estimators']
     if istrain=='train':
         train_save = gdbt_data_get_train('n_class')
         
@@ -92,7 +92,7 @@ def done(istrain='train'):
         print(train_save.shape)
         y_train = train_save['n_class']
         train_save.drop('n_class',axis=1,inplace=True)
-        X_train = train_save.ix[:,columns]
+#        X_train = train_save.ix[:,columns]
         
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
@@ -119,7 +119,7 @@ def done(istrain='train'):
         y_eval = X_eval['n_class']
         X_eval.drop('n_class',axis=1,inplace=True)
         logging.debug(X_eval.shape)
-        X_eval = X_eval.ix[:,columns]
+#        X_eval = X_eval.ix[:,columns]
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
@@ -143,7 +143,7 @@ def done(istrain='train'):
     elif istrain=='test':
         X_test = gdbt_data_get_test()
         print(X_test.shape)
-        X_test = X_test.ix[:,columns]
+#        X_test = X_test.ix[:,columns]
 #        X_test.drop('click',axis=1,inplace=True)
 
         for oper in op:
