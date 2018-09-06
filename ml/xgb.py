@@ -52,7 +52,7 @@ dart_param = {'booster': 'dart',
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=300,
+        n_estimators=147,
 #        n_estimators=1219,
 #        n_estimators=1,
 #        max_depth=3,
@@ -83,7 +83,7 @@ def done(istrain='train'):
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     logging.debug(istrain) 
-    op=['n_estimators']
+    op=['max_depth']
     if istrain=='train':
         train_save = gdbt_data_get_train('n_class')
         

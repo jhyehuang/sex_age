@@ -246,7 +246,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
     elif cv_type=='max_depth':
 #        xgb_param = alg.get_xgb_params()
-        max_depth = range(4,7,1)
+        max_depth = range(3,7,1)
 #        min_child_weight = range(1,6,2)
         param_cv = dict(max_depth=max_depth)
 
