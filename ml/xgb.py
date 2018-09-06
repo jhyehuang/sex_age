@@ -45,7 +45,7 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 
 
-def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=173):
+def modelfit_cv(alg, X_train, y_train,cv_folds=None, early_stopping_rounds=10,cv_type='n_estimators',random_state=0):
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
     if cv_type=='n_estimators':
         xgb_param = alg.get_xgb_params()
@@ -239,7 +239,7 @@ def done(istrain='train'):
     logging.debug(istrain) 
     op=['fin']
     if istrain=='train':
-        train_save = gdbt_data_get_train()
+        train_save = gdbt_data_get_train('n_class')
         
 #        np.random.seed(999)
         r1 = np.random.uniform(0, 1, train_save.shape[0])  #产生0～40M的随机数
@@ -259,7 +259,7 @@ def done(istrain='train'):
         seed=27,
         silent=True,**gpu_dict)
         for i,oper in enumerate(op):
-            modelfit_cv(xgb1, X_train,y_train, cv_folds = kfold,cv_type=oper,random_state=i)        
+            modelfit_cv(xgb1, X_train,y_train, cv_folds = kfold,cv_type=oper,)#random_state=i)        
             logging.debug(oper+":to save validation predictions ...")
             ret=dump(xgb1, FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat') 
             logging.debug(ret)
@@ -269,7 +269,7 @@ def done(istrain='train'):
         del y_train
     elif istrain=='eval':
         
-        X_eval = gdbt_data_get_eval()
+        X_eval = gdbt_data_get_eval('n_class')
         print(X_eval.shape)
         y_eval = X_eval['n_class']
         X_eval.drop('n_class',axis=1,inplace=True)
