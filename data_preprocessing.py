@@ -78,20 +78,12 @@ def data_augmentation(deviceid_train):
         filte=deviceid_train.n_class.values==x
         tmp_deviceid_train=deviceid_train.ix[filte,:]
         logging.debug(deviceid_train.n_class.values)
-        c=tmp_deviceid_train.shape[0]
         n=max_line-tmp_deviceid_train.shape[0]
-        logging.debug(x)
-        logging.debug(n)
-        logging.debug(c)
-        logging.debug(int(n/c))
-        reed=int(n/c)
-        if c >4000:
-            continue
-        if n<c and c < 3000:
-            reed=1
-        for i in (range(reed)):
-#            sample_deviceid_train=tmp_deviceid_train.sample(n=n*x)
-            deviceid_train=pd.concat([deviceid_train,tmp_deviceid_train])
+        while tmp_deviceid_train.shape[0]<n:
+            tmp_deviceid_train=pd.concat([tmp_deviceid_train,tmp_deviceid_train])
+        
+
+        deviceid_train=pd.concat([deviceid_train,tmp_deviceid_train[:n]])
     logging.debug(deviceid_train.shape)
     logging.debug(deviceid_train['n_class'].value_counts( sort=True,))
     deviceid_train=shuffle(deviceid_train)
@@ -99,7 +91,7 @@ def data_augmentation(deviceid_train):
 
 
 # flag  in ['all','sex','age','device_id']
-def gdbt_data_get_train(flag):
+def gdbt_data_get_train(flag='all'):
     
     deviceid_train=dev_id_train()
     
@@ -147,7 +139,7 @@ def gdbt_data_get_train(flag):
     return deviceid_train
 
 
-def gdbt_data_get_eval(flag):
+def gdbt_data_get_eval(flag='all'):
     
     deviceid_train=dev_id_train()
     
