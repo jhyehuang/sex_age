@@ -376,6 +376,11 @@ def compute_date():
     deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
     deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
+    deviceid_brand['brand']=deviceid_brand['brand'].astype('category').values.codes
+    deviceid_brand['type_no']=deviceid_brand['type_no'].astype('category').values.codes
+    deviceid_brand['brand']=deviceid_brand['brand'].map(str)
+    deviceid_brand['type_no']=deviceid_brand['type_no'].map(str)
+    
     package_label=pd.read_csv(file_path+'package_label.csv')
     package_label['t1']=package_label['t1'].astype('category').values.codes
     package_label['t2']=package_label['t2'].astype('category').values.codes

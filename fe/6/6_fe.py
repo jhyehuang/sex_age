@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 import os
 from subprocess import *
-
+import traceback
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
 密码:root, 端口：3306,
@@ -18,7 +18,7 @@ from subprocess import *
 mydb 
 '''
 
-sys.path.append('..')
+sys.path.append('../..')
 from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,get_package_dict
 from flags import FLAGS, unparsed
 from functools import reduce
@@ -58,7 +58,7 @@ def word_to_tfidf(word):
     if len(word)<1:
         return 0
     elif len(word)==1:
-       word[0]= word[0]+' 12 0'
+       return [0]
     transformer=TfidfVectorizer()
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
@@ -289,14 +289,17 @@ def devid_hour(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue
         values=deviceid_packages.ix[filte,'t2_hour_time'].apply(lambda x:get_values(x))
-
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
-        deviceid_packages.ix[filte,'hour_t2_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t2_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
-
-        deviceid_packages.ix[filte,'hour_t2_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
-        deviceid_packages.ix[filte,'hour_t2_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
+        try:
+            t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
+            t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
+            deviceid_packages.ix[filte,'hour_t2_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
+            deviceid_packages.ix[filte,'hour_t2_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
+    
+            deviceid_packages.ix[filte,'hour_t2_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
+            deviceid_packages.ix[filte,'hour_t2_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
+        except:
+            message = traceback.format_exc()
+            logging.debug( message)
 
     columns.append('device_id')
     logging.debug(columns)
@@ -480,14 +483,19 @@ def devid_day(deviceid_packages,package_label):
         filte=np.logical_and(a,True)
         if filte.shape[0]<2:
             continue
-        values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
-        deviceid_packages.ix[filte,'hour_t2_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t2_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
+        try:
+            values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
+            t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()
+            t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
+            deviceid_packages.ix[filte,'hour_t2_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
+            deviceid_packages.ix[filte,'hour_t2_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
+    
+            deviceid_packages.ix[filte,'day_t2_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
+            deviceid_packages.ix[filte,'day_t2_start_day_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_size'))
+        except:
+            message = traceback.format_exc()
+            logging.debug( message)
 
-        deviceid_packages.ix[filte,'day_t2_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
-        deviceid_packages.ix[filte,'day_t2_start_day_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_size'))
 
     columns.append('device_id')
     logging.debug(columns)
@@ -669,13 +677,17 @@ def devid_mon(deviceid_packages,package_label):
         filte=np.logical_and(a,True)
         if filte.shape[0]<2:
             continue 
-        values=deviceid_packages.ix[filte,'t2_mon_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
-        deviceid_packages.ix[filte,'hour_t2_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t2_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
-        deviceid_packages.ix[filte,'mon_t2_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
-        deviceid_packages.ix[filte,'mon_t2_start_mon_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_size'))
+        try:
+            values=deviceid_packages.ix[filte,'t2_mon_time'].apply(lambda x:get_values(x))
+            t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
+            t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
+            deviceid_packages.ix[filte,'hour_t2_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
+            deviceid_packages.ix[filte,'hour_t2_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
+            deviceid_packages.ix[filte,'mon_t2_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
+            deviceid_packages.ix[filte,'mon_t2_start_mon_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_size'))
+        except:
+            message = traceback.format_exc()
+            logging.debug( message)
 
     columns.append('device_id')
     logging.debug(columns)
