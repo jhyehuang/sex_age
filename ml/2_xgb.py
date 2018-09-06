@@ -47,7 +47,6 @@ gbtree_param =dict(learning_rate =0.1,
 #        skip_drop= 0.5
     )
 
-kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 
 def done(istrain,X_train,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
