@@ -202,7 +202,8 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
     if cv_type=='n_estimators':
         xgb_param = alg.get_xgb_params()
-#        xgb_param['num_class'] = 2
+        logging.debug(xgb_param['num_class'])
+        
 
         xgtrain = xgb.DMatrix(X_train, label = y_train)
         

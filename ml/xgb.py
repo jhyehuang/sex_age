@@ -80,7 +80,6 @@ def done(istrain='train'):
         train_save = gdbt_data_get_train('n_class')
         
 #        np.random.seed(999)
-        r1 = np.random.uniform(0, 1, train_save.shape[0])  #产生0～40M的随机数
 #        train_save = train_save.ix[r1 < 0.2, :]
         print(train_save.shape)
         y_train = train_save['n_class']
@@ -89,7 +88,6 @@ def done(istrain='train'):
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
         xgb1 = XGBClassifier(**gbtree_param,
-        
         objective='multi:softprob',
         eval_metric=['auc','mlogloss',],
         nthread=-1,
