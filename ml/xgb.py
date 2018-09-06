@@ -93,6 +93,7 @@ def done(istrain='train'):
         y_train = train_save['n_class']
         train_save.drop('n_class',axis=1,inplace=True)
 #        X_train = train_save.ix[:,columns]
+        X_train = train_save
         
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
