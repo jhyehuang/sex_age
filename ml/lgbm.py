@@ -37,7 +37,7 @@ logging.debug('设置参数')
 cv_params = {
           'boosting_type': 'gbdt',
           'objective': 'multiclass',
-#          'metric': ['auc', 'multi_logloss'],
+          'metric': ['auc',],
 #          'num_trees':100,
             'device': 'gpu',
             'gpu_platform_id': -1,
@@ -46,10 +46,10 @@ cv_params = {
 
 
 gpu_params = {
-            'boosting_type': 'gbdt',
-#            'boosting': 'dart',
+            'boosting_type': 'rf',
             'objective': 'multiclass',
             'num_class':22,
+            'n_estimators':300,
 #            'metric': ['auc', 'multi_logloss'],
             
 #            'learning_rate': 0.01,
@@ -73,6 +73,8 @@ gpu_params = {
 #            'gpu_platform_id': -1,
 #            'gpu_device_id': -1,
 #            'gpu_use_dp': False
+            'random_state':173,
+            'n_jobs ':-1,
 }
 
 
@@ -95,7 +97,6 @@ def modelfit_cv(lgb_train,cv_type='max_depth',):
                                     lgb_train,
                                     seed=2018,
                                     nfold=3,
-#                                    metrics=['auc', 'multi_logloss'],
                                     early_stopping_rounds=60,
                                     verbose_eval=True
                                     )

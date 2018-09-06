@@ -12,6 +12,7 @@ from sklearn.utils import check_random_state
 from sklearn.model_selection import GridSearchCV,StratifiedKFold,train_test_split
 
 from sklearn.metrics import log_loss
+import xgboost as xgb
 
 from matplotlib import pyplot
 pyplot.switch_backend('agg')
