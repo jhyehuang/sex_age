@@ -33,7 +33,7 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
-        n_estimators=500,
+        n_estimators=93,
 #        n_estimators=1,
         max_depth=6,
         min_child_weight=1,
@@ -52,7 +52,7 @@ gbtree_param =dict(learning_rate =0.1,
 def done(istrain,X_train,y_train,flag):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
-    op=['n_estimators']
+    op=['fin']
 
     if istrain=='train':
         xgb1 = XGBClassifier(**gbtree_param,
