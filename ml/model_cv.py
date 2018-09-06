@@ -348,9 +348,9 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
     #Predict training set:
     
-    train_predprob = alg.predict_proba(xgb_test)
+    train_predprob = alg.predict_proba(X_val)
     
-    y_pred = alg.predict(xgb_test)
+    y_pred = alg.predict(X_val)
 
     acc = accuracy_score(y_val, y_pred)
     print(('acc', acc*100.0,'%'))
