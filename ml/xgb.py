@@ -31,6 +31,7 @@ import logging
 from flags import FLAGS, unparsed
 
 
+
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
 
@@ -70,6 +71,12 @@ gbtree_param =dict(learning_rate =0.1,
 
 #gbtree_param.update(dart_param)
 
+
+columns=['brand_cnt','type_no_cnt','app_id_weight','app_id_weight','app_t1_weight','app_t2_weight']
+columns=columns+['app_lda_t2_1','app_lda_t2_2','app_lda_t2_3','app_lda_t2_4','app_lda_t2_5',]
+columns=columns+['dev_brand_weight','dev_type_no_weight']
+columns=columns+['times_len']
+
 def done(istrain='train'):
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
@@ -84,7 +91,8 @@ def done(istrain='train'):
         print(train_save.shape)
         y_train = train_save['n_class']
         train_save.drop('n_class',axis=1,inplace=True)
-        X_train = train_save
+        X_train = train_save.ix[:,columns]
+        
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
         xgb1 = XGBClassifier(**gbtree_param,
@@ -110,6 +118,7 @@ def done(istrain='train'):
         y_eval = X_eval['n_class']
         X_eval.drop('n_class',axis=1,inplace=True)
         logging.debug(X_eval.shape)
+        X_eval = X_eval.ix[:,columns]
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
@@ -133,6 +142,7 @@ def done(istrain='train'):
     elif istrain=='test':
         X_test = gdbt_data_get_test()
         print(X_test.shape)
+        X_test = X_test.ix[:,columns]
 #        X_test.drop('click',axis=1,inplace=True)
 
         for oper in op:
