@@ -49,13 +49,13 @@ dart_param = {'booster': 'dart',
 #         'num_round' : 50
          }
 
-gbtree_param =dict(learning_rate =0.02,
+gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=1000,
+        n_estimators=300,
 #        n_estimators=1219,
 #        n_estimators=1,
-        max_depth=4,
+        max_depth=3,
 #        min_child_weight=5,
 #        gamma=0.1,
 #        subsample=0.7,
