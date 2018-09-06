@@ -86,7 +86,7 @@ def data_augmentation(deviceid_train):
         deviceid_train=pd.concat([deviceid_train,tmp_deviceid_train[:n]])
     logging.debug(deviceid_train.shape)
     logging.debug(deviceid_train['n_class'].value_counts( sort=True,))
-    deviceid_train=shuffle(deviceid_train)
+    deviceid_train=shuffle(deviceid_train,random_state =0)
     return deviceid_train
 
 
