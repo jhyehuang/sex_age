@@ -13,6 +13,7 @@ from joblib import dump, load, Parallel, delayed
 import gc
 from model_cv import modelfit_binary_cv
 from data_preprocessing import *
+from sklearn.metrics import accuracy_score,f1_score
 
 
 import logging
@@ -71,37 +72,20 @@ def done(istrain,X_train,y_train,flag):
         del y_train
     elif istrain=='eval':
         for oper in op:
-            device_id = X_train.ix[:,['device_id']]
+#            device_id = X_train.ix[:,['device_id']]
         #    X_eval.drop(flag,axis=1,inplace=True)
-            logging.debug(device_id.head(2))
-            X_train.drop('device_id',axis=1,inplace=True)
+#            logging.debug(device_id.head(2))
+#            X_train.drop('device_id',axis=1,inplace=True)
             xgb1 = load(FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
-            dtrain_predprob = xgb1.predict_proba(X_train)
-            logging.debug(dtrain_predprob.shape)
-            columns=[]
-            for i in range(dtrain_predprob.shape[1]):
-                if flag=='sex':
-                    columns.append(str(i+1))
-                else:
-                    columns.append(str(i))
-            y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
-            def c(line):
-                return [round(x,6) for x in line]
-            y_pred.apply(lambda line:c(line),axis=1)
+#            dtrain_predprob = xgb1.predict_proba(X_train)
+            y_pred = xgb1.predict(X_train)
+        
+            acc = accuracy_score(y_train, y_pred)
+            logging.debug('acc:'+str( acc*100.0)+'%')
     
     
             logging.debug('-'*30)
-            device_id['device_id']=device_id['device_id'].map(str)
-            device_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
-            fin=pd.concat([device_id,y_pred],axis=1)
-            
-            print(fin)
-
-            
-            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.eval.csv',index=False)
-            
-        
 
         del X_train
     elif istrain=='test':
