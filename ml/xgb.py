@@ -17,6 +17,7 @@ from joblib import dump, load, Parallel, delayed
 import utils
 import gc
 from data_preprocessing import *
+from data_preprocessing import columns
 
 from model_cv import modelfit_multi_cv
 
