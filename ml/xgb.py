@@ -62,10 +62,10 @@ gbtree_param =dict(learning_rate =0.1,
 #        return_train_score=True,
         scoring='roc_auc',
 #        scale_pos_weight=1,
-        reg_alpha=8,
-        reg_lambda=0.7,
-        rate_drop= 0.3,
-        skip_drop= 0.5,
+#        reg_alpha=8,
+#        reg_lambda=0.7,
+#        rate_drop= 0.3,
+#        skip_drop= 0.5,
         )
 
 #gbtree_param.update(dart_param)
@@ -91,7 +91,7 @@ def done(istrain='train'):
         xgb1 = XGBClassifier(**gbtree_param,
         
         objective='multi:softprob',
-        eval_metric=['mlogloss','auc'],
+        eval_metric=['auc','mlogloss',],
         nthread=-1,
         verbose=2,
         seed=27,
@@ -169,8 +169,8 @@ def done(istrain='train'):
         
         
 if __name__ == "__main__":
-#    done(istrain='train')
+    done(istrain='train')
     done(istrain='eval')
-#    done(istrain='test')
+    done(istrain='test')
         
 
