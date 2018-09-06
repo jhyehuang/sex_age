@@ -354,8 +354,8 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
 
     acc = accuracy_score(y_val, y_pred)
     print(('acc', acc*100.0,'%'))
-    f1 = f1_score(y_val, y_pred)
-    print(('f1_score', f1))
+#    f1 = f1_score(y_val, y_pred)
+#    print(('f1_score', f1))
     try:
         logloss = log_loss(y_val, train_predprob)
         logging.debug(logloss)
