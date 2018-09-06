@@ -24,6 +24,7 @@ from joblib import dump, load, Parallel, delayed
 import utils
 import gc
 from data_preprocessing import *
+from sklearn.metrics import accuracy_score,f1_score
 
 
 import logging
@@ -347,7 +348,14 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
     #Predict training set:
     
-    train_predprob = alg.predict_proba(X_val)
+    train_predprob = alg.predict_proba(xgb_test)
+    
+    y_pred = clf.predict(xgb_test)
+
+    acc = accuracy_score(y_val, y_pred)
+    print(('acc', acc*100.0,'%'))
+    f1 = f1_score(y_val, y_pred)
+    print(('f1_score', f1))
     try:
         logloss = log_loss(y_val, train_predprob)
         logging.debug(logloss)
