@@ -247,13 +247,28 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
     elif cv_type=='max_depth':
 #        xgb_param = alg.get_xgb_params()
         max_depth = range(4,7,1)
-#        min_child_weight = range(1,6,1)
+#        min_child_weight = range(1,6,2)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
+    
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+                
+        
+        x_axis = range(0, max_depth)
+        pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
+        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
+        pyplot.title("XGBoost max_depth vs Log Loss")
+        pyplot.xlabel( 'max_depth' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig(FLAGS.tmp_data_path+'max_depth_1.png' )
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
         for key,value in cvresult.best_params_.items():
@@ -263,7 +278,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         min_child_weight = range(1,6,1)
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -271,14 +286,27 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         logging.debug(cvresult.best_params_)
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+                
         
+        x_axis = range(0, min_child_weight)
+        pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
+        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
+        pyplot.title("XGBoost min_child_weight vs Log Loss")
+        pyplot.xlabel( 'min_child_weight' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig(FLAGS.tmp_data_path+'min_child_weght_1.png' )
 
     elif cv_type=='subsample':
         subsample = [i/10.0 for i in range(6,9)]
         colsample_bytree = [i/10.0 for i in range(6,10)]
         param_cv = dict(subsample=subsample, colsample_bytree=colsample_bytree)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_subsampleh_colsample_bytree_1.csv')
     #  
@@ -287,13 +315,34 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
         
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+        
+        
+        # plot results
+        test_scores = np.array(test_means).reshape(len(subsample), len(colsample_bytree))
+        train_scores = np.array(train_means).reshape(len(subsample), len(colsample_bytree))
+        
+        for i, value in enumerate(subsample):
+            pyplot.plot(colsample_bytree, -test_scores[i], label= 'test_subsample:'   + str(value))
+        for i, value in enumerate(colsample_bytree):
+            pyplot.plot(subsample, train_scores[i], label= 'train_colsample_bytree:'   + str(value))
+
+        pyplot.legend()
+        pyplot.xlabel( 'subsample' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig('subsample_vs_colsample_bytree_1.png' )
+        
     elif cv_type=='reg_alpha':
         reg_alpha = [i/10.0 for i in range(60,80)]    #default = 0, 测试0.1,1，1.5，2
         reg_lambda =[i/10 for i in range(4,9)]      #default = 1，测试0.1， 0.5， 1，2
         
         param_cv = dict(reg_alpha=reg_alpha, reg_lambda=reg_lambda)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'reg_alpha_vs_reg_lambda1.csv')
     #  
@@ -301,27 +350,68 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         logging.debug(cvresult.best_params_)
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
+            
+            
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+        
+        
+        # plot results
+        test_scores = np.array(test_means).reshape(len(reg_alpha), len(reg_lambda))
+        train_scores = np.array(train_means).reshape(len(reg_alpha), len(reg_lambda))
+        
+        for i, value in enumerate(reg_alpha):
+            pyplot.plot(reg_lambda, -test_scores[i], label= 'test_reg_alpha:'   + str(value))
+        for i, value in enumerate(reg_lambda):
+            pyplot.plot(reg_alpha, train_scores[i], label= 'train_reg_lambda:'   + str(value))
+
+        pyplot.legend()
+        pyplot.xlabel( 'reg_alpha' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig('reg_alpha_vs_reg_lambda_1.png' )
 
     elif cv_type=='gamma':
         gamma = [i/10.0 for i in range(1,9)]    #default = 0, 测试0.1,1，1.5，2
         
         param_cv = dict(gamma=gamma)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
-        pd.DataFrame(cvresult.cv_results_).to_csv('gamma.csv')
+        pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'gamma.csv')
     #  
         #最佳参数n_estimators
         logging.debug(cvresult.best_params_)
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
+            
+        #最佳参数n_estimators
+        logging.debug(cvresult.best_params_)
+        for key,value in cvresult.best_params_.items():
+            alg.set_params(**{key:value})
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+                
+        
+        x_axis = range(0, gamma)
+        pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
+        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
+        pyplot.title("XGBoost gamma vs Log Loss")
+        pyplot.xlabel( 'gamma' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig(FLAGS.tmp_data_path+'gamma.png' )
 
     elif cv_type=='scale_pos_weight':
         scale_pos_weight = [i for i in range(1,5)]    #default = 0, 测试0.1,1，1.5，2
         
         param_cv = dict(scale_pos_weight=scale_pos_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'scale_pos_weight.csv')
     #  
@@ -330,13 +420,32 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
             
+        #最佳参数n_estimators
+        logging.debug(cvresult.best_params_)
+        for key,value in cvresult.best_params_.items():
+            alg.set_params(**{key:value})
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+                
+        
+        x_axis = range(0, scale_pos_weight)
+        pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
+        pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
+        pyplot.title("XGBoost scale_pos_weight vs Log Loss")
+        pyplot.xlabel( 'scale_pos_weight' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig(FLAGS.tmp_data_path+'scale_pos_weight.png' )
+            
     elif cv_type=='rate_drop':
         rate_drop = [i/10 for i in range(1,7)]    #default = 0, 测试0.1,1，1.5，2
         skip_drop = [i/10 for i in range(1,7)]
         
         param_cv = dict(rate_drop=rate_drop,skip_drop=skip_drop)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'rate_drop.csv')
     #  
@@ -344,6 +453,27 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         logging.debug(cvresult.best_params_)
         for key,value in cvresult.best_params_.items():
             alg.set_params(**{key:value})
+            
+        print("Best: %f using %s" % (cvresult.best_score_, cvresult.best_params_))
+        test_means = cvresult.cv_results_[ 'mean_test_score' ]
+        test_stds = cvresult.cv_results_[ 'std_test_score' ]
+        train_means = cvresult.cv_results_[ 'mean_train_score' ]
+        train_stds = cvresult.cv_results_[ 'std_train_score' ]
+        
+        
+        # plot results
+        test_scores = np.array(test_means).reshape(len(rate_drop), len(skip_drop))
+        train_scores = np.array(train_means).reshape(len(rate_drop), len(skip_drop))
+        
+        for i, value in enumerate(rate_drop):
+            pyplot.plot(skip_drop, -test_scores[i], label= 'test_rate_drop:'   + str(value))
+        for i, value in enumerate(skip_drop):
+            pyplot.plot(rate_drop, train_scores[i], label= 'train_skip_drop:'   + str(value))
+
+        pyplot.legend()
+        pyplot.xlabel( 'rate_drop' )                                                                                                      
+        pyplot.ylabel( 'Log Loss' )
+        pyplot.savefig('reg_alpha_vs_reg_lambda_1.png' )
     #Fit the algorithm on the data
 #    alg.set_params(cvresult.best_params_)
     alg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)],eval_metric='mlogloss',)
