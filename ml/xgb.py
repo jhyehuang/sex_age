@@ -77,7 +77,7 @@ def done(istrain='train'):
     logging.debug(istrain) 
     op=['n_estimators']
     if istrain=='train':
-        train_save = gdbt_data_get_train('n_class')
+        train_save = gdbt_data_get_train('all')
         
 #        np.random.seed(999)
 #        train_save = train_save.ix[r1 < 0.2, :]
