@@ -202,6 +202,8 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
 def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_rounds=10,cv_type='n_estimators',random_state=173):
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
     
+    X_train=X_train_part
+    y_train=y_train_part
 #    X_train = sp.csc_matrix(X_train)
 #    X_val = sp.csc_matrix(X_val)
         
@@ -248,7 +250,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
 #        min_child_weight = range(1,6,1)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -261,7 +263,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         min_child_weight = range(1,6,1)
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -276,7 +278,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         colsample_bytree = [i/10.0 for i in range(6,10)]
         param_cv = dict(subsample=subsample, colsample_bytree=colsample_bytree)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_subsampleh_colsample_bytree_1.csv')
     #  
@@ -291,7 +293,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(reg_alpha=reg_alpha, reg_lambda=reg_lambda)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'reg_alpha_vs_reg_lambda1.csv')
     #  
@@ -305,7 +307,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(gamma=gamma)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv('gamma.csv')
     #  
@@ -319,7 +321,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(scale_pos_weight=scale_pos_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'scale_pos_weight.csv')
     #  
@@ -334,7 +336,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(rate_drop=rate_drop,skip_drop=skip_drop)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='roc_auc',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'rate_drop.csv')
     #  
@@ -353,7 +355,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
     y_pred = alg.predict(X_val)
 
     acc = accuracy_score(y_val, y_pred)
-    logging.debug('acc'+str( acc*100.0)+'%')
+    logging.debug('acc:'+str( acc*100.0)+'%')
 #    f1 = f1_score(y_val, y_pred)
 #    print(('f1_score', f1))
     try:
