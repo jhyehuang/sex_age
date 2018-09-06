@@ -335,7 +335,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
             alg.set_params(**{key:value})
     #Fit the algorithm on the data
 #    alg.set_params(cvresult.best_params_)
-    alg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)],eval_metric=['auc'],)
+    alg.fit(X_train, y_train, eval_set=[(X_val, y_val)],eval_metric=['auc'],)
         
     #Predict training set:
     
