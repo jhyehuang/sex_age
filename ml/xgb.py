@@ -72,10 +72,7 @@ gbtree_param =dict(learning_rate =0.1,
 #gbtree_param.update(dart_param)
 
 
-columns=['brand_cnt','type_no_cnt','app_id_weight','app_id_weight','app_t1_weight','app_t2_weight']
-columns=columns+['app_lda_t2_1','app_lda_t2_2','app_lda_t2_3','app_lda_t2_4','app_lda_t2_5',]
-columns=columns+['dev_brand_weight','dev_type_no_weight']
-columns=columns+['times_len']
+
 
 def done(istrain='train'):
 #    test_save.drop('click',axis=1,inplace=True)
