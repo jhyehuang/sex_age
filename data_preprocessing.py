@@ -59,9 +59,9 @@ def test_score(_y, y):
     y=y.apply(lambda x:label_map[x])
     
     for col in label:
-        logging.debug(y)
+#        logging.debug(y)
         filte=(y.values==col)
-        logging.debug(filte)
+#        logging.debug(filte)
         label_pd.ix[filte,col]=1
     
 #    _y = list(map(lambda x:np.maximum(1e-7, np.minimum(1 - 1e-7, x)),_y))
