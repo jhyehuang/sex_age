@@ -120,7 +120,7 @@ def gdbt_data_get_train(flag='all'):
     logging.debug(deviceid_train.shape)
 
 
-    deviceid_train=data_augmentation(deviceid_train)
+#    deviceid_train=data_augmentation(deviceid_train)
     try:
         if flag!='device_id':
             deviceid_train.drop('device_id', axis=1,inplace = True)
