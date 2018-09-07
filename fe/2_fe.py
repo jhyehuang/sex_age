@@ -52,6 +52,7 @@ def word_to_tfidf(word):
     logging.debug(word)
     tfidf=transformer.fit_transform(word)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
+    logging.debug(weight)
     return weight
 
 def word_to_lda(word):
