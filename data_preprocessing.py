@@ -124,7 +124,7 @@ def gdbt_data_get_train(flag='all'):
     try:
         if flag!='device_id':
             deviceid_train.drop('device_id', axis=1,inplace = True)
-        if flag!='sex':
+        if flag!='sex' or flag!='age':
             deviceid_train.drop('sex', axis=1,inplace = True)
         if flag!='age':
             deviceid_train.drop('age', axis=1,inplace = True)
@@ -172,7 +172,7 @@ def gdbt_data_get_eval(flag='all'):
     try:
         if flag!='device_id':
             deviceid_train.drop('device_id', axis=1,inplace = True)
-        if flag!='sex':
+        if flag!='sex' or flag!='age':
             deviceid_train.drop('sex', axis=1,inplace = True)
         if flag!='age':
             deviceid_train.drop('age', axis=1,inplace = True)
@@ -191,9 +191,13 @@ def gdbt_data_get_eval(flag='all'):
     
     return deviceid_train
 
-def gdbt_data_get_test():
+def gdbt_data_get_test(flag='all'):
     
-    deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
+    
+    if flag=='age':
+        deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test_sex.csv')
+    else:
+        deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
 #    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)

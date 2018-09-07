@@ -142,7 +142,7 @@ def headle_age(flag):
     X_eval.drop(flag,axis=1,inplace=True)
     done('eval',X_eval,y_eval,flag)
     
-    X_test = gdbt_data_get_test()
+    X_test = gdbt_data_get_test(flag)
     print(X_test.shape)
     y=None
 

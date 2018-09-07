@@ -117,15 +117,17 @@ def done(istrain,X_train,y_train,flag):
             test_id=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
             logging.debug(test_id['device_id'].shape)
             test_id['device_id']=test_id['device_id'].map(str)
-            test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
-            fin=pd.concat([test_id,y_pred],axis=1)
+#            test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
+#            fin=pd.concat([test_id,y_pred],axis=1)
             
-            print(fin)
-
+#            print(fin)
+            y_pred = xgb1.predict(X_train)+1
+            test_id['sex']=y_pred
+            test_id=pd.read_csv(FLAGS.file_path+'deviceid_test_sex.csv')
             
-            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
+#            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
         del X_train
-        return fin
+#        return fin
         
         
 def headle_sex(flag):
