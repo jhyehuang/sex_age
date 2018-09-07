@@ -67,7 +67,7 @@ def define_n_class():
 #    package_label=data_augmentation(package_label)
     print(package_label.shape)
     truncate_table('deviceid_train')
-    package_label.to_csv(file_path+'package_label.csv',index= False)
+#    package_label.to_csv(file_path+'package_label.csv',index= False)
     pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
     
     

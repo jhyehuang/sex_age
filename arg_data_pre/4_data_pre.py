@@ -22,7 +22,7 @@ sys.path.append('..')
 from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql
 from flags import FLAGS, unparsed
 from data_preprocessing import *
-
+import logging
 
 def file_exists(filename):
     if not os.path.exists(filename):
@@ -30,16 +30,21 @@ def file_exists(filename):
 
 file_path=FLAGS.file_path
 
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
+
 
 def augmentatio_deviceid_packages():
 #    sql='alter table deviceid_train add n_class int(4) default 0'
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
-    package_label=pd.read_csv(file_path+'package_label.csv')
+    sql='select * from deviceid_train'
+    package_label=data_from_mysql(sql)
     deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
     cols=deviceid_packages.columns
     deviceid_packages=pd.merge(deviceid_packages,package_label,on=['device_id'],how='left')
     deviceid_packages=data_augmentation(deviceid_packages)
+    logging.debug(deviceid_packages.shape)
     deviceid_packages.to_csv(file_path+'deviceid_packages.csv',columns=cols,index= False)
     
     
