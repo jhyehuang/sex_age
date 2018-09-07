@@ -20,6 +20,17 @@ import logging
 mydb 
 '''
 #相似度/距离
+
+import pickle as  pk
+
+import itertools
+
+#处理事件字符串
+import datetime
+
+import numpy as np
+import scipy.io as sio
+import scipy.sparse as ss
 import scipy.spatial.distance as ssd
 
 from collections import defaultdict
@@ -30,6 +41,15 @@ from flags import FLAGS, unparsed
 from functools import reduce
 
 import time, datetime
+
+#读取训练数据
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+from sklearn.decomposition import PCA
+
+
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
@@ -77,18 +97,62 @@ def deviceid_app():
     
     
     n_records = 0
-    train_dict=deviceid_packages.loc[:,['device_id','add_list']].to_dict()
-    for line in :
-        cols = line.strip().split(b",")
-        i = userIndex[cols[0]]  #用户
-        j = eventIndex[cols[1]] #活动
+    train_dict=deviceid_packages.loc[:,['device_id','add_list']].to_dict(orient='records')
+    for line in train_dict:
+        device_id = line.get('device_id','')
+        app_list = line.get('add_list','')
+        for app in app_list:
+            i = dev_Index[device_id]  #用户
+            j = app_Index[app_list] #活动
         
-        eventsForUser[i].add(j)    #该用户参加了这个活动
-        usersForEvent[j].add(i)    #该活动被用户参加
+            appFordev[i].add(j)    #该用户参加了这个活动
+            devForapp[j].add(i)    #该活动被用户参加
+            dev_app_Scores[i, j] = 1
             
-        #userEventScores[i, j] = int(cols[4]) - int(cols[5])   #interested - not_interested
-        score = int(cols[4])
-        #if score == 0:  #0在稀疏矩阵中表示该元素不存在，因此借用-1表示interested=0
-        #userEventScores[i, j] = -1
-        #else:
-        userEventScores[i, j] = score
+  
+    ##统计每个用户参加的活动，后续用于将用户朋友参加的活动影响到用户
+    pk.dump(devForapp, open("devForapp.pkl", 'wb'))
+    ##统计活动参加的用户
+    pk.dump(appFordev, open("appFordev.pkl", 'wb'))
+    
+    #保存用户-活动关系矩阵R，以备后用
+    sio.mmwrite("dev_app_Scores", dev_app_Scores)
+    
+    
+    #保存用户索引表
+    pk.dump(dev_Index, open("dev_Index.pkl", 'wb'))
+    #保存活动索引表
+    pk.dump(app_Index, open("app_Index.pkl", 'wb'))
+
+
+    # 为了防止不必要的计算，我们找出来所有关联的用户 或者 关联的event
+    # 所谓的关联用户，指的是至少在同一个event上有行为的用户pair
+    # 关联的event指的是至少同一个user有行为的event pair
+    unique_dev_Pairs = set()
+    unique_app_Pairs = set()
+    for deviceid in unique_deviceid:
+        i = dev_Index[deviceid]
+        dev_id = devForapp[i]
+        if len(dev_id) > 2:
+            unique_dev_Pairs.update(itertools.combinations(dev_id, 2))
+    
+    for user in n_unique_app:
+        u = app_Index[user]
+        apps = appFordev[u]
+        if len(apps) > 2:
+            unique_app_Pairs.update(itertools.combinations(apps, 2))
+     
+    #保存用户-事件关系对索引表
+    pk.dump(unique_dev_Pairs, open("unique_dev_Pairs.pkl", 'wb'))
+    pk.dump(unique_app_Pairs, open("unique_app_Pairs.pkl", 'wb'))
+    
+    
+def time_profile(func):
+    def warpper(*args,**kwargs):
+        start=time.time()
+        result=func(*args,**kwargs)
+        end=time.time()
+        print('花费时间为{}'.format(end-start))
+        return result
+    return warpper
+    

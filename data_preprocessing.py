@@ -366,6 +366,29 @@ def cnn_read_data():
     return deviceid_train,y_train,deviceid_test
     # 分别对训练和测试数据的特征以及目标值进行标准化处理
 
+def get_all_data_kmeans():
+#    return
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
+    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+
+    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
+    logging.debug(deviceid_packages.columns)
+    logging.debug(deviceid_packages.shape)
+    
+    try:        
+        deviceid_packages.drop('add_list', axis=1,inplace = True)
+        deviceid_packages.drop('device_id', axis=1,inplace = True)
+
+    except:
+        error_msg = traceback.format_exc()
+        print(error_msg)
+    return deviceid_packages
     
 
 if __name__ == "__main__":
