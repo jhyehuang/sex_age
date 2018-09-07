@@ -64,7 +64,8 @@ def word_to_lda(word):
         return 0
     elif len(word)==1:
        return [1]
-
+    elif len(list(set(word)))==1:
+       return pd.DataFrame(columns=['app_lda_t2_'+str(i) for i in range(1,6)])
     logging.debug(word)
     logging.debug(list(set(word)))
     vectorizer=CountVectorizer(min_df=1)
