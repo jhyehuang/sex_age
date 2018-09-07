@@ -123,7 +123,7 @@ def done(istrain,X_train,y_train,flag):
 #            print(fin)
             y_pred = xgb1.predict(X_train)+1
             test_id['sex']=y_pred
-            test_id=pd.read_csv(FLAGS.file_path+'deviceid_test_sex.csv')
+            test_id=pd.to_csv(FLAGS.file_path+'deviceid_test_sex.csv',index=False)
             
 #            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
         del X_train
