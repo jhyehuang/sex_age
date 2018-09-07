@@ -388,6 +388,7 @@ def get_all_data_kmeans():
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
+    deviceid_packages.fillna(0)
     return deviceid_packages
     
 
