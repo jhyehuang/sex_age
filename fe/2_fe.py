@@ -105,7 +105,7 @@ def app_get_t1(app_list):
 #    print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
-        result_t1[t1]=cnt1[t1].values
+        result_t1[t1]=cnt1[t1]
     logging.debug(result_t1)
     return result_t1
 
