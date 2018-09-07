@@ -59,8 +59,8 @@ def word_to_tfidf(word):
         return 0
     elif len(word)==1:
        return [0]
-    transformer=TfidfVectorizer()
-    tfidf=transformer.fit_transform(word,min_df=1)
+    transformer=TfidfVectorizer(min_df=1)
+    tfidf=transformer.fit_transform(word,)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
     return weight
 
