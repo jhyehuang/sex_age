@@ -96,7 +96,7 @@ def get_t2(app_list):
     return set(t2_list)
 
 def set_t1(app_list):
-    app_list=app_list.split('\'')
+#    app_list=app_list.split('\'')
     logging.debug(app_list)
     return [x for x in app_list if len(x)>2]
 
