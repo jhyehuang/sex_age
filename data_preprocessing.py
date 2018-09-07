@@ -124,7 +124,7 @@ def gdbt_data_get_train(flag='all'):
     try:
         if flag!='device_id':
             deviceid_train.drop('device_id', axis=1,inplace = True)
-        if flag!='sex' or flag!='age':
+        if flag!='sex' and flag!='age':
             deviceid_train.drop('sex', axis=1,inplace = True)
         if flag!='age':
             deviceid_train.drop('age', axis=1,inplace = True)
@@ -172,7 +172,7 @@ def gdbt_data_get_eval(flag='all'):
     try:
         if flag!='device_id':
             deviceid_train.drop('device_id', axis=1,inplace = True)
-        if flag!='sex' or flag!='age':
+        if flag!='sex' and flag!='age':
             deviceid_train.drop('sex', axis=1,inplace = True)
         if flag!='age':
             deviceid_train.drop('age', axis=1,inplace = True)
