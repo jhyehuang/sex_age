@@ -377,7 +377,13 @@ def compute_date():
     deviceid_packages_03=pd.read_csv(file_path+'03_deviceid_packages.csv')
     deviceid_packages_04=pd.read_csv(file_path+'04_deviceid_packages.csv')
     package_label=pd.read_csv(file_path+'package_label.csv')
-    
+    def app_list(text):
+        app_list=text.split('|')
+#        print (app_list)
+        return app_list
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages_03['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+
     
     result = []
     result.append(pool.apply_async(compute_date_t1, (deviceid_packages_03,package_label, )))
