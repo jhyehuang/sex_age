@@ -156,12 +156,12 @@ def devid_day(deviceid_packages):
 #        ret['close_size'] = cnt1[_key_codes].values
 #        print(ret)
 #        ret.fillna(0)
-        max_hour=cnt1.mean()
+        max_hour=cnt1.max()
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'day'].unique().max()
 #        print(ret)
         
-        return int(sum(cnt1)/max_hour)
+        return int(max_hour)
     
     deviceid_packages['close_day']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
 #    deviceid_packages.to_csv(file_path+'0402_deviceid_train.csv')
@@ -205,11 +205,11 @@ def devid_mon(deviceid_packages):
 #        ret['close_size'] = cnt1[_key_codes].values
 #        print(ret)
 #        ret.fillna(0)
-        max_hour=cnt1.mean()
+        max_hour=cnt1.max()
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'mon'].unique().max()
 #        print(ret)
-        return int(sum(cnt1)/max_hour)
+        return int(max_hour)
     
     deviceid_packages['close_mon']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
     
