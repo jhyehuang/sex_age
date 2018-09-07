@@ -44,7 +44,7 @@ kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=3)
 
 
 def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_rounds=10,cv_type='n_estimators',random_state=0):
-    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.6,random_state = random_state)
+    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
     if cv_type=='n_estimators':
         xgb_param = alg.get_xgb_params()
 #        xgb_param['num_class'] = 2
@@ -52,7 +52,7 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
         xgtrain = xgb.DMatrix(X_train, label = y_train)
         
         cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], folds =cv_folds,
-                         metrics='auc', early_stopping_rounds=early_stopping_rounds)
+                         metrics='logloss', early_stopping_rounds=early_stopping_rounds)
         
         n_estimators = cvresult.shape[0]
         alg.set_params(n_estimators = n_estimators)
@@ -179,7 +179,7 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
             alg.set_params(**{key:value})
     #Fit the algorithm on the data
 #    alg.set_params(cvresult.best_params_)
-    alg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)],eval_metric='auc',)
+    alg.fit(X_train, y_train, eval_set=[(X_train_part, y_train_part), (X_val, y_val)],eval_metric='logloss',)
         
     #Predict training set:
     
@@ -246,11 +246,11 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
     elif cv_type=='max_depth':
 #        xgb_param = alg.get_xgb_params()
-        max_depth = range(3,7,1)
+        max_depth = [ i for i in range(3,7,1)]
 #        min_child_weight = range(1,6,2)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -262,7 +262,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         train_stds = cvresult.cv_results_[ 'std_train_score' ]
                 
         
-        x_axis = range(0, max_depth)
+        x_axis = max_depth
         pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
         pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
         pyplot.title("XGBoost max_depth vs Log Loss")
@@ -275,10 +275,10 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
             alg.set_params(**{key:value})
     elif cv_type=='min_child_weight':
 #        xgb_param = alg.get_xgb_params()
-        min_child_weight = range(1,6,1)
+        min_child_weight = [ i for i in range(1,6,1)]
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -293,7 +293,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         train_stds = cvresult.cv_results_[ 'std_train_score' ]
                 
         
-        x_axis = range(0, min_child_weight)
+        x_axis = min_child_weight
         pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
         pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
         pyplot.title("XGBoost min_child_weight vs Log Loss")
@@ -306,7 +306,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         colsample_bytree = [i/10.0 for i in range(6,10)]
         param_cv = dict(subsample=subsample, colsample_bytree=colsample_bytree)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_subsampleh_colsample_bytree_1.csv')
     #  
@@ -342,7 +342,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(reg_alpha=reg_alpha, reg_lambda=reg_lambda)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'reg_alpha_vs_reg_lambda1.csv')
     #  
@@ -378,7 +378,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(gamma=gamma)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'gamma.csv')
     #  
@@ -398,7 +398,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         train_stds = cvresult.cv_results_[ 'std_train_score' ]
                 
         
-        x_axis = range(0, gamma)
+        x_axis =gamma
         pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
         pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
         pyplot.title("XGBoost gamma vs Log Loss")
@@ -411,7 +411,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(scale_pos_weight=scale_pos_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'scale_pos_weight.csv')
     #  
@@ -431,7 +431,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         train_stds = cvresult.cv_results_[ 'std_train_score' ]
                 
         
-        x_axis = range(0, scale_pos_weight)
+        x_axis = scale_pos_weight
         pyplot.errorbar(max_depth, test_means, yerr=test_stds ,label='Test')
         pyplot.errorbar(x_axis, train_means, yerr=train_stds ,label='Train')
         pyplot.title("XGBoost scale_pos_weight vs Log Loss")
@@ -445,7 +445,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         
         param_cv = dict(rate_drop=rate_drop,skip_drop=skip_drop)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=1)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'rate_drop.csv')
     #  

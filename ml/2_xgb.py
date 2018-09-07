@@ -33,17 +33,17 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
-        n_estimators=93,
+        n_estimators=112,
 #        n_estimators=1,
-        max_depth=6,
-        min_child_weight=1,
-        gamma=0.1,
-        subsample=0.6,
-        colsample_bytree=0.9,
-        scoring='roc_auc',
+        max_depth=4,
+#        min_child_weight=1,
+#        gamma=0.1,
+#        subsample=0.6,
+#        colsample_bytree=0.9,
+#        scoring='roc_auc',
 #        scale_pos_weight=1,
-        reg_alpha=6.1,
-        reg_lambda=0.5,
+#        reg_alpha=6.1,
+#        reg_lambda=0.5,
 #        rate_drop= 0.3,
 #        skip_drop= 0.5
     )
@@ -57,7 +57,7 @@ def done(istrain,X_train,y_train,flag):
     if istrain=='train':
         xgb1 = XGBClassifier(**gbtree_param,
         objective='binary:logistic',
-        eval_metric=['auc'],
+#        eval_metric=['logloss'],
         nthread=-1,
         verbose=2,
         seed=27,
@@ -74,13 +74,17 @@ def done(istrain,X_train,y_train,flag):
         for oper in op:
 #            device_id = X_train.ix[:,['device_id']]
         #    X_eval.drop(flag,axis=1,inplace=True)
-#            logging.debug(device_id.head(2))
+            logging.debug(X_train.shape)
 #            X_train.drop('device_id',axis=1,inplace=True)
             xgb1 = load(FLAGS.tmp_data_path+flag+'_xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
 #            dtrain_predprob = xgb1.predict_proba(X_train)
-            y_pred = xgb1.predict(X_train)
+            y_pred = xgb1.predict(X_train)+1
         
+            logging.debug(y_train.shape)
+            logging.debug(y_pred.shape)
+            logging.debug(y_pred)
+            logging.debug(y_train)
             acc = accuracy_score(y_train, y_pred)
             logging.debug('acc:'+str( acc*100.0)+'%')
     
@@ -140,6 +144,7 @@ def headle_sex(flag):
     print(X_eval.shape)
     y_eval = X_eval[flag]
     logging.debug(X_eval.shape)
+    logging.debug(y_eval.unique())
     X_eval.drop(flag,axis=1,inplace=True)
     done('eval',X_eval,y_eval,flag)
     

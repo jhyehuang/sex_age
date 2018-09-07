@@ -9,7 +9,9 @@ import time
 import pandas as pd
 import numpy as np
 import os
+sys.path.append('..')
 from subprocess import *
+from data_preprocessing import *
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
@@ -30,11 +32,17 @@ def file_exists(filename):
 
 file_path=FLAGS.file_path
 
+def data_into_mysql(file_name='deviceid_train.csv'):
+    data_src=pd.read_csv(file_path+file_name)
+    table_name=file_name.replace('.csv','')
+    print(table_name)
+    print(data_src.head(5))
+    pd.io.sql.to_sql(data_src,table_name, engine,if_exists='append', index= False)
 
 def define_n_class():
-    sql='alter table deviceid_train add n_class int(4) default 0'
-    ret=data_from_mysql(sql)
-    print(ret.head(3))
+#    sql='alter table deviceid_train add n_class int(4) default 0'
+#    ret=data_from_mysql(sql)
+#    print(ret.head(3))
     
     sql='select * from deviceid_train'
     package_label=data_from_mysql(sql)
@@ -56,8 +64,10 @@ def define_n_class():
     print(package_label.head(3))
     
     package_label['n_class']=package_label.apply(lambda line:map_label(line['sex'],line['age']),axis=1)
+#    package_label=data_augmentation(package_label)
+    print(package_label.shape)
     truncate_table('deviceid_train')
-    
+    package_label.to_csv(file_path+'package_label.csv',index= False)
     pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
     
     
@@ -66,6 +76,8 @@ if __name__=='__main__':
     sql='select * from package_label'
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
+    truncate_table('deviceid_train')
+    data_into_mysql()
     define_n_class()
 
 # id,

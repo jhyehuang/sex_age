@@ -41,7 +41,7 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 
 
-dart_param = {'booster': 'dart',
+dart_param = {'booster': 'gbtree',
          'sample_type': 'uniform',
          'normalize_type': 'tree',
 #         'rate_drop': 0.1,
@@ -53,8 +53,6 @@ gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
         n_estimators=147,
-#        n_estimators=1219,
-#        n_estimators=1,
 #        max_depth=3,
 #        min_child_weight=5,
 #        gamma=0.1,
@@ -99,7 +97,7 @@ def done(istrain='train'):
 #        n_estimators = [i for i in range(200,1000,1)]
         xgb1 = XGBClassifier(**gbtree_param,
         objective='multi:softprob',
-        eval_metric=['auc','mlogloss',],
+        eval_metric=['mlogloss',],
         nthread=-1,
         verbose=2,
         seed=27,
