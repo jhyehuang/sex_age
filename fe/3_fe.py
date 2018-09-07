@@ -129,21 +129,25 @@ def devid_app_times_tx(deviceid_packages,package_label):
 #        print (app_list)
         return app_list
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    # 使用 t1 app 的时长
+    # 使用 t2 app 的时长
     deviceid_packages['t1_app_time']=deviceid_packages.apply(lambda line:app_get_t1(line['device_id'],line['add_list']),axis=1)
     deviceid_packages['t2_app_time']=deviceid_packages.apply(lambda line:app_get_t2(line['device_id'],line['add_list']),axis=1)
     
     columns=[]
-    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
-    for x in FLAGS.t1_feature.replace('\'','').split(','):
-        columns.append('app_time_t1_'+str(x))
-    for x in FLAGS.t2_feature.replace('\'','').split(','):
-        columns.append('app_time_t2_'+str(x))
+#    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
+#    for x in FLAGS.t1_feature.replace('\'','').split(','):
+#        columns.append('app_time_t1_'+str(x))
+#    for x in FLAGS.t2_feature.replace('\'','').split(','):
+#        columns.append('app_time_t2_'+str(x))
         
     for x in package_label['t1'].unique():
         deviceid_packages['app_time_t1_'+str(x)]=int(0)
+        columns.append('app_time_t1_'+str(x))
 
     for x in package_label['t2'].unique():
         deviceid_packages['app_time_t2_'+str(x)]=int(0)
+        columns.append('app_time_t2_'+str(x))
     
     for x in package_label['t1'].unique():
         _x=[]
