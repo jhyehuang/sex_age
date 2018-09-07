@@ -71,7 +71,8 @@ X_train =get_all_data_kmeans()
 
 X_train = (X_train - X_train.min()) / (X_train.max() - X_train.min())
 #X_train = (X_train ) / X_train.max()
-
+print(X_train.shape)
+print(X_train.head(5))
 
 
 #对数据进行PCA降维
