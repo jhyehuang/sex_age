@@ -60,6 +60,13 @@ def word_to_tfidf(word):
     return weight
 
 def word_to_lda(word):
+    if len(word)<1:
+        return 0
+    elif len(word)==1:
+       return [1]
+
+    logging.debug(word)
+    logging.debug(list(set(word)))
     vectorizer=CountVectorizer()
     tf = vectorizer.fit_transform(word)
     lda = LatentDirichletAllocation(n_topics=5,
