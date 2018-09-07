@@ -359,9 +359,9 @@ def cnn_read_data():
 
 
     
-    logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
-    logging.debug(deviceid_train.head(2))
+    logging.debug(y_train.shape)
+    logging.debug(deviceid_test.shape)
     
     return deviceid_train,y_train,deviceid_test
     # 分别对训练和测试数据的特征以及目标值进行标准化处理
