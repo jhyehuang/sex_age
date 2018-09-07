@@ -48,6 +48,8 @@ def word_to_tfidf(word):
         return 0
     elif len(word)==1:
        return [0]
+    elif list(set(word))==1:
+       return [0 for x in range(len(word))]
     transformer=TfidfVectorizer()
     logging.debug(word)
     tfidf=transformer.fit_transform(word)
