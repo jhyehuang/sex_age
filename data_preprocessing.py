@@ -15,6 +15,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import lightgbm as lgb 
 
+# 数据标准化
+from sklearn.preprocessing import StandardScaler
+
 import logging
 sys.path.append('..')
 from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,dev_id_train
@@ -309,6 +312,61 @@ def lightgbm_data_get_test():
 
 
     return deviceid_test
+
+
+def cnn_read_data():
+    # 分别初始化对特征和目标值的标准化器
+    ss_X = StandardScaler()    
+    
+    
+    deviceid_train=dev_id_train()
+    deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
+    
+#    return
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
+    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+
+    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
+    logging.debug(deviceid_packages.columns)
+    logging.debug(deviceid_packages.shape)
+    
+    
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages,on=['device_id'],how='left') 
+    y_train=deviceid_train['n_class']
+    deviceid_train.drop('n_class', axis=1,inplace = True)
+
+    try:        
+        deviceid_train.drop('add_list', axis=1,inplace = True)
+        deviceid_train.drop('device_id', axis=1,inplace = True)
+        deviceid_train.drop('sex', axis=1,inplace = True)
+        deviceid_train.drop('age', axis=1,inplace = True)
+        deviceid_test.drop('device_id', axis=1,inplace = True)
+
+    except:
+        error_msg = traceback.format_exc()
+        print(error_msg)
+        
+    
+    deviceid_train = ss_X.fit_transform(deviceid_train)
+    deviceid_test = ss_X.fit_transform(deviceid_test)
+
+
+    
+    logging.debug(deviceid_train.columns)
+    logging.debug(deviceid_train.shape)
+    logging.debug(deviceid_train.head(2))
+    
+    return deviceid_train,y_train,deviceid_test
+    # 分别对训练和测试数据的特征以及目标值进行标准化处理
+
+    
 
 if __name__ == "__main__":
     gdbt_data_get_train()

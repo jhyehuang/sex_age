@@ -117,15 +117,14 @@ def done(istrain,X_train,y_train,flag):
             test_id=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
             logging.debug(test_id['device_id'].shape)
             test_id['device_id']=test_id['device_id'].map(str)
-#            test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
             
-            
+            fin=pd.concat([test_id,y_pred],axis=1)
+            fin.rename(columns={'device_id':'DeviceID'}, inplace = True)
+            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
 #            print(fin)
             ret=xgb1.predict(X_train)
             y_pred = ret+1
             
-            fin=pd.concat([test_id,ret,abs(ret-1)],axis=1)
-            fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
             
             test_id['sex']=y_pred
             test_id.to_csv(FLAGS.file_path+'deviceid_test_sex.csv',index=False)

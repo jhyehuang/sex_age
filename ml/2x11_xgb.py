@@ -56,7 +56,7 @@ def done(istrain,X_train,y_train,flag):
     if istrain=='train':
         xgb1 = XGBClassifier(**gbtree_param,
         objective='multi:softprob',
-        eval_metric=['auc'],
+        eval_metric=['mlogloss'],
         nthread=-1,
         verbose=1,
         seed=27,

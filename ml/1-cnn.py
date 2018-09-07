@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 """A very simple MNIST classifier.
@@ -23,39 +23,31 @@ import tensorflow as tf
 FLAGS = None
 
 
-# 我们在这里调用系统提供的Mnist数据函数为我们读入数据，如果没有下载的话则进行下载。
-# 
-# <font color=#ff0000>**这里将data_dir改为适合你的运行环境的目录**</font>
-
-# In[2]:
-
 
 # Import data
-data_dir = '/tmp/tensorflow/mnist/input_data'
-mnist = input_data.read_data_sets(data_dir, one_hot=True)
+x_train,y_train,x_test = cnn_read_data()
 
 
 # 一个非常非常简陋的模型
 
-# In[3]:
+# In[4]:
 
 
 # Create the model
-x = tf.placeholder(tf.float32, [None, 784])
+x = tf.placeholder(tf.float32, [None, x_train.shape[1]])
 #W = tf.Variable(tf.zeros([784, 10]))
 #b = tf.Variable(tf.zeros([10]))
-y_ = tf.placeholder(tf.float32, [None, 22])
-# variables
+y = tf.placeholder(tf.float32, [None, 22])
 
 
 # ## 权重初始化
 # 权重初始化时，将标准差从0.1调整为0.71
 
-# In[4]:
+# In[5]:
 
 
 def weight_variable(shape):
-    initial = tf.truncated_normal(shape, stddev=0.1)
+    initial = tf.truncated_normal(shape, stddev=0.71)
     return tf.Variable(initial)
 def bias_variable(shape):
     initial = tf.constant(0.1, shape=shape)
@@ -64,7 +56,7 @@ def bias_variable(shape):
 
 # # 卷积和池化
 
-# In[5]:
+# In[6]:
 
 
 def conv2d(x, W):
@@ -73,9 +65,8 @@ def max_pool_2x2(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],strides=[1, 2, 2, 1], padding='SAME')
 
 
-# # 第一层卷积
+print (x,y)
 
-# In[7]:
 
 
 W_conv1 = weight_variable([5, 5, 1, 32])
@@ -87,7 +78,7 @@ h_pool1 = max_pool_2x2(h_conv1)
 
 # # 第二层卷积
 
-# In[8]:
+# In[9]:
 
 
 W_conv2 = weight_variable([5, 5, 32, 64])
@@ -97,22 +88,19 @@ h_pool2 = max_pool_2x2(h_conv2)
 
 
 # # 密集连接层
-# 999  98.66
-# 784  98.11
-# 
 
-# In[42]:
+# In[10]:
 
 
-W_fc1 = weight_variable([7 * 7 * 64, 999])
-b_fc1 = bias_variable([999])
+W_fc1 = weight_variable([7 * 7 * 64, 1024])
+b_fc1 = bias_variable([1024])
 h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
 h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
 
 # #  Dropout
 
-# In[43]:
+# In[11]:
 
 
 keep_prob = tf.placeholder("float")
@@ -121,10 +109,10 @@ h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
 # # 输出层
 
-# In[44]:
+# In[12]:
 
 
-W_fc2 = weight_variable([999, 10])
+W_fc2 = weight_variable([1024, 10])
 b_fc2 = bias_variable([10])
 y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
@@ -133,29 +121,32 @@ y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
 # ## 计算交叉熵
 
-# In[49]:
+# In[13]:
 
 
-cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv))
-train_step = tf.train.AdamOptimizer(1e-4*0.9).minimize(cross_entropy) 
-#train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(cross_entropy) 
-correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
+cross_entropy = -tf.reduce_sum(y*tf.log(y_conv))
+train_step = tf.train.AdamOptimizer(1e-3).minimize(cross_entropy) 
+#train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(cross_entropy) 
+correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 
-# In[50]:
+# In[ ]:
 
 
-with tf.Session() as sess:
-    init=tf.global_variables_initializer()
-    sess.run(init)
-    for i in range(25000):
-        batch = mnist.train.next_batch(50)
-        if i%100==0:
-            train_accuracy = accuracy.eval(feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
+sess = tf.Session()
+init=tf.initialize_all_variables()
+sess.run(init)
+for i in range(25000):
+    batch = mnist.train.next_batch(50)
+    if i%100==0:
+        train_accuracy = accuracy.eval(session=sess,feed_dict={x:batch[0], y: batch[1], keep_prob: 0.5})
+        print (type(train_accuracy))
+        if train_accuracy>=0.97:
             print("step %d, training accuracy %g"%(i, train_accuracy))
-        train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-    print ("test accuracy %g"%accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+            train_step.run(session=sess,feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
+            print ("test accuracy %g"%accuracy.eval(session=sess,feed_dict={x: mnist.test.images, y: mnist.test.labels, keep_prob: 0.5}))
+sess.close()
 
 
 # ### 使用tensorflow，构造并训练一个神经网络，在测试机上达到超过98%的准确率。
@@ -175,3 +166,11 @@ with tf.Session() as sess:
 # - 正则化因子
 # - 权重初始化分布参数整
 
+# 
+# ## 评价标准
+# 
+# - 准确度达到98%或者以上60分，作为及格标准，未达到者本作业不及格，不予打分。
+# - 使用了正则化因子或文档中给出描述：10分。
+# - 手动初始化参数或文档中给出描述：10分，不设置初始化参数的，只使用默认初始化认为学员没考虑到初始化问题，不给分。
+# - 学习率调整：10分，需要文档中给出描述。
+# - 卷积kernel size和数量调整：10分，需要文档中给出描述。
