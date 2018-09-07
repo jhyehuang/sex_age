@@ -42,6 +42,7 @@ def dev_id_train():
     deviceid_train=data_from_mysql(sql)
     return deviceid_train
 
+
 def word_to_tfidf(word):
     transformer=TfidfVectorizer()
     tfidf=transformer.fit_transform(word)
@@ -66,9 +67,10 @@ def tx_group_by(tx_pd,col='t1'):
 #    print(_key_codes)
     cnt1=tx_pd['app_id'].groupby(_key_codes).size()
 #    cnt1 = grp1.aggregate(np.size)
-    _cnt = cnt1[_key_codes].values
-    _cnt[np.isnan(_cnt)] = 0
-    tx_pd[col+'_size'] = _cnt
+#    _cnt = cnt1[tx_pd[col].unique().tolist()].values
+#    _cnt[np.isnan(_cnt)] = 0
+#    tx_pd[col+'_size'] = _cnt
+    return cnt1
 
 def app_list(text):
     app_list=text.split('|')
@@ -82,6 +84,7 @@ def app_get_t1(app_list):
     tx_list=[]
     for app_id in app_list:
         t1_dict={}
+        # 查得 app_id  对应的 t1 编码 t2 编码
         t2=get_package_dict(app_id,'t1,t2')
         
         if len(t2)<1:
@@ -95,12 +98,14 @@ def app_get_t1(app_list):
     tx_pd=pd.DataFrame(x for x in tx_list)
     if tx_pd.shape[0]<1:
         return {}
-    tx_group_by(tx_pd,'t1')
+    
+    #计算 dev_id 下 按照t1 分组后每个t1的数量
+    cnt1=tx_group_by(tx_pd,'t1')
 
 #    print(tx_pd)
     result_t1={}
     for t1 in tx_pd.t1.unique():
-        result_t1[t1]=tx_pd.ix[tx_pd.t1.values==t1,'t1_size'].sum()
+        result_t1[t1]=cnt1[t1].values
     logging.debug(result_t1)
     return result_t1
 
@@ -124,12 +129,12 @@ def app_get_t2(app_list):
     tx_pd=pd.DataFrame(x for x in tx_list)
     if tx_pd.shape[0]<1:
         return {}
-    tx_group_by(tx_pd,'t2')
+    cnt1=tx_group_by(tx_pd,'t2')
 #    print(tx_pd)
 
     result_t2={}
     for t2 in tx_pd.t2.unique():
-        result_t2[t2]=tx_pd.ix[tx_pd.t2.values==t2,'t2_size'].sum()
+        result_t2[t2]=cnt1[t2]
     logging.debug(result_t2)
     return result_t2
 
@@ -137,21 +142,26 @@ def app_get_t2(app_list):
 def devid_app_tx(deviceid_packages,package_label):
     
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    #每一个app_list中 属于t1类型的size
     deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    #每一个app_list中 属于t2类型的size
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
     
     columns=[]
-    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
-    for x in FLAGS.t1_feature.replace('\'','').split(','):
-        columns.append('app_len_t1_'+str(x))
-    for x in FLAGS.t2_feature.replace('\'','').split(','):
-        columns.append('app_len_t2_'+str(x))
+#    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
+#    for x in FLAGS.t1_feature.replace('\'','').split(','):
+#        columns.append('app_len_t1_'+str(x))
+#    for x in FLAGS.t2_feature.replace('\'','').split(','):
+#        columns.append('app_len_t2_'+str(x))
         
+    # 将 deviceid_packages['t1_app_len'] 展开package_label['t1'].unique()个特征
     for x in package_label['t1'].unique():
         deviceid_packages['app_len_t1_'+str(x)]=int(0)
+        columns.append('app_len_t1_'+str(x))
 
     for x in package_label['t2'].unique():
         deviceid_packages['app_len_t2_'+str(x)]=int(0)
+        columns.append('app_len_t2_'+str(x))
     
     for x in package_label['t1'].unique():
         _x=[]
@@ -177,6 +187,7 @@ def devid_app_tx(deviceid_packages,package_label):
         deviceid_packages.ix[filte,'app_len_t1_'+str(x)]=values
         
         
+    # 将 deviceid_packages['t2_app_len'] 展开package_label['t2'].unique()个特征
     for x in package_label['t2'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
@@ -215,7 +226,7 @@ def devid_app_count(deviceid_packages,package_label):
 #    app_mtrix=app_mtrix['add_id_list']
 #    print(package_label['t1'].max())
 #    print(package_label['t2'].max())
-    
+    # 将app_list 包含的t1类型进行join编码
     def get_label_t1_1(l):
 #        print(l)
         logging.debug(l)
@@ -227,6 +238,7 @@ def devid_app_count(deviceid_packages,package_label):
             ret.append('0')
         return ''.join(ret)
   
+    # 将app_list 包含的t2类型进行join编码
     def get_label_t2_1(l):
 #        print(l)
         logging.debug(l)
@@ -277,8 +289,11 @@ def devid_app_tfidf(deviceid_packages,package_label):
     #        print (app_list)
         return text
 
+    #将app_list 转化为空格分割的字符串
     deviceid_packages['add_id_text']=deviceid_packages['add_id_list'].apply(lambda line:list_to_text(app_list(line)))
-    word=deviceid_packages['add_id_text'].values.tolist()    
+    # 将分割的字符串变为shape[:,1]的数组
+    word=deviceid_packages['add_id_text'].values.tolist() 
+    # 数组作为tf * idf的输入，获得词条出现的词频-逆向文件频率
     deviceid_packages['app_id_weight']=word_to_tfidf(word)
 
     
@@ -319,17 +334,22 @@ def devid_app_tfidf(deviceid_packages,package_label):
             return ''
         return label.pop()
     app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    
+    # 转化为t1 字符串 和 t2 字符串
     t1_mtrix=list(map(get_label_t1_1,app_mtrix))
     t2_mtrix=list(map(get_label_t2_1,app_mtrix))
+    
+    # 计算t1 字符串 和 t2 字符串 的词频 逆向文件频率
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
+    
+    # 计算 t2 的主题概率
     lda_pd=word_to_lda(t2_mtrix)
 #    logging.debug(lda_pd)
 #    logging.debug(lda_pd['app_lda_t2_1'].values)
     for x in ['app_lda_t2_'+str(i) for i in range(1,6)]:
         deviceid_packages[x]=lda_pd[x].values
-#    deviceid_packages=pd.concat([deviceid_packages,lda_pd],axis=1, join_axes=[deviceid_packages.index])
-#    logging.debug(deviceid_packages)
+
     deviceid_packages.fillna(0)
     
 
@@ -350,14 +370,14 @@ def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
         label=deviceid_brand.ix[filer,'brand'].values.tolist()
         if len(label)<1:
             return ''
-        return label.pop()
+        return ' '.join(label)
     
     def get_type_no(l):
         filer=deviceid_brand['device_id'].astype('category').values==l
         label=deviceid_brand.ix[filer,'type_no'].values.tolist()
         if len(label)<1:
             return ''
-        return label.pop()
+        return ' '.join(label)
     app_mtrix=deviceid_packages['device_id'].tolist()
     t1_mtrix=list(map(get_brand,app_mtrix))
     t2_mtrix=list(map(get_type_no,app_mtrix))
@@ -373,7 +393,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=4)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
     deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
     deviceid_brand['brand']=deviceid_brand['brand'].astype('category').values.codes

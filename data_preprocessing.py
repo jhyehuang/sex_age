@@ -103,14 +103,14 @@ def gdbt_data_get_train(flag='all'):
     deviceid_train=dev_id_train()
     
 #    return
-    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
@@ -151,14 +151,14 @@ def gdbt_data_get_eval(flag='all'):
     deviceid_train=dev_id_train()
     
 #    return
-    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
@@ -195,14 +195,14 @@ def gdbt_data_get_test():
     
     deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
-    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
-    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
+#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
 #    deviceid_test=pd.merge(deviceid_test,deviceid_packages_04,on=['device_id'],how='left')
