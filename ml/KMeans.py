@@ -71,6 +71,7 @@ X_train =get_all_data_kmeans()
 
 X_train = (X_train - X_train.min()) / (X_train.max() - X_train.min())
 #X_train = (X_train ) / X_train.max()
+X_train=X_train.fillna(0)
 print(X_train.shape)
 print(X_train.head(5))
 
