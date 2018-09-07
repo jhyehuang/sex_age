@@ -414,10 +414,10 @@ def compute_date():
     package_label['t1']=package_label['t1'].astype('category').values.codes
     package_label['t2']=package_label['t2'].astype('category').values.codes
     result = []
-    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
-    result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
+#    result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
+#    result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tfidf, (deviceid_packages,package_label, )))
-    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
+#    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
     pool.close()
     pool.join()
         
