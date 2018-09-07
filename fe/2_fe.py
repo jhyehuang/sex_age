@@ -50,9 +50,10 @@ def word_to_tfidf(word):
        return [1]
     elif len(list(set(word)))==1:
        return [1 for x in range(len(word))]
-    transformer=TfidfVectorizer(min_df=1)
     logging.debug(word)
     logging.debug(list(set(word)))
+    transformer=TfidfVectorizer(min_df=1)
+
     tfidf=transformer.fit_transform(word,)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
     logging.debug(weight)
@@ -319,7 +320,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
   
     def get_label_t2_1(l):
 #        print(l)
-        logging.debug(l)
+#        logging.debug(l)
         ret=list(map(get_label_2_t2,l))
         condition = lambda t: t != ""
         ret= list(filter(condition, ret))
