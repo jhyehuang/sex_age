@@ -11,6 +11,7 @@ import numpy as np
 import os
 from subprocess import *
 import json
+import logging
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
@@ -27,6 +28,8 @@ from functools import reduce
 
 import time, datetime
 
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
 
 file_path=FLAGS.file_path
 
@@ -71,7 +74,7 @@ def get_t1(app_list):
     for app_id in app_list:
         
         t1=get_package_label(app_id,'t1')
-        print(t1)
+        logging.debug(t1)
         if t1.shape[0]<1:
             continue
         t1_list.append(int(t1['t1'].values[0]))
@@ -80,13 +83,13 @@ def get_t1(app_list):
 def get_t2(app_list):
     t2_list=[]
 
-#    print(app_list)
+#    logging.debug(app_list)
 #    app_list=json.dumps(app_list)
 #    app_list=json.loads(app_list)
     for app_id in app_list:
         
         t2=get_package_label(app_id,'t2')
-        print(t2)
+        logging.debug(t2)
         if t2.shape[0]<1:
             continue
         t2_list.append(int(t2['t2'].values[0]))
@@ -94,28 +97,28 @@ def get_t2(app_list):
 
 def set_t1(app_list):
     app_list=app_list.split('\'')
-    print(app_list)
+    logging.debug(app_list)
     return [x for x in app_list if len(x)>2]
 
 def set_app_dict(app_list):
     app_dict={}
     app_list=json.dumps(app_list)
     app_list=json.loads(app_list)
-    print(app_list)
+    logging.debug(app_list)
     
     app_list=app_list.replace('{','').replace('}','').replace('(','').replace(')','').split(', \'')
     for x in app_list:
         x=x.replace('\'','').split(':')
-#        print(x)
-#            print(tmp)
+#        logging.debug(x)
+#            logging.debug(tmp)
         app_dict[x[0]]=int(x[1])
-#            print(values[0])
+#            logging.debug(values[0])
     return app_dict
 c=0
 def compute_date_t1(deviceid_packages,package_label):
     global c
     c=0
-#    print(len(package_label['t1'].unique()))
+#    logging.debug(len(package_label['t1'].unique()))
     columns=[]
     for x in package_label['t1'].unique():
         deviceid_packages['t1_'+str(x)]=0
@@ -130,13 +133,13 @@ def compute_date_t1(deviceid_packages,package_label):
             _x.append({x})
         _x=pd.DataFrame({'a':_x})
         def c(a,b):
-#            print(a,b)
+#            logging.debug(a,b)
             return len(a&b)>0
         a=list(map(c,_x['a'],deviceid_packages['t1_list']))
-#        print(_x)
-#        print(deviceid_packages['t1_list'])
+#        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'t1_'+str(x)]=1
         
     columns.append('device_id')
@@ -147,7 +150,7 @@ def compute_date_t1(deviceid_packages,package_label):
 def compute_date_t2(deviceid_packages,package_label):
     global c
     c=0
-#    print(len(package_label['t1'].unique()))
+#    logging.debug(len(package_label['t1'].unique()))
     columns=[]
     for x in package_label['t2'].unique():
         deviceid_packages['t2_'+str(x)]=0
@@ -162,13 +165,13 @@ def compute_date_t2(deviceid_packages,package_label):
             _x.append({x})
         _x=pd.DataFrame({'a':_x})
         def c(a,b):
-#            print(a,b)
+#            logging.debug(a,b)
             return len(a&b)>0
         a=list(map(c,_x['a'],deviceid_packages['t2_list']))
-#        print(_x)
-#        print(deviceid_packages['t1_list'])
+#        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'t2_'+str(x)]=1
     columns.append('device_id')
     return deviceid_packages.ix[:,columns]
@@ -179,51 +182,51 @@ def set_app_hout_dict_01(app_list):
 #    app_list=json.dumps(app_list)
 #    app_list=json.loads(app_list)
     app_list=app_list.replace('{','').replace('}','').replace('(','').replace(')','').split('),')
-    print(app_list)
+    logging.debug(app_list)
     for x in app_list:
-#        print(x)
+#        logging.debug(x)
         x=x.split(', \'')
-#        print(x)
+#        logging.debug(x)
         for values in x:
             values=values.replace('\'','').split(':')
             tmp=[]
             for _v in values:
                 tmp=tmp+_v.split(',') 
-#            print(tmp)
+#            logging.debug(tmp)
             app_dict[tmp[0]]=int(tmp[1])
-#            print(values[0])
+#            logging.debug(values[0])
     return app_dict
 
 def set_app_hout_dict_02(app_list):
     app_dict={}
     app_list=app_list.replace('{','').replace('}','').replace('(','').replace(')','').split('),')
-    print(app_list)
+    logging.debug(app_list)
     for x in app_list:
-#        print(x)
+#        logging.debug(x)
         x=x.split(', \'')
-#        print(x)
+#        logging.debug(x)
         for values in x:
             values=values.replace('\'','').split(':')
             tmp=[]
             for _v in values:
                 tmp=tmp+_v.split(',') 
-            print(tmp)
+            logging.debug(tmp)
             if len(tmp)<3:
                 continue
             app_dict[tmp[0]]=int(tmp[2])
-#            print(values[0])
+#            logging.debug(values[0])
     return app_dict
 
 def app_get_hour_t1(app_list):
     t1_dict={}
 
-#    print(app_list)
+#    logging.debug(app_list)
 #    app_list=json.dumps(app_list)
 #    app_list=json.loads(app_list)
     for app_id in app_list.keys():
         
         t2=get_package_label(app_id,'t1')
-        print(t2)
+        logging.debug(t2)
         if t2.shape[0]<1:
             continue
         t1_dict[t2['t1'].values[0]]=app_list[app_id]
@@ -232,36 +235,36 @@ def app_get_hour_t1(app_list):
 def compute_date_close_hour(deviceid_packages,package_label):
     global c
     c=0
-#    print(len(package_label['t1'].unique()))
+#    logging.debug(len(package_label['t1'].unique()))
     columns=[]
     for x in package_label['t1'].unique():
         deviceid_packages['close_hour_t1_'+str(x)]=0
         columns.append('close_hour_t1_'+str(x))
-#    print(deviceid_packages.head(2))
+#    logging.debug(deviceid_packages.head(2))
     deviceid_packages['app_list']=deviceid_packages['close_hour'].apply(lambda x:set_app_hout_dict_01(x))
     deviceid_packages['t1_dict']=deviceid_packages['app_list'].apply(lambda x:app_get_hour_t1(x))
     
-#    print(deviceid_packages['t1_dict'].head(5))
+#    logging.debug(deviceid_packages['t1_dict'].head(5))
     for x in package_label['t1'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
             _x.append(str(x))
-        print(_x)
+        logging.debug(_x)
         _x=pd.DataFrame({'a':_x},dtype='category')
 
         def c(a,b):
             ert=(str(a) in b.keys())
-#            print(ert)
+#            logging.debug(ert)
             return ert
         a=list(map(c,_x['a'],deviceid_packages['t1_dict']))
-#        print(_x)
-#        print(deviceid_packages['t1_list'])
+#        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
         def get_values(t1_dict):
             return t1_dict[str(x)]
             
         values=deviceid_packages.ix[filte,'t1_dict'].apply(lambda x:get_values(x))
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'close_hour_t1_'+str(x)]=values
         
     #  2
@@ -279,15 +282,15 @@ def compute_date_close_hour(deviceid_packages,package_label):
         _x=pd.DataFrame({'a':_x})
         def c(a,b):
             ert=(str(a) in b.keys())
-#            print(ert)
+#            logging.debug(ert)
             return ert
         a=list(map(c,_x['a'],deviceid_packages['t1_dict']))
-        print(_x)
-#        print(deviceid_packages['t1_list'])
+        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
 
         values=deviceid_packages.ix[filte,'t1_dict'].apply(lambda x:get_values(x))
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'close_hour_len_t1_'+str(x)]=values
     columns.append('device_id')
     return deviceid_packages.ix[:,columns]
@@ -295,7 +298,7 @@ def compute_date_close_hour(deviceid_packages,package_label):
 def compute_date_close_day(deviceid_packages,package_label):
     global c
     c=0
-#    print(len(package_label['t1'].unique()))
+#    logging.debug(len(package_label['t1'].unique()))
     columns=[]
     for x in package_label['t1'].unique():
         deviceid_packages['close_day_t1_'+str(x)]=0
@@ -311,18 +314,18 @@ def compute_date_close_day(deviceid_packages,package_label):
         _x=pd.DataFrame({'a':_x})
         def c(a,b):
             ert=(str(a) in b.keys())
-#            print(ert)
+#            logging.debug(ert)
             return ert
         a=list(map(c,_x['a'],deviceid_packages['t1_dict']))
-        print(_x)
-#        print(deviceid_packages['t1_list'])
+        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
-#        print(filte)
+#        logging.debug(filte)
         def get_values(t1_dict):
             return t1_dict[str(x)]
             
         values=deviceid_packages.ix[filte,'t1_dict'].apply(lambda x:get_values(x))
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'close_day_t1_'+str(x)]=values
         
     columns.append('device_id')
@@ -333,7 +336,7 @@ def compute_date_close_mon(deviceid_packages,package_label):
     global c
     c=0
     
-#    print(len(package_label['t1'].unique()))
+#    logging.debug(len(package_label['t1'].unique()))
     columns=[]
     for x in package_label['t1'].unique():
         deviceid_packages['close_mon_t1_'+str(x)]=0
@@ -349,18 +352,18 @@ def compute_date_close_mon(deviceid_packages,package_label):
         _x=pd.DataFrame({'a':_x})
         def c(a,b):
             ert=(str(a) in b.keys())
-#            print(ert)
+#            logging.debug(ert)
             return ert
         a=list(map(c,_x['a'],deviceid_packages['t1_dict']))
-        print(_x)
-#        print(deviceid_packages['t1_list'])
+        logging.debug(_x)
+#        logging.debug(deviceid_packages['t1_list'])
         filte=np.logical_and(a,True)
-#        print(filte)
+#        logging.debug(filte)
         def get_values(t1_dict):
             return t1_dict[str(x)]
             
         values=deviceid_packages.ix[filte,'t1_dict'].apply(lambda x:get_values(x))
-#        print(filte)
+#        logging.debug(filte)
         deviceid_packages.ix[filte,'close_mon_t1_'+str(x)]=values
         
     columns.append('device_id')
@@ -388,7 +391,7 @@ def compute_date():
         deviceid_packages=res.get()
         deviceid_packages_03=pd.merge(deviceid_packages_03,deviceid_packages,on=['device_id'],how='left') 
     
-    print(deviceid_packages_03.head(5))
+    logging.debug(deviceid_packages_03.head(5))
     
     deviceid_packages_03.to_csv(file_path+'05_deviceid_packages.csv',index= False)
     
@@ -400,7 +403,7 @@ if __name__=='__main__':
 
 # id,
     end_time=time.time()
-    print('耗时:',end_time-start_time)
+    logging.debug('耗时:',end_time-start_time)
 
 
 
