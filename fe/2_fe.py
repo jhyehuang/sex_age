@@ -67,7 +67,7 @@ def word_to_lda(word):
 
     logging.debug(word)
     logging.debug(list(set(word)))
-    vectorizer=CountVectorizer()
+    vectorizer=CountVectorizer(min_df=1)
     tf = vectorizer.fit_transform(word)
     lda = LatentDirichletAllocation(n_topics=5,
                                     max_iter=50,
