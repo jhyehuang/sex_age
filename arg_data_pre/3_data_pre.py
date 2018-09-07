@@ -56,7 +56,7 @@ if __name__=='__main__':
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
     hot_package_label()
-    package_label_into_mysql()
+#    package_label_into_mysql()
     
 # id,
     end_time=time.time()
