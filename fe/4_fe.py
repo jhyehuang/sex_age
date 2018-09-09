@@ -25,7 +25,12 @@ from functools import reduce
 
 import time, datetime
 import json
+import hashlib, csv, math, os, subprocess
 
+NR_BINS = 1000000
+
+def hashstr(input):
+    return str(int(hashlib.md5(input.encode('utf8')).hexdigest(), 16)%(NR_BINS-1)+1)
 
 file_path=FLAGS.file_path
 
@@ -36,21 +41,21 @@ def time_to_hour(timeStamp):
 #    print(timeArray)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_hour   # 2013
+    return str(timeArray.tm_hour)   # 2013
 
 def time_to_day(timeStamp):
     # 字符类型的时间
     timeArray = time.localtime(timeStamp)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_mday   # 2013
+    return str(timeArray.tm_mday)   # 2013
 
 def time_to_mon(timeStamp):
     # 字符类型的时间
     timeArray = time.localtime(timeStamp)
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
-    return timeArray.tm_mon   # 2013
+    return str(timeArray.tm_mon)   # 2013
 # 结果如下
 # time.struct_time(tm_year=2013, tm_mon=10, tm_mday=10, tm_hour=23, tm_min=40, tm_sec=0, tm_wday=3, tm_yday=283, tm_isdst=-1)
 
@@ -108,8 +113,8 @@ def devid_hour(deviceid_packages):
         max_hour=cnt1.max()
         filte=ret['close_size'].values==max_hour
         ret=ret.ix[filte,:]
-        hour=ret['hour'].unique().max()
-        time_len=min(sum(ret['close'].values-ret['start'].values)/60,400)
+        hour=hashstr(''.join(ret['hour'].tolist()))
+        time_len=sum(ret['close'].values-ret['start'].values)/60
 #        print(time_len)
         
         return hour,int(time_len)
@@ -156,12 +161,13 @@ def devid_day(deviceid_packages):
 #        ret['close_size'] = cnt1[_key_codes].values
 #        print(ret)
 #        ret.fillna(0)
-        max_hour=cnt1.max()
+        day=hashstr(''.join(ret['day'].tolist()))
+        day_len=len(ret['day'].tolist())
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'day'].unique().max()
 #        print(ret)
         
-        return int(max_hour)
+        return day,day_len
     
     deviceid_packages['close_day']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
 #    deviceid_packages.to_csv(file_path+'0402_deviceid_train.csv')
@@ -205,11 +211,12 @@ def devid_mon(deviceid_packages):
 #        ret['close_size'] = cnt1[_key_codes].values
 #        print(ret)
 #        ret.fillna(0)
-        max_hour=cnt1.max()
+        mon=hashstr(''.join(ret['mon'].tolist()))
+        mon_len=len(ret['mon'].tolist())
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'mon'].unique().max()
 #        print(ret)
-        return int(max_hour)
+        return mon,mon_len
     
     deviceid_packages['close_mon']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
     

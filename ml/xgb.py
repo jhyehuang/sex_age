@@ -19,6 +19,7 @@ import gc
 from data_preprocessing import *
 
 from model_cv import modelfit_multi_cv
+from feature_select import feature_selectfrommodel
 
 
 #sys.path.append(utils.xgb_path)
@@ -52,8 +53,8 @@ dart_param = {'booster': 'gbtree',
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
         num_class=22,
-        n_estimators=147,
-#        max_depth=3,
+        n_estimators=200,
+        max_depth=3,
 #        min_child_weight=5,
 #        gamma=0.1,
 #        subsample=0.7,
@@ -73,15 +74,13 @@ gbtree_param =dict(learning_rate =0.1,
 
 
 def done(istrain='train'):
-    columns=['brand_cnt','type_no_cnt','app_id_weight','app_t1_weight','app_t2_weight'] \
-    +['app_lda_t2_1','app_lda_t2_2','app_lda_t2_3','app_lda_t2_4','app_lda_t2_5',] \
-    +['dev_brand_weight','dev_type_no_weight'] \
-    +['times_len']
+    columns=['hour_t1_start_hour_len_32', 'app_id_weight', 'every_app_len', 'type_no', 'times_len', 'brand', 'close_hour_len_t1_32', 'brand_cnt', 'app_len', 'app_time_t2_61', 'type_no_cnt', 'close_day_t1_32', 'hour_t1_close_hour_weight_32', 'close_hour_t1_32', 'hour_t1_start_hour_weight_32', 'hour_t2_start_hour_len_132', 'hour_t2_start_hour_len_94', 'close_hour_t1_33', 'close_day_t1_33', 'close_hour_t1_43', 'close_hour_t1_22', 'hour_t2_start_hour_len_124', 'hour_t2_start_hour_len_251', 'close_day_t1_19', 'close_hour_t1_36', 'hour_t1_start_hour_size_32', 'close_day_t1_4', 'close_day_size_t1_32', 'close_hour_t1_4', 'hour_t1_close_hour_weight_19', 'close_day_t1_36', 'close_day_t1_43', 'hour_t2_close_hour_weight_124', 'hour_t1_start_hour_len_33', 'close_hour_len_t1_33', 'hour_t2_start_hour_len_11', 'hour_t2_start_hour_len_158', 'close_hour_t1_19', 'hour_t2_start_hour_weight_132', 'close_day_size_t1_33', 'hour_t1_start_hour_size_36', 'hour_t1_start_hour_len_17', 'hour_t1_start_hour_len_43', 'app_time_t1_32',]
+    
 #    test_save.drop('click',axis=1,inplace=True)
 #    op=['n_estimators','max_depth','min_child_weight','subsample','reg_alpha','gamma','fin']
     #  scale_pos_weight   rate_drop
     logging.debug(istrain) 
-    op=['max_depth']
+    op=['n_estimators']
     if istrain=='train':
         train_save = gdbt_data_get_train('n_class')
         
@@ -90,8 +89,9 @@ def done(istrain='train'):
         print(train_save.shape)
         y_train = train_save['n_class']
         train_save.drop('n_class',axis=1,inplace=True)
-#        X_train = train_save.ix[:,columns]
         X_train = train_save
+#        X_train = train_save.ix[:,columns]
+        
         
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
@@ -108,6 +108,7 @@ def done(istrain='train'):
             ret=dump(xgb1, FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat') 
             logging.debug(ret)
             gc.collect()
+        feature_selectfrommodel(xgb1, X_train,y_train)
         del train_save
         del X_train
         del y_train

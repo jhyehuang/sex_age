@@ -37,7 +37,7 @@ logging.debug('设置参数')
 cv_params = {
           'boosting_type': 'gbdt',
           'objective': 'multiclass',
-          'metric': ['auc',],
+#          'metric': ['auc',],
 #          'num_trees':100,
             'device': 'gpu',
             'gpu_platform_id': -1,
@@ -46,7 +46,7 @@ cv_params = {
 
 
 gpu_params = {
-            'boosting_type': 'rf',
+            'boosting_type': 'gbdt',
             'objective': 'multiclass',
             'num_class':22,
             'n_estimators':300,
@@ -73,8 +73,8 @@ gpu_params = {
 #            'gpu_platform_id': -1,
 #            'gpu_device_id': -1,
 #            'gpu_use_dp': False
-            'random_state':173,
-            'n_jobs ':-1,
+#            'random_state':173,
+#            'n_jobs ':-1,
 }
 
 
@@ -321,11 +321,12 @@ def done(istrain=True):
     
 #    op=['num_trees','max_depth','max_bin','bagging_fraction','lambda']
 #    cv_params['num_trees'] = 315
-    cv_params['num_trees'] = 75
+    cv_params['num_trees'] = 66
 #    cv_params['num_leaves'] = 50
 #    cv_params['max_depth'] = 6
 #    op=['max_bin','bagging_fraction','lambda','x']
-    op=['num_trees','max_depth','max_bin','bagging_fraction','lambda','x']
+#    op=['num_trees','max_depth','max_bin','bagging_fraction','lambda','x']
+    op=['max_depth']
     ### 开始训练
     logging.debug('设置参数')
     if istrain:

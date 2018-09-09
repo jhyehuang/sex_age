@@ -33,7 +33,7 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 gbtree_param =dict(learning_rate =0.1,
         booster='gbtree',
-        n_estimators=112,
+        n_estimators=58,
 #        n_estimators=1,
         max_depth=4,
 #        min_child_weight=1,
@@ -117,13 +117,14 @@ def done(istrain,X_train,y_train,flag):
             test_id=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
             logging.debug(test_id['device_id'].shape)
             test_id['device_id']=test_id['device_id'].map(str)
-            
+            logging.debug(y_pred.shape)
             fin=pd.concat([test_id,y_pred],axis=1)
             fin.rename(columns={'device_id':'DeviceID'}, inplace = True)
             fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
 #            print(fin)
             ret=xgb1.predict(X_train)
             y_pred = ret+1
+            logging.debug(y_pred.shape)
             
             
             test_id['sex']=y_pred

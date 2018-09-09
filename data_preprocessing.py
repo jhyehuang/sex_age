@@ -106,19 +106,23 @@ def gdbt_data_get_train(flag='all'):
     deviceid_train=dev_id_train()
     
 #    return
-#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+    deviceid_packages_07= pd.read_csv(FLAGS.file_path +'07_deviceid_packages.csv',)
+    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
+    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_07,on=['device_id'],how='left')
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_08,on=['device_id'],how='left')
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
 
@@ -136,7 +140,7 @@ def gdbt_data_get_train(flag='all'):
         
 #        deviceid_train.drop('t1_code', axis=1,inplace = True)
 #        deviceid_train.drop('t2_code', axis=1,inplace = True)
-        deviceid_train.drop('add_list', axis=1,inplace = True)
+#        deviceid_train.drop('add_list', axis=1,inplace = True)
 
     except:
         error_msg = traceback.format_exc()
@@ -154,19 +158,23 @@ def gdbt_data_get_eval(flag='all'):
     deviceid_train=dev_id_train()
     
 #    return
-#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+    deviceid_packages_07= pd.read_csv(FLAGS.file_path +'07_deviceid_packages.csv',)
+    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
+    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_07,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_08,on=['device_id'],how='left')
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
 
@@ -181,7 +189,7 @@ def gdbt_data_get_eval(flag='all'):
             deviceid_train.drop('age', axis=1,inplace = True)
         if flag!='n_class':
             deviceid_train.drop('n_class', axis=1,inplace = True)
-        deviceid_train.drop('add_list', axis=1,inplace = True)
+#        deviceid_train.drop('add_list', axis=1,inplace = True)
 
     except:
         error_msg = traceback.format_exc()
@@ -202,19 +210,23 @@ def gdbt_data_get_test(flag='all'):
     else:
         deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
-#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+    deviceid_packages_07= pd.read_csv(FLAGS.file_path +'07_deviceid_packages.csv',)
+    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
+    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
-#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
-#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_04,on=['device_id'],how='left')
-    deviceid_test=pd.merge(deviceid_test,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
+#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_05,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_06,on=['device_id'],how='left')
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_07,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_08,on=['device_id'],how='left')
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_09,on=['device_id'],how='left')
     logging.debug(deviceid_test.columns)
     logging.debug(deviceid_test.shape)
 
@@ -225,7 +237,7 @@ def gdbt_data_get_test(flag='all'):
         
 #        deviceid_test.drop('t1_code', axis=1,inplace = True)
 #        deviceid_test.drop('t2_code', axis=1,inplace = True)
-        deviceid_test.drop('add_list', axis=1,inplace = True)
+#        deviceid_test.drop('add_list', axis=1,inplace = True)
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
@@ -239,28 +251,36 @@ def gdbt_data_get_test(flag='all'):
 def lightgbm_data_get_train():
     deviceid_train=dev_id_train()
     
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_train.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+    deviceid_packages_07= pd.read_csv(FLAGS.file_path +'07_deviceid_packages.csv',)
+    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_07,on=['device_id'],how='left')
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_08,on=['device_id'],how='left')
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
 
 
-
+#    deviceid_train=data_augmentation(deviceid_train)
     try:
-        deviceid_train.drop('device_id', axis=1,inplace = True)
-        deviceid_train.drop('sex', axis=1,inplace = True)
-        deviceid_train.drop('age', axis=1,inplace = True)
+            deviceid_train.drop('device_id', axis=1,inplace = True)
+            deviceid_train.drop('sex', axis=1,inplace = True)
+            deviceid_train.drop('age', axis=1,inplace = True)
+#            deviceid_train.drop('n_class', axis=1,inplace = True)
         
-        deviceid_train.drop('t1_code', axis=1,inplace = True)
-        deviceid_train.drop('t2_code', axis=1,inplace = True)
-        deviceid_train.drop('add_list_x', axis=1,inplace = True)
-        deviceid_train.drop('add_list_y', axis=1,inplace = True)
+#        deviceid_train.drop('t1_code', axis=1,inplace = True)
+#        deviceid_train.drop('t2_code', axis=1,inplace = True)
+#        deviceid_train.drop('add_list', axis=1,inplace = True)
+
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
@@ -285,14 +305,21 @@ def lightgbm_data_get_test():
 
     deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
+    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-#    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_train.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+    deviceid_packages_07= pd.read_csv(FLAGS.file_path +'07_deviceid_packages.csv',)
+    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
-    deviceid_test=pd.merge(deviceid_test,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_03,on=['device_id'],how='left') 
+#    deviceid_test=pd.merge(deviceid_test,deviceid_packages_05,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_06,on=['device_id'],how='left')
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_07,on=['device_id'],how='left') 
+    deviceid_test=pd.merge(deviceid_test,deviceid_packages_08,on=['device_id'],how='left')
     logging.debug(deviceid_test.columns)
     logging.debug(deviceid_test.shape)
 
@@ -301,10 +328,9 @@ def lightgbm_data_get_test():
         deviceid_test.drop('device_id', axis=1,inplace = True)
         
         
-        deviceid_test.drop('t1_code', axis=1,inplace = True)
-        deviceid_test.drop('t2_code', axis=1,inplace = True)
-        deviceid_test.drop('add_list_x', axis=1,inplace = True)
-        deviceid_test.drop('add_list_y', axis=1,inplace = True)
+#        deviceid_test.drop('t1_code', axis=1,inplace = True)
+#        deviceid_test.drop('t2_code', axis=1,inplace = True)
+#        deviceid_test.drop('add_list', axis=1,inplace = True)
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
@@ -325,13 +351,13 @@ def cnn_read_data():
 #    return
 #    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
-    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
-    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_05,on=['device_id'],how='left') 
     deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
     logging.debug(deviceid_packages.columns)
     logging.debug(deviceid_packages.shape)
@@ -370,13 +396,13 @@ def get_all_data_kmeans():
 #    return
 #    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
-    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
-    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_05,on=['device_id'],how='left') 
     deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
     logging.debug(deviceid_packages.columns)
     logging.debug(deviceid_packages.shape)

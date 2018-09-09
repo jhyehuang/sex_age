@@ -29,11 +29,11 @@ gpu_dict={'tree_method':'gpu_hist',}
 
 gbtree_param =dict(learning_rate =0.1,
     booster='gbtree',
-    num_class=11,
-    n_estimators=180,
+    num_class=22,
+    n_estimators=110,
 #        n_estimators=1219,
 #        n_estimators=1,
-    max_depth=3,
+#    max_depth=4,
 #        min_child_weight=5,
 #        gamma=0.1,
 #        subsample=0.6,
@@ -93,11 +93,10 @@ def done(istrain,X_train,y_train,flag):
             dtrain_predprob = xgb1.predict_proba(X_train)
             logging.debug(dtrain_predprob.shape)
             columns=[]
-            for i in range(dtrain_predprob.shape[1]):
-                if flag=='sex':
-                    columns.append(str(i+1))
-                else:
-                    columns.append(str(i))
+            for i in [1,2]:
+                for j in range(11):
+                    col=str(i)+'-'+str(j)
+                    columns.append(col)
             y_pred=pd.DataFrame(dtrain_predprob,columns=columns)
             def c(line):
                 return [round(x,6) for x in line]
@@ -113,12 +112,21 @@ def done(istrain,X_train,y_train,flag):
             test_id.rename(columns={'device_id':'DeviceID'}, inplace = True)
             fin=pd.concat([test_id,y_pred],axis=1)
             
-            print(fin)
-
-            
+#            print(fin)
+#
+#            
+#            
+##            df1=pd.read_csv(FLAGS.tmp_data_path+'sex_fin-xgboost.test.csv')
+#            fin['sex']=X_train['sex'].values
+#            columns=['DeviceID']
+#
+#                    fitle=np.logical_and(fin['sex'].values==i,True)
+#                    fin.ix[fitle,col]=fin.ix[fitle,str(j)].values
+#                    fin.ix[np.logical_and(fitle,False),col]=0.000001
+#            
+#            fin.drop('sex',axis=1,inplace=True)
             fin.to_csv(FLAGS.tmp_data_path+flag+'_'+oper+'-xgboost.test.csv',index=False)
-            df1=pd.read_csv(FLAGS.tmp_data_path+'sex_fin-xgboost.test.csv')
-            test_concat(df1,fin)
+#            test_concat(df1,fin)
         del X_train
         return fin
         
@@ -162,6 +170,6 @@ def test_concat(df1,df2):
     df1.apply(lambda line:c(line),axis=1)
     df1.to_csv(FLAGS.tmp_data_path+'2x11_xgboost.test.csv',columns=columns,index=False)
 if __name__ == "__main__":
-    headle_age('age')
+    headle_age('n_class')
 
     

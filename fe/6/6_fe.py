@@ -729,8 +729,9 @@ def compute_date():
     deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left')
     deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
     print(deviceid_packages.head(5))
+    columns=['device_id','hour_t1_start_hour_len_32', 'hour_t1_start_hour_size_32', 'hour_t1_close_hour_weight_32', 'hour_t2_start_hour_len_132', 'hour_t2_start_hour_len_124', 'hour_t1_start_hour_weight_32', 'hour_t1_start_hour_len_33', 'hour_t2_start_hour_len_94', 'hour_t1_start_hour_len_36', 'hour_t1_start_hour_len_43', 'hour_t2_start_hour_size_132', 'hour_t2_start_hour_len_223', 'hour_t1_start_hour_len_19', 'hour_t2_start_hour_weight_132', 'hour_t1_start_hour_size_36', 'hour_t1_start_hour_size_43', 'day_t1_start_day_len_32', 'hour_t1_start_hour_len_17', 'hour_t1_start_hour_size_19', 'hour_t2_start_hour_size_83', 'hour_t2_start_hour_len_251', 'hour_t2_start_hour_len_243', 'hour_t1_start_hour_size_33', 'hour_t1_close_hour_weight_19', 'hour_t1_start_hour_len_31', 'hour_t2_close_hour_weight_124', 'hour_t2_start_hour_size_223', 'hour_t1_close_hour_weight_33', 'hour_t2_start_hour_len_83', 'hour_t2_start_hour_len_158', 'hour_t2_close_hour_weight_132', 'hour_t2_start_hour_len_11',]
     
-    deviceid_packages.to_csv(file_path+'06_deviceid_packages.csv', index= False)
+    deviceid_packages.to_csv(file_path+'06_deviceid_packages.csv',columns=columns, index= False)
     
     
 if __name__=='__main__':
