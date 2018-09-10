@@ -88,14 +88,17 @@ def type_no_w(deviceid_packages):
     for x in typeno_2_typeno_1:
         filte1=np.logical_and(deviceid_train.sex==2,deviceid_train.type_no==x)
         filte2=np.logical_and(deviceid_train.type_no==x,True)
-        typeno_dict[x]=1
+        typeno_dict[x]=2
     for x in typeno_1andtypeno_2:
         filte1=np.logical_and(deviceid_train.sex==1,deviceid_train.type_no==x)
         filte2=np.logical_and(deviceid_train.sex==2,deviceid_train.type_no==x)
+        s1=deviceid_train.ix[filte1,'type_no'].shape[0]
+        s2=deviceid_train.ix[filte2,'type_no'].shape[0]
+        p=np.sum(s1 * np.log(s2),s2 * np.log(s1))
         if x in typeno_dict:
-            typeno_dict[x]=min(typeno_dict[x],(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]))
+            typeno_dict[x]=min(typeno_dict[x],-p/2)
         else:
-            typeno_dict[x]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
+            typeno_dict[x]=-p/2
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x]) 
