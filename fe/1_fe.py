@@ -94,7 +94,9 @@ def type_no_w(deviceid_packages):
         filte2=np.logical_and(deviceid_train.sex==2,deviceid_train.type_no==x)
         s1=deviceid_train.ix[filte1,'type_no'].shape[0]
         s2=deviceid_train.ix[filte2,'type_no'].shape[0]
-        p=np.sum(s1 * np.log(s2),s2 * np.log(s1))
+        p1=s1/(s1+s2)
+        p2=1-p1
+        p=p1 * np.log(p2)+p2 * np.log(p1)
         if x in typeno_dict:
             typeno_dict[x]=min(typeno_dict[x],-p/2)
         else:
