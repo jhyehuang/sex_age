@@ -24,13 +24,37 @@ from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,dev_id_tr
 from flags import FLAGS, unparsed
 from functools import reduce
 import logging
-
+from sklearn.preprocessing import LabelEncoder
+from scipy.sparse import csr_matrix, hstack
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
 
 
 
 file_path=FLAGS.file_path
+
+def brand_type_no_onehot(deviceid_packages):
+    deviceid_packages.drop('device_id', axis=1,inplace = True)
+    deviceid_packages['trainrow'] = np.arange(deviceid_packages.shape[0])
+    brandencoder = LabelEncoder().fit(deviceid_packages.brand)
+    deviceid_packages['brand'] = brandencoder.transform(deviceid_packages['phone_brand'])
+    Xtr_brand = csr_matrix((np.ones(deviceid_packages.shape[0]),
+                           (deviceid_packages.trainrow, deviceid_packages.brand)))
+    
+    m = deviceid_packages.brand.str.cat(deviceid_packages.type_no)
+
+    modelencoder = LabelEncoder().fit(m)
+    deviceid_packages['type_no'] = modelencoder.transform(m)
+    Xtr_model = csr_matrix((np.ones(deviceid_packages.shape[0]),
+                           (deviceid_packages.trainrow, deviceid_packages.type_no)))
+    
+    Xtrain = hstack((Xtr_brand, Xtr_model), format='csr')
+    ret=pd.DataFrame(Xtrain)
+    
+    return ret
+
+    
+        
 
 def calcLeaveOneOut(df, vn,gby ):
 
@@ -67,6 +91,8 @@ def calcLeaveOneOut(df, vn,gby ):
 
     vn_cnt=gby+'_cnt'
     df[vn_cnt] = _cnt
+    columns=[vn_cnt]
+    return  df.ix[:,columns]
 
 
 def type_no_w(deviceid_packages):
@@ -104,6 +130,8 @@ def type_no_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x]) 
+    columns=['type_no_w']
+    return  deviceid_packages.ix[:,columns]
 
 def difference_list(type_list):
     import copy
@@ -155,6 +183,8 @@ def type_no_w2(deviceid_packages):
     for x in no_train_typeno:
         typeno_dict[x]=0
     deviceid_packages['type_no2_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
+    columns=['type_no2_w']
+    return  deviceid_packages.ix[:,columns]
     
 def type_no_w3(deviceid_packages):
     deviceid_train=dev_id_train()
@@ -192,31 +222,39 @@ def type_no_w3(deviceid_packages):
     for x in no_train_typeno:
         typeno_dict[x]=0
     deviceid_packages['type_no3_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
-
+    columns=['type_no3_w']
+    return  deviceid_packages.ix[:,columns]
 
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=3)
+    pool = multiprocessing.Pool(processes=6)
     deviceid_packages=pd.read_csv(file_path+'deviceid_brand.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
-    
+#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+    device_id=deviceid_packages.ix[:,'device_id']
+    brand_type_no_onehot(deviceid_packages)
     calcLeaveOneOut(deviceid_packages,'device_id','brand')
     calcLeaveOneOut(deviceid_packages,'device_id','type_no')
     type_no_w(deviceid_packages)
     type_no_w2(deviceid_packages)
     type_no_w3(deviceid_packages)
     
-#    result = []
-#    result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
-#    result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
-#    pool.close()
-#    pool.join()
+    result = []
+    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
+    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','brand',)))
+    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
+    result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
+    result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
+    result.append(pool.apply_async(type_no_w3, (deviceid_packages, )))
+    pool.close()
+    pool.join()
         
-#    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left') 
+    deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
+                                 result[3].get(),result[4].get(),result[5].get()],axis=1)
+
     
     print(deviceid_packages.head(5))
     

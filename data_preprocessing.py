@@ -104,7 +104,18 @@ def get_train_data(flag='train'):
         deviceid_train=dev_id_train()
     elif flag=='test':
         deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
+    '''
+    brand 编码
+    type_no 编码
+    brand_cnt brand 出现的次数
+    type_no_cnt type_no 出现的次数
+    type_no_w  type_no 在训练数据中 sex为某以类别 出现的在总类别中占比
+    type_no2_w  type_no 在训练数据中 age为某以类别 出现的在总类别中占比
+    type_no3_w  type_no 在训练数据中 n_class为某以类别 出现的在总类别中占比
+    '''
     deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    
+    
 #    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
 #    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
