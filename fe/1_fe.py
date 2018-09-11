@@ -237,12 +237,6 @@ def compute_date():
     deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
     deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     device_id=deviceid_packages.ix[:,'device_id']
-    brand_type_no_onehot(deviceid_packages)
-    calcLeaveOneOut(deviceid_packages,'device_id','brand')
-    calcLeaveOneOut(deviceid_packages,'device_id','type_no')
-    type_no_w(deviceid_packages)
-    type_no_w2(deviceid_packages)
-    type_no_w3(deviceid_packages)
     
     result = []
     result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
