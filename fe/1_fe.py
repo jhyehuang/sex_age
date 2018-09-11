@@ -49,7 +49,7 @@ def brand_type_no_onehot(deviceid_packages):
                            (deviceid_packages.trainrow, deviceid_packages.type_no)))
     
     Xtrain = hstack((Xtr_brand, Xtr_type_no), format='csr')
-#    print(type(Xtrain))
+    print(Xtrain)
     ret=pd.DataFrame(np.array(Xtrain))
     print(ret)
     
