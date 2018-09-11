@@ -76,7 +76,8 @@ def brand_type_no_onehot(deviceid_packages):
         
 
 def calcLeaveOneOut(df, vn,gby ):
-
+    df['brand']=df['brand'].astype('category').values.codes
+    df['type_no']=df['type_no'].astype('category').values.codes
     #每个特征取值对应的样本组成group
     _key_codes = df[gby].values
     logging.debug(_key_codes)
