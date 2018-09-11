@@ -33,7 +33,7 @@ logging.basicConfig(
 file_path=FLAGS.file_path
 
 
-def difference_list(app_list):
+def intersection_list(app_list):
     import copy
     retlist=[]
     for i in range(0,len(app_list)):
@@ -42,7 +42,7 @@ def difference_list(app_list):
         tlist=copy.deepcopy(app_list)
         tlist.remove(alist)
         blist=reduce(operator.add, tlist)
-        clist=list(set(alist).difference(set(blist)))
+        clist=list(set(alist).intersection(set(blist)))
         retlist.append(clist)
     return retlist
 
@@ -66,16 +66,16 @@ def app3_w(deviceid_packages,deviceid_train):
             type_list1=reduce(operator.add, type_list1)
             apps_list.append(type_list1)
     
-    diff_list=difference_list(apps_list)
+    inter_list=intersection_list(apps_list)
     app_dict={}
     def c(a,b):
 #        print(a,b)
         ert=(a in b)
         return ert
-    for i,x in enumerate(diff_list):
+    for i,x in enumerate(inter_list):
         for li in x:
             _x=[]
-            for i in range(deviceid_train.shape[0]):
+            for _ in range(deviceid_train.shape[0]):
                 _x.append(li)
     #        print(_x)
             _x=pd.DataFrame({'a':_x},dtype='category')
@@ -83,7 +83,10 @@ def app3_w(deviceid_packages,deviceid_train):
             filte1=np.logical_and(deviceid_train.n_class==i,a)
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
-            app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            if li in app_dict:
+                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            else:
+                app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app3_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
     return  deviceid_packages.ix[:,['device_id','app3_w']]
 
@@ -104,16 +107,16 @@ def app1_w(deviceid_packages,deviceid_train):
             type_list1=reduce(operator.add, type_list1)
             apps_list.append(type_list1)
     
-    diff_list=difference_list(apps_list)
+    inter_list=intersection_list(apps_list)
     app_dict={}
     def c(a,b):
 #        print(a,b)
         ert=(a in b)
         return ert
-    for i,x in enumerate(diff_list):
+    for i,x in enumerate(inter_list):
         for li in x:
             _x=[]
-            for i in range(deviceid_train.shape[0]):
+            for _ in range(deviceid_train.shape[0]):
                 _x.append(li)
     #        print(_x)
             _x=pd.DataFrame({'a':_x},dtype='category')
@@ -121,7 +124,10 @@ def app1_w(deviceid_packages,deviceid_train):
             filte1=np.logical_and(deviceid_train.n_class==i,a)
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
-            app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            if li in app_dict:
+                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            else:
+                app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app1_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
     return  deviceid_packages.ix[:,['device_id','app1_w']]
     
@@ -140,16 +146,16 @@ def app2_w(deviceid_packages,deviceid_train):
             type_list1=reduce(operator.add, type_list1)
             apps_list.append(type_list1)
     
-    diff_list=difference_list(apps_list)
+    inter_list=intersection_list(apps_list)
     app_dict={}
     def c(a,b):
 #        print(a,b)
         ert=(a in b)
         return ert
-    for i,x in enumerate(diff_list):
+    for i,x in enumerate(inter_list):
         for li in x:
             _x=[]
-            for i in range(deviceid_train.shape[0]):
+            for _ in range(deviceid_train.shape[0]):
                 _x.append(li)
     #        print(_x)
             _x=pd.DataFrame({'a':_x},dtype='category')
@@ -157,7 +163,10 @@ def app2_w(deviceid_packages,deviceid_train):
             filte1=np.logical_and(deviceid_train.n_class==i,a)
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
-            app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            if li in app_dict:
+                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+            else:
+                app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app2_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
     return  deviceid_packages.ix[:,['device_id','app2_w']]
 
