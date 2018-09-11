@@ -76,8 +76,8 @@ def brand_type_no_onehot(deviceid_packages):
         
 
 def calcLeaveOneOut(df, vn,gby ):
-    df['brand']=df['brand'].astype('category').values.codes
-    df['type_no']=df['type_no'].astype('category').values.codes
+#    df['brand']=df['brand'].astype('category').values.codes
+#    df['type_no']=df['type_no'].astype('category').values.codes
     #每个特征取值对应的样本组成group
     _key_codes = df[gby].values
     logging.debug(_key_codes)
@@ -370,19 +370,21 @@ def compute_date():
     deviceid_packages=pd.read_csv(file_path+'deviceid_brand.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
-#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+
     device_id=deviceid_packages.ix[:,'device_id']
     deviceid_packages=deviceid_packages.fillna('未知')
     
     result = []
 #    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
+
+    result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
+    result.append(pool.apply_async(brand_w, (deviceid_packages, )))
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','brand',)))
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
-    result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w3, (deviceid_packages, )))
-    result.append(pool.apply_async(brand_w, (deviceid_packages, )))
     result.append(pool.apply_async(brand_w2, (deviceid_packages, )))
     result.append(pool.apply_async(brand_w3, (deviceid_packages, )))
     pool.close()
