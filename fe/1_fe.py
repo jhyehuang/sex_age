@@ -37,7 +37,7 @@ def brand_type_no_onehot(deviceid_packages):
     deviceid_packages.drop('device_id', axis=1,inplace = True)
     deviceid_packages['trainrow'] = np.arange(deviceid_packages.shape[0])
     brandencoder = LabelEncoder().fit(deviceid_packages.brand)
-    deviceid_packages['brand'] = brandencoder.transform(deviceid_packages['phone_brand'])
+    deviceid_packages['brand'] = brandencoder.transform(deviceid_packages['brand'])
     Xtr_brand = csr_matrix((np.ones(deviceid_packages.shape[0]),
                            (deviceid_packages.trainrow, deviceid_packages.brand)))
     
@@ -45,10 +45,10 @@ def brand_type_no_onehot(deviceid_packages):
 
     modelencoder = LabelEncoder().fit(m)
     deviceid_packages['type_no'] = modelencoder.transform(m)
-    Xtr_model = csr_matrix((np.ones(deviceid_packages.shape[0]),
+    Xtr_type_no = csr_matrix((np.ones(deviceid_packages.shape[0]),
                            (deviceid_packages.trainrow, deviceid_packages.type_no)))
     
-    Xtrain = hstack((Xtr_brand, Xtr_model), format='csr')
+    Xtrain = hstack((Xtr_brand, Xtr_type_no), format='csr')
     ret=pd.DataFrame(Xtrain)
     
     return ret
