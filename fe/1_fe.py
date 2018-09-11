@@ -373,6 +373,7 @@ def compute_date():
 #    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
 #    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     device_id=deviceid_packages.ix[:,'device_id']
+    deviceid_packages=deviceid_packages.fillna('未知')
     
     result = []
 #    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
