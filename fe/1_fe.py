@@ -208,6 +208,8 @@ def difference_list(type_list):
     return retlist
         
 def brand_w2(deviceid_packages):
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -247,6 +249,8 @@ def brand_w2(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w2(deviceid_packages):
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -286,6 +290,8 @@ def type_no_w2(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
     
 def brand_w3(deviceid_packages):
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -325,6 +331,8 @@ def brand_w3(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w3(deviceid_packages):
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -379,8 +387,7 @@ def compute_date():
 
     result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(brand_w, (deviceid_packages, )))
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','brand',)))
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
     result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
