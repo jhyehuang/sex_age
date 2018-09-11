@@ -115,8 +115,19 @@ def get_train_data(flag='train'):
     '''
     deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     
+    '''
+    'app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 
+    'app_len_t2_94','app_len_t2_251', 'app_len_t1_33', 'app_len_t2_124', 'app_len_t1_32', 
+    'app_len_t2_223', 'app_len_t2_83','app_len_t2_106', 'app_len_t2_61', 'app_len_t2_159',
+    'app_len_t1_17', 'app_len_t2_158'
+    app_id_weight app的逆文档频率
+    app_len_t1 编码
+    app_len_t2 brand 出现的次数
     
+    '''
 #    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    
+    
 #    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
 #    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)

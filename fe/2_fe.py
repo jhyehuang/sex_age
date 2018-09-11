@@ -173,13 +173,11 @@ def devid_app_tx(deviceid_packages,package_label):
 #        columns.append('app_len_t2_'+str(x))
         
     # 将 deviceid_packages['t1_app_len'] 展开package_label['t1'].unique()个特征
-    for x in package_label['t1'].unique():
-        deviceid_packages['app_len_t1_'+str(x)]=int(0)
-        columns.append('app_len_t1_'+str(x))
+    deviceid_packages['app_t1_w']=int(0)
+    columns.append('app_t1_w')
 
-    for x in package_label['t2'].unique():
-        deviceid_packages['app_len_t2_'+str(x)]=int(0)
-        columns.append('app_len_t2_'+str(x))
+    deviceid_packages['app_t2_w']=int(0)
+    columns.append('app_t2_w')
     
     for x in package_label['t1'].unique():
         _x=[]
@@ -197,12 +195,12 @@ def devid_app_tx(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-        def get_values(t1_dict):
-            return t1_dict[str(x)]
+#        def get_values(t1_dict):
+#            return t1_dict[str(x)]
             
-        values=deviceid_packages.ix[filte,'t1_app_len'].apply(lambda x:get_values(x))
+#        values=deviceid_packages.ix[filte,'t1_app_len'].apply(lambda x:get_values(x))
 #        print(filte)
-        deviceid_packages.ix[filte,'app_len_t1_'+str(x)]=values
+        deviceid_packages.ix[filte,'app_t1_w']=deviceid_packages.ix[filte,''
         
         
     # 将 deviceid_packages['t2_app_len'] 展开package_label['t2'].unique()个特征
