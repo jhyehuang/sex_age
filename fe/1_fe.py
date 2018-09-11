@@ -41,7 +41,7 @@ def brand_type_no_onehot(deviceid_packages):
     Xtr_brand = csr_matrix((np.ones(deviceid_packages.shape[0]),
                            (deviceid_packages.trainrow, deviceid_packages.brand)))
     
-    m = deviceid_packages.apply(lambda line:line['brand']+line['type_no'])
+    m = deviceid_packages.apply(lambda line:line['brand']+line['type_no'],axis=1)
 
     modelencoder = LabelEncoder().fit(m)
     deviceid_packages['type_no'] = modelencoder.transform(m)
