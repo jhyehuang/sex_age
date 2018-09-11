@@ -249,7 +249,7 @@ def compute_date():
     pool.join()
         
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
-                                 result[3].get(),result[4].get(),result[5].get()],axis=1)
+                                 result[3].get()],axis=1)
 
     
     print(deviceid_packages.head(5))
