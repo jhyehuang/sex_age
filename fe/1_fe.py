@@ -232,8 +232,8 @@ def compute_date():
     deviceid_packages=pd.read_csv(file_path+'deviceid_brand.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
-#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     device_id=deviceid_packages.ix[:,'device_id']
     brand_type_no_onehot(deviceid_packages)
     calcLeaveOneOut(deviceid_packages,'device_id','brand')
