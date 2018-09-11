@@ -239,9 +239,9 @@ def compute_date():
     device_id=deviceid_packages.ix[:,'device_id']
     
     result = []
-    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
+#    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','brand',)))
-    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
+#    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
     result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w3, (deviceid_packages, )))
