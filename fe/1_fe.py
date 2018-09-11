@@ -96,6 +96,44 @@ def calcLeaveOneOut(df, vn,gby ):
     columns=[vn_cnt]
     return  df.ix[:,columns]
 
+def brand_w(deviceid_packages):
+    deviceid_train=dev_id_train()
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
+    deviceid_train=deviceid_train.fillna(-1)
+    typeno_1=deviceid_train.ix[deviceid_train['sex'].values==1,'brand'].tolist()
+    typeno_2=deviceid_train.ix[deviceid_train['sex'].values==2,'brand'].tolist()
+    all_typeno=deviceid_packages['brand'].tolist()
+    typeno_1_typeno_2=list(set(typeno_1).difference(set(typeno_2)))
+    typeno_2_typeno_1=list(set(typeno_2).difference(set(typeno_1)))
+    typeno_1andtypeno_2=list(list(set(typeno_1).intersection(set(typeno_2))))
+    typeno_1notypeno_2=list(set(all_typeno).difference(set(typeno_1_typeno_2+typeno_2_typeno_1+typeno_1andtypeno_2)))
+    typeno_dict={}
+    for x in typeno_1_typeno_2:
+        filte1=np.logical_and(deviceid_train.sex==1,deviceid_train.brand==x)
+        filte2=np.logical_and(deviceid_train.brand==x,True)
+        typeno_dict[x]=1
+    for x in typeno_2_typeno_1:
+        filte1=np.logical_and(deviceid_train.sex==2,deviceid_train.brand==x)
+        filte2=np.logical_and(deviceid_train.brand==x,True)
+        typeno_dict[x]=2
+    for x in typeno_1andtypeno_2:
+        filte1=np.logical_and(deviceid_train.sex==1,deviceid_train.brand==x)
+        filte2=np.logical_and(deviceid_train.sex==2,deviceid_train.brand==x)
+        s1=deviceid_train.ix[filte1,'brand'].shape[0]
+        s2=deviceid_train.ix[filte2,'brand'].shape[0]
+        p1=s1/(s1+s2)
+        p2=1-p1
+        p=p1 * np.log(p2)+p2 * np.log(p1)
+        if x in typeno_dict:
+            typeno_dict[x]=min(typeno_dict[x],-p/2)
+        else:
+            typeno_dict[x]=-p/2
+    for x in typeno_1notypeno_2:
+        typeno_dict[x]=0
+    deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x]) 
+    columns=['brand_w']
+    return  deviceid_packages.ix[:,columns]
+
 
 def type_no_w(deviceid_packages):
     deviceid_train=dev_id_train()
@@ -149,6 +187,45 @@ def difference_list(type_list):
         retlist.append(clist)
     return retlist
         
+def brand_w2(deviceid_packages):
+    deviceid_train=dev_id_train()
+    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
+    type_list=[]
+    all_typeno=deviceid_packages['brand'].tolist()
+    train_typeno=deviceid_train['brand'].tolist()
+    no_train_typeno=list(set(all_typeno).difference(set(train_typeno)))
+    for i in range(0,11):
+        type_list1=deviceid_train.ix[deviceid_train['age'].values==i,'brand'].tolist()
+        type_list.append(type_list1)
+    
+    diff_list=difference_list(type_list)
+    typeno_dict={}
+    for i,x in enumerate(diff_list):
+        for li in x:
+            filte1=np.logical_and(deviceid_train.age==i,deviceid_train.brand==li)
+            filte2=np.logical_and(True,deviceid_train.brand==li)
+            if deviceid_train.ix[filte1,'brand'].shape[0]==0:
+                typeno_dict[li]=0
+            else:
+                typeno_dict[li]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
+    
+    
+    for i in range(0,11):
+        clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
+        for x in clist:
+            filte1=np.logical_and(deviceid_train.age==i,deviceid_train.brand==x)
+            filte2=np.logical_and(True,deviceid_train.brand==x)
+            if x in typeno_dict:
+                typeno_dict[x]=min(typeno_dict[x],(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]))
+            else:
+                typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
+    deviceid_packages['brand2_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+    columns=['brand2_w']
+    return  deviceid_packages.ix[:,columns]
+
 def type_no_w2(deviceid_packages):
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
@@ -188,6 +265,45 @@ def type_no_w2(deviceid_packages):
     columns=['type_no2_w']
     return  deviceid_packages.ix[:,columns]
     
+def brand_w3(deviceid_packages):
+    deviceid_train=dev_id_train()
+    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
+    type_list=[]
+    all_typeno=deviceid_packages.brand.tolist()
+    train_typeno=deviceid_train.brand.tolist()
+    no_train_typeno=list(set(all_typeno).difference(set(train_typeno)))
+    for i in range(0,23):
+        type_list1=deviceid_train.ix[deviceid_train['n_class'].values==i,'brand'].tolist()
+        type_list.append(type_list1)
+    
+    diff_list=difference_list(type_list)
+    typeno_dict={}
+    for i,x in enumerate(diff_list):
+        for li in x:
+            filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.brand==li)
+            filte2=np.logical_and(True,deviceid_train.brand==li)
+            if deviceid_train.ix[filte1,'brand'].shape[0]==0:
+                typeno_dict[li]=0
+            else:
+                typeno_dict[li]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
+    
+    
+    for i in range(0,23):
+        clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
+        for x in clist:
+            filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.brand==x)
+            filte2=np.logical_and(True,deviceid_train.brand==x)
+            if x in typeno_dict:
+                typeno_dict[x]=min(typeno_dict[x],(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]))
+            else:
+                typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
+    deviceid_packages['brand3_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+    columns=['brand3_w']
+    return  deviceid_packages.ix[:,columns]
+
 def type_no_w3(deviceid_packages):
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
@@ -230,7 +346,7 @@ def type_no_w3(deviceid_packages):
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=6)
+    pool = multiprocessing.Pool(processes=8)
     deviceid_packages=pd.read_csv(file_path+'deviceid_brand.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
@@ -241,15 +357,19 @@ def compute_date():
     result = []
 #    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
     result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','brand',)))
-#    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
+    result.append(pool.apply_async(calcLeaveOneOut, (deviceid_packages,'device_id','type_no',)))
     result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w2, (deviceid_packages, )))
     result.append(pool.apply_async(type_no_w3, (deviceid_packages, )))
+    result.append(pool.apply_async(brand_w, (deviceid_packages, )))
+    result.append(pool.apply_async(brand_w2, (deviceid_packages, )))
+    result.append(pool.apply_async(brand_w3, (deviceid_packages, )))
     pool.close()
     pool.join()
         
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
-                                 result[3].get()],axis=1)
+                                 result[3].get(),result[4].get(),result[5].get(),result[6].get(), \
+                                 result[7].get()],axis=1)
 
     
     print(deviceid_packages.head(5))
