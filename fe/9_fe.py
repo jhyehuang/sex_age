@@ -84,7 +84,7 @@ def app3_w(deviceid_packages,deviceid_train):
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
             if li in app_dict:
-                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+                app_dict[li]=max(app_dict[li],deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0])
             else:
                 app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app3_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
@@ -125,7 +125,7 @@ def app1_w(deviceid_packages,deviceid_train):
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
             if li in app_dict:
-                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+                app_dict[li]=min(app_dict[li],deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0])
             else:
                 app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app1_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
@@ -164,7 +164,7 @@ def app2_w(deviceid_packages,deviceid_train):
             print(np.unique(filte1))
             filte2=np.logical_and(a,True)
             if li in app_dict:
-                app_dict[li]=app_dict[li]+deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
+                app_dict[li]=min(app_dict[li],deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0])
             else:
                 app_dict[li]=deviceid_train.ix[filte1,'app_list'].shape[0]/deviceid_train.ix[filte2,'app_list'].shape[0]
     deviceid_packages['app2_w']=deviceid_packages['app_list'].apply(lambda x:app_dict_get(x,app_dict))
