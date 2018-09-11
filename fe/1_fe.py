@@ -11,6 +11,10 @@ import numpy as np
 import os
 from subprocess import *
 import json
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
 
 '''
 # 初始化数据库连接，使用pymysql模块 # MySQL的用户：root, 
@@ -32,6 +36,19 @@ logging.basicConfig(
 
 
 file_path=FLAGS.file_path
+
+def word_to_tfidf(word):
+    logging.debug(word)
+    if len(word)<1:
+        return 0
+    elif len(word)==1:
+       return [0]
+    elif len(list(set(word)))==1:
+       return [1 for x in range(len(word))]
+    transformer=TfidfVectorizer(min_df=1)
+    tfidf=transformer.fit_transform(word,)
+    weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
+    return weight
 
 def brand_type_no_onehot(deviceid_packages):
     deviceid_packages.drop('device_id', axis=1,inplace = True)
@@ -130,8 +147,9 @@ def brand_w(deviceid_packages):
             typeno_dict[x]=-p/2
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
-    deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x]) 
-    columns=['brand_w']
+    deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+    deviceid_packages['brand_tfidf_w']=word_to_tfidf(deviceid_packages['brand'].tolist())
+    columns=['brand_w','brand_tfidf_w']
     return  deviceid_packages.ix[:,columns]
 
 
@@ -170,7 +188,8 @@ def type_no_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x]) 
-    columns=['type_no_w']
+    deviceid_packages['type_no_tfidf_w']=word_to_tfidf(deviceid_packages['type_no'].tolist())
+    columns=['type_no_w','type_no_tfidf_w']
     return  deviceid_packages.ix[:,columns]
 
 def difference_list(type_list):
