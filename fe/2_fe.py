@@ -339,7 +339,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=3)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
     deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
     deviceid_brand['brand']=deviceid_brand['brand'].astype('category').values.codes
@@ -363,10 +363,7 @@ def compute_date():
 #    deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
     deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
-#    columns=['device_id','app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 'app_len_t2_94',
-#             'app_len_t2_251', 'app_len_t1_33', 'app_len_t2_124', 'app_len_t1_32', 'app_len_t2_223', 'app_len_t2_83',
-#             'app_len_t2_106', 'app_len_t2_61', 'app_len_t2_159', 'app_len_t1_17', 'app_len_t2_158',]
-    
+
     deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv',index= False)
     
     
