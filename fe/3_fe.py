@@ -166,7 +166,7 @@ def devid_app_times_tx(deviceid_packages,package_label):
 
         filte=np.logical_and(a,True)
         def get_values(t1_dict):
-            return t1_dict[str(x)]
+            return t1_dict[str(x)]/np.sum(t1_dict.values)
             
         values=deviceid_packages.ix[filte,'t1_app_time'].apply(lambda x:get_values(x))
 #        print(filte)
