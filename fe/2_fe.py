@@ -238,57 +238,15 @@ def devid_app_count(deviceid_packages,package_label):
         return len(app_list)
     deviceid_packages['app_len']=deviceid_packages['add_id_list'].apply(lambda line:app_count(line))
 
+    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    #每一个app_list中 属于t2类型的size
+    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
 
-    app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-#    app_mtrix=app_mtrix['add_id_list']
-#    print(package_label['t1'].max())
-#    print(package_label['t2'].max())
-    # 将app_list 包含的t1类型进行join编码
-    def get_label_t1_1(l):
-#        print(l)
-        logging.debug(l)
-        ret=list(map(get_label_2_t1,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ''.join(ret)
-  
-    # 将app_list 包含的t2类型进行join编码
-    def get_label_t2_1(l):
-#        print(l)
-        logging.debug(l)
-        ret=list(map(get_label_2_t2,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ''.join(ret)
-  
-    def get_label_2_t1(l):
-        
-        filer=package_label['app_id'].astype('category').values==l
-        label=package_label.ix[filer,'t1'].values.tolist()
-        if len(label)<1:
-            return ''
-        return label.pop()
-    
-    def get_label_2_t2(l):
-        logging.debug(package_label['app_id'].values)
-        logging.debug(l)
-        filer=np.logical_and(package_label['app_id'].values==l,True)
-        logging.debug(filer)
-        
-        label=package_label.ix[filer,'t2'].values.tolist()
-        logging.debug(label)
-        if len(label)<1:
-            return ''
-        return label.pop()
-    t1_mtrix=list(map(get_label_t1_1,app_mtrix))
-    t2_mtrix=list(map(get_label_t2_1,app_mtrix))
-    
+    def t1_concat(x):
+        return ''.join(x.keys())
+    t1_mtrix=deviceid_packages['t1_app_len'].apply(lambda x:t1_concat(x))
+    t2_mtrix=deviceid_packages['t2_app_len'].apply(lambda x:t1_concat(x))
     
     deviceid_packages['t1_code']=np.array(t1_mtrix).reshape(-1,1)
     deviceid_packages['t2_code']=np.array(t2_mtrix).reshape(-1,1)
