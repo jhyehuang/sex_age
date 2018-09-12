@@ -50,16 +50,17 @@ def word_to_tfidf(word):
        return [1]
     elif len(list(set(word)))==1:
        return [1 for x in range(len(word))]
-    logging.debug(word)
-    logging.debug(list(set(word)))
+#    logging.debug(word)
+#    logging.debug(list(set(word)))
     transformer=TfidfVectorizer(min_df=1)
 
     tfidf=transformer.fit_transform(word,)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
-    logging.debug(weight)
+#    logging.debug(weight)
     return weight
 
 def word_to_lda(word):
+    logging.debug(len(word))
     if len(word)<1:
         return 0
     elif len(word)==1:
@@ -360,6 +361,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
     
     # 计算 t2 的主题概率
+    logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
 #    logging.debug(lda_pd)
 #    logging.debug(lda_pd['app_lda_t2_1'].values)
@@ -408,8 +410,8 @@ def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=4)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    pool = multiprocessing.Pool(processes=3)
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
     deviceid_brand=pd.read_csv(file_path+'deviceid_brand.csv')
     
     deviceid_brand['brand']=deviceid_brand['brand'].astype('category').values.codes
@@ -424,13 +426,13 @@ def compute_date():
     result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tfidf, (deviceid_packages,package_label, )))
-    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
+#    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
     pool.close()
     pool.join()
         
     deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left')
     deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
-    deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
+#    deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
     deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
 #    columns=['device_id','app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 'app_len_t2_94',
