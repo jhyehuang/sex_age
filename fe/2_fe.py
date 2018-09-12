@@ -272,7 +272,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     # 将分割的字符串变为shape[:,1]的数组
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
     #将app_list 转化为空格分割的字符串
-    deviceid_packages['add_id_text']=deviceid_packages['add_list'].apply(lambda line:list_to_text(app_list(line)))
+    deviceid_packages['add_id_text']=deviceid_packages['add_list'].apply(lambda line:list_to_text(line))
 
     deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
