@@ -51,14 +51,14 @@ def get_times(dev_id,app_id_list):
     ret['start'] = ret['start'].map(int)
 #        print(ret)
     condition = sum(ret['close'].map(int).values-ret['start'].map(int).values)/1000/60/60
-    return min(int(condition),400)
+    return int(condition)
 
 def get_times_len(dev_id,app_id_list):
     ret=0
     for app_id in app_id_list:
         ret=ret+get_times(dev_id,app_id)
     print(dev_id,ret)
-    return min(int(ret),400)
+    return int(ret)
     
 def dev_id_train():
     sql='select * from deviceid_train'

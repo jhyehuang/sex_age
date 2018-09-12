@@ -222,13 +222,7 @@ def devid_hour(deviceid_packages,package_label):
     deviceid_packages['t2_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t2(line['device_id'],line['add_list']),axis=1)
     
     columns=[]
-#    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
-#    for x in FLAGS.t1_feature.replace('\'','').split(','):
-#        for suffix in ['close_hour_weight','start_hour_weight','start_hour_len','start_hour_size']:
-#            columns.append('hour_t1_'+suffix+'_'+str(x))
-#    for x in FLAGS.t2_feature.replace('\'','').split(','):
-#        for suffix in ['close_hour_weight','start_hour_weight','start_hour_len','start_hour_size']:
-#            columns.append('hour_t2_'+suffix+'_'+str(x))
+
         
     for x in package_label['t1'].unique():
         for suffix in ['close_hour_weight','start_hour_weight','start_hour_len','start_hour_size']:
@@ -699,15 +693,7 @@ def devid_mon(deviceid_packages,package_label):
 
     columns.append('device_id')
     logging.debug(columns)
-    
-#    for x in package_label['t1'].unique():
-#        for suffix in ['close_mon','start_mon','start_mon_len','start_mon_size']:
-#            deviceid_packages['mon_t1_'+suffix+'_'+str(x)]=deviceid_packages['mon_t1_'+suffix+'_'+str(x)].astype('category').values.codes
-#
-#    for x in package_label['t2'].unique():
-#        for suffix in ['close_mon','start_mon','start_mon_len','start_mon_size']:
-#            deviceid_packages['mon_t2_'+suffix+'_'+str(x)]=deviceid_packages['mon_t2_'+suffix+'_'+str(x)].astype('category').values.codes
-#    
+       
     return deviceid_packages.ix[:, columns]
     
 def compute_date():

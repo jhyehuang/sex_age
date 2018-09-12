@@ -20,6 +20,10 @@ create table IF NOT EXISTS `deviceid_package_start_close`(
 `app_id` varchar(50) ,
 `start` varchar(50) ,
 `close` varchar(50) ,
+`start_day` varchar(50) ,
+`close_day` varchar(50) ,
+`start_day_cnt` int(20) ,
+`close_day_cnt` int(20) ,
  PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
