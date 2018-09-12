@@ -264,67 +264,22 @@ def devid_app_count(deviceid_packages,package_label):
     return deviceid_packages.ix[:, ['device_id','app_len','t1_code','t2_code']]
     
 def devid_app_tfidf(deviceid_packages,package_label):
-    def list_to_text(l):
-        text=' '.join(l)
-    #        print (app_list)
-        return text
 
-    #将app_list 转化为空格分割的字符串
-    deviceid_packages['add_id_text']=deviceid_packages['add_id_list'].apply(lambda line:list_to_text(app_list(line)))
-    # 将分割的字符串变为shape[:,1]的数组
-    word=deviceid_packages['add_id_text'].values.tolist() 
-    # 数组作为tf * idf的输入，获得词条出现的词频-逆向文件频率
-    deviceid_packages['app_id_weight']=word_to_tfidf(word)
+    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    #每一个app_list中 属于t2类型的size
+    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
 
-    
-    def get_label_t1_1(l):
-#        print(l)
-        logging.debug(l)
-        ret=list(map(get_label_2_t1,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ' '.join(ret)
-  
-    def get_label_t2_1(l):
-#        print(l)
-#        logging.debug(l)
-        ret=list(map(get_label_2_t2,l))
-        condition = lambda t: t != ""
-        ret= list(filter(condition, ret))
-        ret=list(map(str,ret))
-        if len(ret)<1:
-            ret.append('0')
-        return ' '.join(ret)
-  
-    def get_label_2_t1(l):
-        
-        filer=package_label['app_id'].astype('category').values==l
-        label=package_label.ix[filer,'t1'].values.tolist()
-        if len(label)<1:
-            return ''
-        return label.pop()
-    
-    def get_label_2_t2(l):
-        filer=package_label['app_id'].astype('category').values==l
-        label=package_label.ix[filer,'t2'].values.tolist()
-        if len(label)<1:
-            return ''
-        return label.pop()
-    app_mtrix=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    
-    # 转化为t1 字符串 和 t2 字符串
-    t1_mtrix=list(map(get_label_t1_1,app_mtrix))
-    t2_mtrix=list(map(get_label_t2_1,app_mtrix))
+    def t1_concat(x):
+        return ' '.join(x.keys())
+    t1_mtrix=deviceid_packages['t1_app_len'].apply(lambda x:t1_concat(x))
+    t2_mtrix=deviceid_packages['t2_app_len'].apply(lambda x:t1_concat(x))
     
     # 计算t1 字符串 和 t2 字符串 的词频 逆向文件频率
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
     
     # 计算 t2 的主题概率
-    t2_mtrix=list(map(get_label_t2_1,app_mtrix))
     logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
 #    logging.debug(lda_pd)
