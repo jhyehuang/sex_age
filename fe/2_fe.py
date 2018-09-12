@@ -277,6 +277,8 @@ def devid_app_count(deviceid_packages,package_label):
     
     def get_label_2_t2(l):
         filer=package_label['app_id'].astype('category').values==l
+        logging.debug(package_label['app_id'].astype('category').values)
+        logging.debug(l)
         label=package_label.ix[filer,'t2'].values.tolist()
         if len(label)<1:
             return ''
