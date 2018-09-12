@@ -27,6 +27,7 @@ import time, datetime
 import json
 import hashlib, csv, math, os, subprocess
 
+
 NR_BINS = 1000000
 
 def hashstr(input):
@@ -42,6 +43,13 @@ def time_to_hour(timeStamp):
     # 转为时间数组
 #    timeArray = time.strptime(timeArray, "%Y-%m-%d %H:%M:%S")
     return str(timeArray.tm_hour)   # 2013
+
+def time_to_week(timeStamp):
+    timeArray =int(time.mktime(time.strptime(timeStamp,"%Y%m%d")))
+    date = datetime.datetime.fromtimestamp(timeArray)
+    day=date.weekday()
+    print(day)
+    return day   # 2013
 
 def time_to_day(timeStamp):
     # 字符类型的时间
@@ -108,16 +116,16 @@ def devid_hour(deviceid_packages):
         cnt1 = grp1.aggregate(np.size)
 #        print(98,cnt1[close.values].values)
         ret['close_size'] = cnt1[_key_codes].values
-#        print(ret)
+        hour=hashstr(''.join(ret['hour'].tolist()))
+        time_len=sum(ret['close'].values-ret['start'].values)/60
+
         ret.fillna(0)
         max_hour=cnt1.max()
         filte=ret['close_size'].values==max_hour
         ret=ret.ix[filte,:]
-        hour=hashstr(''.join(ret['hour'].tolist()))
-        time_len=sum(ret['close'].values-ret['start'].values)/60
-#        print(time_len)
-        
-        return hour,int(time_len)
+        max_hour=max(ret['hour'].values)
+
+        return hour,max_hour,int(time_len)
     print(deviceid_packages.shape)
     deviceid_packages['close_hour']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
 #    deviceid_packages.to_csv(file_path+'0401_deviceid_train.csv')
@@ -163,11 +171,13 @@ def devid_day(deviceid_packages):
 #        ret.fillna(0)
         day=hashstr(''.join(ret['day'].tolist()))
         day_len=len(ret['day'].tolist())
+        ret['week_end']=ret['start_day'].apply(lambda x:time_to_week(x))
+        week_end=' '.join(ret['week_end'].tolist())
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'day'].unique().max()
 #        print(ret)
         
-        return day,day_len
+        return day,week_end,day_len
     
     deviceid_packages['close_day']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
 #    deviceid_packages.to_csv(file_path+'0402_deviceid_train.csv')
