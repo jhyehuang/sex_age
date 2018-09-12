@@ -361,6 +361,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
     
     # 计算 t2 的主题概率
+    t2_mtrix=list(map(get_label_t2_1,app_mtrix))
     logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
 #    logging.debug(lda_pd)
