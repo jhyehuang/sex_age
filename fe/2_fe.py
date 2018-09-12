@@ -278,7 +278,7 @@ def devid_app_count(deviceid_packages,package_label):
     def get_label_2_t2(l):
         logging.debug(package_label['app_id'].values)
         logging.debug(l)
-        filer=(package_label['app_id'].values==l)
+        filer=np.logical_and(package_label['app_id'].values==l,True)
         logging.debug(filer)
         
         label=package_label.ix[filer,'t2'].values.tolist()
