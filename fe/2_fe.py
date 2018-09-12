@@ -264,8 +264,16 @@ def devid_app_count(deviceid_packages,package_label):
     return deviceid_packages.ix[:, ['device_id','app_len','t1_code','t2_code']]
     
 def devid_app_tfidf(deviceid_packages,package_label):
+    def list_to_text(l):
+        text=' '.join(l)
+    #        print (app_list)
+        return text
 
+    # 将分割的字符串变为shape[:,1]的数组
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
+    #将app_list 转化为空格分割的字符串
+    deviceid_packages['add_id_text']=deviceid_packages['add_list'].apply(lambda line:list_to_text(app_list(line)))
+
     deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
@@ -278,6 +286,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     # 计算t1 字符串 和 t2 字符串 的词频 逆向文件频率
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
+    deviceid_packages['app_id_weight']=word_to_tfidf(deviceid_packages['add_id_text'].tolist())
     
     # 计算 t2 的主题概率
     logging.debug(t2_mtrix)
