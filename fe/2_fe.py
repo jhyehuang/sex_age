@@ -200,7 +200,7 @@ def devid_app_tx(deviceid_packages,package_label):
             
 #        values=deviceid_packages.ix[filte,'t1_app_len'].apply(lambda x:get_values(x))
 #        print(filte)
-        deviceid_packages.ix[filte,'app_t1_w']=deviceid_packages.ix[filte,''
+        deviceid_packages.ix[filte,'app_t1_w']=deviceid_packages.ix[filte,'app_t1_w']+deviceid_packages.ix[filte,'device_id'].shape[0]/deviceid_packages.shape[0]
         
         
     # 将 deviceid_packages['t2_app_len'] 展开package_label['t2'].unique()个特征
@@ -220,9 +220,9 @@ def devid_app_tx(deviceid_packages,package_label):
 
         filte=np.logical_and(a,True)
             
-        values=deviceid_packages.ix[filte,'t2_app_len'].apply(lambda x:get_values(x))
+#        values=deviceid_packages.ix[filte,'t2_app_len'].apply(lambda x:get_values(x))
 #        print(filte)
-        deviceid_packages.ix[filte,'app_len_t2_'+str(x)]=values
+        deviceid_packages.ix[filte,'app_t2_w']= deviceid_packages.ix[filte,'app_t2_w']+deviceid_packages.ix[filte,'device_id'].shape[0]/deviceid_packages.shape[0]
     columns.append('device_id')
     logging.debug(columns)
     deviceid_packages.fillna(0)
@@ -433,11 +433,11 @@ def compute_date():
     deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
     deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
-    columns=['device_id','app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 'app_len_t2_94',
-             'app_len_t2_251', 'app_len_t1_33', 'app_len_t2_124', 'app_len_t1_32', 'app_len_t2_223', 'app_len_t2_83',
-             'app_len_t2_106', 'app_len_t2_61', 'app_len_t2_159', 'app_len_t1_17', 'app_len_t2_158',]
+#    columns=['device_id','app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 'app_len_t2_94',
+#             'app_len_t2_251', 'app_len_t1_33', 'app_len_t2_124', 'app_len_t1_32', 'app_len_t2_223', 'app_len_t2_83',
+#             'app_len_t2_106', 'app_len_t2_61', 'app_len_t2_159', 'app_len_t1_17', 'app_len_t2_158',]
     
-    deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv',columns=columns,index= False)
+    deviceid_packages.to_csv(file_path+'02_deviceid_packages.csv',index= False)
     
     
 if __name__=='__main__':
