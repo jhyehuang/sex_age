@@ -70,7 +70,7 @@ gbtree_param =dict(learning_rate =0.005,
 #        skip_drop= 0.5,
         )
 
-#gbtree_param.update(dart_param)
+gbtree_param.update(dart_param)
 
 
 
