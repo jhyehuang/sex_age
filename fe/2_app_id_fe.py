@@ -167,13 +167,15 @@ def devid_app_tx(deviceid_packages,package_label):
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
     
     columns=[]
-#    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
-#    for x in FLAGS.t1_feature.replace('\'','').split(','):
-#        columns.append('app_len_t1_'+str(x))
-#    for x in FLAGS.t2_feature.replace('\'','').split(','):
-#        columns.append('app_len_t2_'+str(x))
-        
-    # 将 deviceid_packages['t1_app_len'] 展开package_label['t1'].unique()个特征
+
+    def a(x):
+        return max(x,key=x.get)
+
+    deviceid_packages['app_t1_pref']=deviceid_packages['t1_app_len'].apply(a)
+    columns.append('app_t1_pref')
+    deviceid_packages['app_t2_pref']=deviceid_packages['t2_app_len'].apply(a)
+    columns.append('app_t2_pref')
+    
     deviceid_packages['app_t1_w']=int(0)
     columns.append('app_t1_w')
 
@@ -230,6 +232,8 @@ def devid_app_tx(deviceid_packages,package_label):
     
     return deviceid_packages.ix[:, columns]
     
+
+
 
 def devid_app_count(deviceid_packages,package_label):
 
