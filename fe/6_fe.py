@@ -601,13 +601,17 @@ def get_dev_mon_info_t2(dev_id,app_id_list):
         return {}
 
     result_t2={}
+    close_mon=''
+    start_mon=''
     for t2 in tx_pd.t2.unique():
         tmp_dict={}
         tmp_dict['start_mon_len']=tx_pd.ix[tx_pd.t2.values==t2,'start_mon_len'].sum()
         tmp_dict['start_mon_size']=tx_pd.ix[tx_pd.t2.values==t2,'start_mon_size'].sum()
-        tmp_dict['close_mon']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_mon'].tolist())
-        tmp_dict['start_mon']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_mon'].tolist())
+        close_mon=close_mon+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_mon'].tolist())
+        start_mon=start_mon+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_mon'].tolist())
         result_t2[t2]=tmp_dict
+    result_t2['start_mon']=start_mon
+    result_t2['close_mon']=close_mon
     logging.debug(result_t2)
     return result_t2
 
