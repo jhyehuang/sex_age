@@ -217,6 +217,12 @@ def get_hour_info(dev_id,app_id_list):
     result['start_hour_size']=ret.shape[0]
     return result
 
+def get_sub_values(v_dict,col):
+    if v_dict=={}:
+        return ''
+    logging.debug(v_dict)
+    return v_dict[col]
+
 c=0
 def devid_hour(deviceid_packages,package_label):
     global c
@@ -233,11 +239,7 @@ def devid_hour(deviceid_packages,package_label):
     columns=[]
     def get_values(t1_dict):
         return t1_dict[str(x)]
-    def get_sub_values(v_dict,col):
-        if v_dict=={}:
-            return ''
-        logging.debug(v_dict)
-        return v_dict[col]
+
         
     for x in package_label['t1'].unique():
         for suffix in ['start_hour_len','start_hour_size']:
@@ -482,8 +484,7 @@ def devid_day(deviceid_packages,package_label):
         filte=np.logical_and(a,True)
         def get_values(t1_dict):
             return t1_dict[str(x)]
-        def get_sub_values(v_dict,col):
-            return v_dict[col]
+
         if filte.shape[0]<2:
             continue  
         values=deviceid_packages.ix[filte,'t1_day_time'].apply(lambda x:get_values(x))
@@ -692,8 +693,7 @@ def devid_mon(deviceid_packages,package_label):
         filte=np.logical_and(a,True)
         def get_values(t1_dict):
             return t1_dict[str(x)]
-        def get_sub_values(v_dict,col):
-            return v_dict[col]
+
         if filte.shape[0]<2:
             continue    
         values=deviceid_packages.ix[filte,'t1_mon_time'].apply(lambda x:get_values(x))
