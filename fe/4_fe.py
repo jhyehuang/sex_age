@@ -157,6 +157,7 @@ def devid_hour(deviceid_packages):
     
     deviceid_packages['app_list']=deviceid_packages['close_hour'].apply(lambda x:set_app_dict_03(x))
     deviceid_packages['t1_dict']=deviceid_packages['app_list'].apply(lambda x:app_get_t1(x))
+    deviceid_packages['close_hour_len_t1']=deviceid_packages['t1_dict'].apply(get_max_value_s_key)
     deviceid_packages['t2_dict']=deviceid_packages['app_list'].apply(lambda x:app_get_t2(x))
     deviceid_packages['close_hour_len_t2']=deviceid_packages['t2_dict'].apply(get_max_value_s_key)
     columns.append('close_max_hour_t1')
