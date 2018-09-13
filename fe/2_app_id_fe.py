@@ -169,6 +169,7 @@ def devid_app_tx(deviceid_packages,package_label):
     columns=[]
 
     def a(x):
+        print(x)
         return max(x,key=x.get)
 
     deviceid_packages['app_t1_pref']=deviceid_packages['t1_app_len'].apply(a)
