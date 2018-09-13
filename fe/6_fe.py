@@ -229,14 +229,12 @@ def devid_hour(deviceid_packages,package_label):
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
     deviceid_packages['t1_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t1(line['device_id'],line['add_list']),axis=1)
     deviceid_packages['t2_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t2(line['device_id'],line['add_list']),axis=1)
+
+    columns=[]
     def get_values(t1_dict):
         return t1_dict[str(x)]
     def get_sub_values(v_dict,col):
         return v_dict[col]
-    if filte.shape[0]<2:
-        continue
-    columns=[]
-
         
     for x in package_label['t1'].unique():
         for suffix in ['start_hour_len','start_hour_size']:
@@ -278,6 +276,8 @@ def devid_hour(deviceid_packages,package_label):
 
         filte=np.logical_and(a,True)
 
+        if filte.shape[0]<2:
+            continue
             
         values=deviceid_packages.ix[filte,'t1_hour_time'].apply(lambda x:get_values(x))
 
