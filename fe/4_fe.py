@@ -27,6 +27,7 @@ import time, datetime
 import json
 import hashlib, csv, math, os, subprocess
 import logging
+import gc
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s', level=logging.DEBUG)
 NR_BINS = 1000000
@@ -538,6 +539,7 @@ def compute_date():
 #    device_id=deviceid_packages_04.ix[:,'device_id']
     
     result = []
+    gc.collect()
     result.append(pool.apply_async(compute_date_close_hour, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(compute_date_close_day, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(compute_date_close_mon, (deviceid_packages,package_label, )))
