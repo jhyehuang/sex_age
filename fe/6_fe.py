@@ -206,7 +206,7 @@ def get_hour_info(dev_id,app_id_list):
     result={}
     ret=deviceid_package_start_close_train(dev_id,app_id_list)
     if ret.shape[0]<1:
-        return 0
+        return {}
     result['start_hour_len']=sum(ret['close'].map(int)/1000-ret['start'].map(int)/1000)
     ret['close'] = ret['close'].map(int)/1000
     ret['start'] = ret['start'].map(int)/1000
@@ -409,7 +409,7 @@ def get_day_info(dev_id,app_id_list):
     result={}
     ret=deviceid_package_start_close_train(dev_id,app_id_list)
     if ret.shape[0]<1:
-        return 0
+        return result
     result['start_day_len']=sum(ret['close'].map(int)/1000-ret['start'].map(int)/1000)/60
     
     result['close_day'] =' '.join(ret['close'].apply(lambda x:time_to_day(x)).tolist())
@@ -619,7 +619,7 @@ def get_mon_info(dev_id,app_id_list):
     result={}
     ret=deviceid_package_start_close_train(dev_id,app_id_list)
     if ret.shape[0]<1:
-        return 0
+        return result
     result['start_mon_len']=sum(ret['close'].map(int)/1000-ret['start'].map(int)/1000)/60
     
     result['close_mon'] =' '.join(ret['close'].apply(lambda x:time_to_mon(x)).tolist())
