@@ -229,7 +229,12 @@ def devid_hour(deviceid_packages,package_label):
     deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
     deviceid_packages['t1_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t1(line['device_id'],line['add_list']),axis=1)
     deviceid_packages['t2_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t2(line['device_id'],line['add_list']),axis=1)
-    
+    def get_values(t1_dict):
+        return t1_dict[str(x)]
+    def get_sub_values(v_dict,col):
+        return v_dict[col]
+    if filte.shape[0]<2:
+        continue
     columns=[]
 
         
@@ -243,13 +248,13 @@ def devid_hour(deviceid_packages,package_label):
             deviceid_packages['hour_t2_'+suffix+'_'+str(x)]=int(0)
             columns.append('hour_t2_'+suffix+'_'+str(x))
 
-    t1_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_values('close_hour')).tolist()   
-    t2_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_values('start_hour')).tolist()   
+    t1_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
+    t2_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
     deviceid_packages['hour_t1_close_hour_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t1_start_hour_weight']=word_to_tfidf(t2_mtrix)
   
-    t1_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_values('close_hour')).tolist()   
-    t2_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_values('start_hour')).tolist()   
+    t1_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
+    t2_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
     deviceid_packages['hour_t2_close_hour_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t2_start_hour_weight']=word_to_tfidf(t2_mtrix)
     columns.append('hour_t1_close_hour_weight')
@@ -272,12 +277,7 @@ def devid_hour(deviceid_packages,package_label):
 
 
         filte=np.logical_and(a,True)
-        def get_values(t1_dict):
-            return t1_dict[str(x)]
-        def get_sub_values(v_dict,col):
-            return v_dict[col]
-        if filte.shape[0]<2:
-            continue
+
             
         values=deviceid_packages.ix[filte,'t1_hour_time'].apply(lambda x:get_values(x))
 
@@ -447,13 +447,13 @@ def devid_day(deviceid_packages,package_label):
             columns.append('day_t2_'+suffix+'_'+str(x))
 
     
-    t1_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_values('close_day')).tolist()   
-    t2_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_values('start_day')).tolist()   
+    t1_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_sub_values(x,'close_day')).tolist()   
+    t2_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_sub_values(x,'start_day')).tolist()   
     deviceid_packages['hour_t1_close_day_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t1_start_day_weight']=word_to_tfidf(t2_mtrix)
   
-    t1_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_values('close_day')).tolist()   
-    t2_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_values('start_day')).tolist()   
+    t1_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_sub_values(x,'close_day')).tolist()   
+    t2_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_sub_values(x,'start_day')).tolist()   
     deviceid_packages['hour_t2_close_day_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t2_start_day_weight']=word_to_tfidf(t2_mtrix)
     columns.append('hour_t1_close_day_weight')
@@ -658,13 +658,13 @@ def devid_mon(deviceid_packages,package_label):
             columns.append('mon_t2_'+suffix+'_'+str(x))
 
     
-    t1_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_values('close_mon')).tolist()   
-    t2_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_values('start_mon')).tolist()   
+    t1_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
+    t2_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
     deviceid_packages['hour_t1_close_mon_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t1_start_mon_weight']=word_to_tfidf(t2_mtrix)
   
-    t1_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_values('close_mon')).tolist()   
-    t2_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_values('start_mon')).tolist()   
+    t1_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
+    t2_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
     deviceid_packages['hour_t2_close_mon_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['hour_t2_start_mon_weight']=word_to_tfidf(t2_mtrix)
     columns.append('hour_t1_close_mon_weight')
