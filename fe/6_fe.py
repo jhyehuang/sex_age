@@ -19,6 +19,7 @@ mydb
 '''
 
 sys.path.append('../..')
+sys.path.append('..')
 from db.conn_db import db,cursor,engine,truncate_table,data_from_mysql,get_package_dict
 from flags import FLAGS, unparsed
 from functools import reduce
