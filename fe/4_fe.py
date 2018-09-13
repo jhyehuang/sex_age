@@ -368,10 +368,10 @@ def compute_date():
     result.append(pool.apply_async(devid_mon, (deviceid_packages, )))
     pool.close()
     pool.join()
-    for res in result:
-        ret=res.get()
-        logging.debug('============================================',ret.head(2))
-        deviceid_packages=pd.merge(deviceid_packages,ret,on=['device_id'],how='left') 
+
+    logging.debug('============================================')
+    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left') 
+    deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left') 
     
     logging.debug(deviceid_packages.head(5))
     
@@ -386,7 +386,7 @@ if __name__=='__main__':
 
 # id,
     end_time=time.time()
-    logging.debug('耗时:',end_time-start_time)
+    logging.debug('耗时:',str(end_time-start_time))
 
 
 
