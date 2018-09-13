@@ -168,15 +168,7 @@ def devid_app_tx(deviceid_packages,package_label):
     
     columns=[]
 
-    def a(x):
-        if x =={}:
-            return 0
-        return max(x,key=x.get)
 
-    deviceid_packages['app_t1_pref']=deviceid_packages['t1_app_len'].apply(a)
-    columns.append('app_t1_pref')
-    deviceid_packages['app_t2_pref']=deviceid_packages['t2_app_len'].apply(a)
-    columns.append('app_t2_pref')
     
     deviceid_packages['app_t1_w']=int(0)
     columns.append('app_t1_w')
@@ -248,26 +240,27 @@ def devid_app_count(deviceid_packages,package_label):
     deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
     deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
+    columns=[]
+    def a(x):
+        if x =={}:
+            return 0
+        return max(x,key=x.get)
 
-    def t1_concat(x):
-        return ''.join(x.keys())
-    t1_mtrix=deviceid_packages['t1_app_len'].apply(lambda x:t1_concat(x))
-    t2_mtrix=deviceid_packages['t2_app_len'].apply(lambda x:t1_concat(x))
-    
-    deviceid_packages['t1_code']=np.array(t1_mtrix).reshape(-1,1)
-    deviceid_packages['t2_code']=np.array(t2_mtrix).reshape(-1,1)
-    
-    deviceid_packages['t1_code']=deviceid_packages['t1_code'].astype('category').values.codes
-    deviceid_packages['t2_code']=deviceid_packages['t2_code'].astype('category').values.codes
+    deviceid_packages['app_t1_pref']=deviceid_packages['t1_app_len'].apply(a)
+    columns.append('app_t1_pref')
+    deviceid_packages['app_t2_pref']=deviceid_packages['t2_app_len'].apply(a)
+    columns.append('app_t2_pref')
     deviceid_packages.fillna(0)
     
+    columns.append('app_len')
+    columns.append('device_id')
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     
  
     
 #    print(deviceid_train.head(5))
     
-    return deviceid_packages.ix[:, ['device_id','app_len','t1_code','t2_code']]
+    return deviceid_packages.ix[:, columns]
     
 def devid_app_tfidf(deviceid_packages,package_label):
     def list_to_text(l):
