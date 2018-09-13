@@ -360,7 +360,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=3)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
 #    deviceid_train=dev_id_train()
     
     result = []
@@ -387,7 +387,7 @@ if __name__=='__main__':
 
 # id,
     end_time=time.time()
-    logging.debug('耗时:',str(end_time-start_time))
+    logging.debug('耗时:'+str(end_time-start_time))
 
 
 
