@@ -309,9 +309,7 @@ def devid_hour(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue
         values=deviceid_packages.ix[filte,'t2_hour_time'].apply(lambda x:get_values(x))
-        try:
-            t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
-            t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
+        try: 
             deviceid_packages.ix[filte,'hour_t2_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
             deviceid_packages.ix[filte,'hour_t2_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
         except:
@@ -488,8 +486,6 @@ def devid_day(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue  
         values=deviceid_packages.ix[filte,'t1_day_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()   
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
 
 
         deviceid_packages.ix[filte,'day_t1_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
@@ -515,8 +511,6 @@ def devid_day(deviceid_packages,package_label):
             continue
         try:
             values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
-            t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()
-            t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
     
             deviceid_packages.ix[filte,'day_t2_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
             deviceid_packages.ix[filte,'day_t2_start_day_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_size'))
@@ -697,8 +691,7 @@ def devid_mon(deviceid_packages,package_label):
         if filte.shape[0]<2:
             continue    
         values=deviceid_packages.ix[filte,'t1_mon_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
+
 
         deviceid_packages.ix[filte,'mon_t1_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
         deviceid_packages.ix[filte,'mon_t1_start_mon_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_size'))
