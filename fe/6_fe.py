@@ -145,13 +145,17 @@ def get_dev_hour_info_t1(dev_id,app_id_list):
         return {}
 
     result_t1={}
+    close_hour=''
+    start_hour=''
     for t1 in tx_pd.t1.unique():
         tmp_dict={}
         tmp_dict['start_hour_len']=tx_pd.ix[tx_pd.t1.values==t1,'start_hour_len'].sum()
         tmp_dict['start_hour_size']=tx_pd.ix[tx_pd.t1.values==t1,'start_hour_size'].sum()
-        tmp_dict['close_hour']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_hour'].tolist())
-        tmp_dict['start_hour']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_hour'].tolist())
+        close_hour=close_hour+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_hour'].tolist())
+        start_hour=start_hour+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_hour'].tolist())
         result_t1[t1]=tmp_dict
+    result_t1['close_hour']=close_hour
+    result_t1['start_hour']=start_hour
     logging.debug(result_t1)
     return result_t1
 
@@ -183,13 +187,17 @@ def get_dev_hour_info_t2(dev_id,app_id_list):
         return {}
 
     result_t2={}
+    close_hour=''
+    start_hour=''
     for t2 in tx_pd.t2.unique():
         tmp_dict={}
         tmp_dict['start_hour_len']=tx_pd.ix[tx_pd.t2.values==t2,'start_hour_len'].sum()
         tmp_dict['start_hour_size']=tx_pd.ix[tx_pd.t2.values==t2,'start_hour_size'].sum()
-        tmp_dict['close_hour']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_hour'].tolist())
-        tmp_dict['start_hour']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_hour'].tolist())
+        close_hour=close_hour+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_hour'].tolist())
+        start_hour=start_hour+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_hour'].tolist())
         result_t2[t2]=tmp_dict
+    result_t2['close_hour']=close_hour
+    result_t2['start_hour']=start_hour
     logging.debug(result_t2)
     return result_t2
 
@@ -225,16 +233,28 @@ def devid_hour(deviceid_packages,package_label):
 
         
     for x in package_label['t1'].unique():
-        for suffix in ['close_hour_weight','start_hour_weight','start_hour_len','start_hour_size']:
+        for suffix in ['start_hour_len','start_hour_size']:
             deviceid_packages['hour_t1_'+suffix+'_'+str(x)]=int(0)
             columns.append('hour_t1_'+suffix+'_'+str(x))
 
     for x in package_label['t2'].unique():
-        for suffix in ['close_hour_weight','start_hour_weight','start_hour_len','start_hour_size']:
+        for suffix in ['start_hour_len','start_hour_size']:
             deviceid_packages['hour_t2_'+suffix+'_'+str(x)]=int(0)
             columns.append('hour_t2_'+suffix+'_'+str(x))
 
-    
+    t1_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_values('close_hour')).tolist()   
+    t2_mtrix=deviceid_packages['t1_hour_time'].apply(lambda x:get_values('start_hour')).tolist()   
+    deviceid_packages['hour_t1_close_hour_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t1_start_hour_weight']=word_to_tfidf(t2_mtrix)
+  
+    t1_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_values('close_hour')).tolist()   
+    t2_mtrix=deviceid_packages['t2_hour_time'].apply(lambda x:get_values('start_hour')).tolist()   
+    deviceid_packages['hour_t2_close_hour_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t2_start_hour_weight']=word_to_tfidf(t2_mtrix)
+    columns.append('hour_t1_close_hour_weight')
+    columns.append('hour_t1_start_hour_weight')
+    columns.append('hour_t2_close_hour_weight')
+    columns.append('hour_t2_start_hour_weight')
     for x in package_label['t1'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
@@ -259,10 +279,6 @@ def devid_hour(deviceid_packages,package_label):
             continue
             
         values=deviceid_packages.ix[filte,'t1_hour_time'].apply(lambda x:get_values(x))
-        t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
-        t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
-        deviceid_packages.ix[filte,'hour_t1_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t1_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
         deviceid_packages.ix[filte,'hour_t1_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
         deviceid_packages.ix[filte,'hour_t1_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
@@ -290,9 +306,6 @@ def devid_hour(deviceid_packages,package_label):
         try:
             t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_hour')).tolist()   
             t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_hour')).tolist()   
-            deviceid_packages.ix[filte,'hour_t2_close_hour_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-            deviceid_packages.ix[filte,'hour_t2_start_hour_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
-    
             deviceid_packages.ix[filte,'hour_t2_start_hour_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_len'))
             deviceid_packages.ix[filte,'hour_t2_start_hour_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_hour_size'))
         except:
@@ -301,15 +314,7 @@ def devid_hour(deviceid_packages,package_label):
 
     columns.append('device_id')
     logging.debug(columns)
-    
-#    for x in package_label['t1'].unique():
-#        for suffix in ['close_hour','start_hour','start_hour_len','start_hour_size']:
-#            deviceid_packages['hour_t1_'+suffix+'_'+str(x)]=deviceid_packages['hour_t1_'+suffix+'_'+str(x)].astype('category').values.codes
-#
-#    for x in package_label['t2'].unique():
-#        for suffix in ['close_hour','start_hour','start_hour_len','start_hour_size']:
-#            deviceid_packages['hour_t2_'+suffix+'_'+str(x)]=deviceid_packages['hour_t2_'+suffix+'_'+str(x)].astype('category').values.codes
-    
+
     return deviceid_packages.ix[:, columns]
 
 def get_dev_day_info_t1(dev_id,app_id_list):
@@ -340,13 +345,17 @@ def get_dev_day_info_t1(dev_id,app_id_list):
         return {}
 
     result_t1={}
+    close_day=''
+    start_day=''
     for t1 in tx_pd.t1.unique():
         tmp_dict={}
         tmp_dict['start_day_len']=tx_pd.ix[tx_pd.t1.values==t1,'start_day_len'].sum()
         tmp_dict['start_day_size']=tx_pd.ix[tx_pd.t1.values==t1,'start_day_size'].sum()
-        tmp_dict['close_day']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_day'].tolist())
-        tmp_dict['start_day']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_day'].tolist())
+        close_day=close_day+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_day'].tolist())
+        start_day=start_day+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_day'].tolist())
         result_t1[t1]=tmp_dict
+    result_t1['close_day']=close_day
+    result_t1['start_day']=start_day
     logging.debug(result_t1)
     return result_t1
 
@@ -378,13 +387,17 @@ def get_dev_day_info_t2(dev_id,app_id_list):
         return {}
 
     result_t2={}
+    close_day=''
+    start_day=''
     for t2 in tx_pd.t2.unique():
         tmp_dict={}
         tmp_dict['start_day_len']=tx_pd.ix[tx_pd.t2.values==t2,'start_day_len'].sum()
         tmp_dict['start_day_size']=tx_pd.ix[tx_pd.t2.values==t2,'start_day_size'].sum()
-        tmp_dict['close_day']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_day'].tolist())
-        tmp_dict['start_day']=' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_day'].tolist())
+        close_day=close_day+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'close_day'].tolist())
+        start_day=start_day+' '.join(tx_pd.ix[tx_pd.t2.values==t2,'start_day'].tolist())
         result_t2[t2]=tmp_dict
+    result_t2['close_day']=close_day
+    result_t2['start_day']=start_day
     logging.debug(result_t2)
     return result_t2
 
@@ -423,16 +436,30 @@ def devid_day(deviceid_packages,package_label):
 #            columns.append('day_t2_'+suffix+'_'+str(x))
 #        
     for x in package_label['t1'].unique():
-        for suffix in ['close_day_weight','start_day_weight','start_day_len','start_day_size']:
+        for suffix in ['start_day_len','start_day_size']:
             deviceid_packages['day_t1_'+suffix+'_'+str(x)]=int(0)
             columns.append('day_t1_'+suffix+'_'+str(x))
 
     for x in package_label['t2'].unique():
-        for suffix in ['close_day_weight','start_day_weight','start_day_len','start_day_size']:
+        for suffix in ['start_day_len','start_day_size']:
             deviceid_packages['day_t2_'+suffix+'_'+str(x)]=int(0)
             columns.append('day_t2_'+suffix+'_'+str(x))
 
     
+    t1_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_values('close_day')).tolist()   
+    t2_mtrix=deviceid_packages['t1_day_time'].apply(lambda x:get_values('start_day')).tolist()   
+    deviceid_packages['hour_t1_close_day_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t1_start_day_weight']=word_to_tfidf(t2_mtrix)
+  
+    t1_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_values('close_day')).tolist()   
+    t2_mtrix=deviceid_packages['t2_day_time'].apply(lambda x:get_values('start_day')).tolist()   
+    deviceid_packages['hour_t2_close_day_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t2_start_day_weight']=word_to_tfidf(t2_mtrix)
+    columns.append('hour_t1_close_day_weight')
+    columns.append('hour_t1_start_day_weight')
+    columns.append('hour_t2_close_day_weight')
+    columns.append('hour_t2_start_day_weight')
+
     for x in package_label['t1'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
@@ -458,8 +485,6 @@ def devid_day(deviceid_packages,package_label):
         values=deviceid_packages.ix[filte,'t1_day_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()   
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
-        deviceid_packages.ix[filte,'hour_t1_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t1_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
 
         deviceid_packages.ix[filte,'day_t1_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
@@ -487,8 +512,6 @@ def devid_day(deviceid_packages,package_label):
             values=deviceid_packages.ix[filte,'t2_day_time'].apply(lambda x:get_values(x))
             t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_day')).tolist()
             t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_day')).tolist()   
-            deviceid_packages.ix[filte,'hour_t2_close_day_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-            deviceid_packages.ix[filte,'hour_t2_start_day_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
     
             deviceid_packages.ix[filte,'day_t2_start_day_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_len'))
             deviceid_packages.ix[filte,'day_t2_start_day_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_day_size'))
@@ -537,13 +560,17 @@ def get_dev_mon_info_t1(dev_id,app_id_list):
         return {}
 
     result_t1={}
+    close_mon=''
+    start_mon=''
     for t1 in tx_pd.t1.unique():
         tmp_dict={}
         tmp_dict['start_mon_len']=tx_pd.ix[tx_pd.t1.values==t1,'start_mon_len'].sum()
         tmp_dict['start_mon_size']=tx_pd.ix[tx_pd.t1.values==t1,'start_mon_size'].sum()
-        tmp_dict['close_mon']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_mon'].tolist())
-        tmp_dict['start_mon']=' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_mon'].tolist())
+        close_mon=close_mon+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'close_mon'].tolist())
+        start_mon=start_mon+' '.join(tx_pd.ix[tx_pd.t1.values==t1,'start_mon'].tolist())
         result_t1[t1]=tmp_dict
+    result_t1['close_mon']=close_mon
+    result_t1['start_mon']=start_mon
     logging.debug(result_t1)
     return result_t1
 
@@ -620,16 +647,29 @@ def devid_mon(deviceid_packages,package_label):
 #            columns.append('mon_t2_'+suffix+'_'+str(x))
         
     for x in package_label['t1'].unique():
-        for suffix in ['close_mon_weight','start_mon_weight','start_mon_len','start_mon_size']:
+        for suffix in ['start_mon_len','start_mon_size']:
             deviceid_packages['mon_t1_'+suffix+'_'+str(x)]=int(0)
             columns.append('mon_t1_'+suffix+'_'+str(x))
 
     for x in package_label['t2'].unique():
-        for suffix in ['close_mon_weight','start_mon_weight','start_mon_len','start_mon_size']:
+        for suffix in ['start_mon_len','start_mon_size']:
             deviceid_packages['mon_t2_'+suffix+'_'+str(x)]=int(0)
             columns.append('mon_t2_'+suffix+'_'+str(x))
 
     
+    t1_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_values('close_mon')).tolist()   
+    t2_mtrix=deviceid_packages['t1_mon_time'].apply(lambda x:get_values('start_mon')).tolist()   
+    deviceid_packages['hour_t1_close_mon_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t1_start_mon_weight']=word_to_tfidf(t2_mtrix)
+  
+    t1_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_values('close_mon')).tolist()   
+    t2_mtrix=deviceid_packages['t2_mon_time'].apply(lambda x:get_values('start_mon')).tolist()   
+    deviceid_packages['hour_t2_close_mon_weight']=word_to_tfidf(t1_mtrix)
+    deviceid_packages['hour_t2_start_mon_weight']=word_to_tfidf(t2_mtrix)
+    columns.append('hour_t1_close_mon_weight')
+    columns.append('hour_t1_start_mon_weight')
+    columns.append('hour_t2_close_mon_weight')
+    columns.append('hour_t2_start_mon_weight')
     for x in package_label['t1'].unique():
         _x=[]
         for i in range(deviceid_packages.shape[0]):
@@ -655,8 +695,6 @@ def devid_mon(deviceid_packages,package_label):
         values=deviceid_packages.ix[filte,'t1_mon_time'].apply(lambda x:get_values(x))
         t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
         t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
-        deviceid_packages.ix[filte,'hour_t1_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-        deviceid_packages.ix[filte,'hour_t1_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
 
         deviceid_packages.ix[filte,'mon_t1_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
         deviceid_packages.ix[filte,'mon_t1_start_mon_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_size'))
@@ -683,8 +721,6 @@ def devid_mon(deviceid_packages,package_label):
             values=deviceid_packages.ix[filte,'t2_mon_time'].apply(lambda x:get_values(x))
             t1_mtrix=values.apply(lambda x:get_sub_values(x,'close_mon')).tolist()   
             t2_mtrix=values.apply(lambda x:get_sub_values(x,'start_mon')).tolist()   
-            deviceid_packages.ix[filte,'hour_t2_close_mon_weight_'+str(x)]=word_to_tfidf(t1_mtrix)
-            deviceid_packages.ix[filte,'hour_t2_start_mon_weight_'+str(x)]=word_to_tfidf(t2_mtrix)
             deviceid_packages.ix[filte,'mon_t2_start_mon_len_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_len'))
             deviceid_packages.ix[filte,'mon_t2_start_mon_size_'+str(x)]=values.apply(lambda x:get_sub_values(x,'start_mon_size'))
         except:
@@ -700,7 +736,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=3)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
 #    deviceid_train=dev_id_train()
     package_label=pd.read_csv(file_path+'package_label.csv')
     package_label['t1']=package_label['t1'].astype('category').values.codes
