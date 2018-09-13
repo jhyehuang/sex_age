@@ -234,6 +234,8 @@ def devid_hour(deviceid_packages,package_label):
     def get_values(t1_dict):
         return t1_dict[str(x)]
     def get_sub_values(v_dict,col):
+        if v_dict=={}:
+            return ''
         logging.debug(v_dict)
         return v_dict[col]
         
