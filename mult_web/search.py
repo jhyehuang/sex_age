@@ -102,6 +102,7 @@ def get_content(brand,type_no):
                 "PSTM": "%s" % (int(time.time())),
                 "PSINO": "1",
             }
+            print(url)
             resp = requests.get(url,
                                 headers=query_header,
                                 timeout=10,
