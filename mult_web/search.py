@@ -67,7 +67,7 @@ def get_all_nodes(brand,type_no, data):
 
 def get_content(brand,type_no):
     st = time.time()
-    url = f'http://www.baidu.com/s?wd='+brand+' '+type_no+' 上市'
+    url = f'http://www.baidu.com/s?wd='+str(brand)+' '+str(type_no)+' 上市'
     agent_list = [
         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
         "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -119,5 +119,6 @@ def get_content(brand,type_no):
 
 if __name__ == "__main__":
     deviceid_brand=pd.read_csv(FLAGS.file_path+'new_deviceid_brand.csv')
-    ret=get_content('samsung','gt-i9507v')
-    print(ret)
+    for line in deviceid_brand.itertuples():
+        print(get_content(line.brand,line.type_no))
+        break
