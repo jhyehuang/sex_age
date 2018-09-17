@@ -68,10 +68,19 @@ def get_all_nodes(brand,type_no, data):
             aea = sub_rep_str.xpath("//*[@class='section-header-desc']")
             if len(aea)<1:
                 continue
-            aea = aea[0]
-            sell_date=aea.xpath("string(.)")
-            sell_date=sell_date.replace('上市时间：','')
+#            aea = aea[0]
+            #        break
+            sell_date=''
+            for ae in aea:
+                sell_date=ae.xpath("string(.)")
+                if '上市时间' in sell_date:
+                    sell_date=sell_date.replace('上市时间：','')
+                else:
+                    sell_date=''
+                    continue
 #            print(sell_date)
+            if sell_date=='':
+                continue
             print(price,sell_date)
             tag_objs['price']=price
             tag_objs['sell_date']=sell_date
@@ -196,6 +205,6 @@ if __name__ == "__main__":
         flag,price,sell_date=get_content(line.brand,line.type_no)
         deviceid_brand.loc[line[0],'price']=price
         deviceid_brand.loc[line[0],'sell_date']=sell_date
-        break
+#        break
     print(deviceid_brand.head(2))
     deviceid_brand.to_csv(FLAGS.file_path+'new_deviceid_brand_price.csv',index= False)
