@@ -109,16 +109,16 @@ def K_cluster_analysis(K, X_train):
     
     
     #对数据进行PCA降维
-    pca = PCA(n_components=0.7)
-    pca.fit(X_train)
+#    pca = PCA(n_components=0.7)
+#    pca.fit(X_train)
     
-    X_train_pca = pca.transform(X_train)
+#    X_train_pca = pca.transform(X_train)
     #K-means,在训练集上训练
     mb_kmeans = MiniBatchKMeans(n_clusters = K,init='k-means++',max_iter=100,random_state=0,tol=0.0001, verbose=1)
-    mb_kmeans.fit(X_train_pca)
+    mb_kmeans.fit(X_train)
     
     # 在训练集和测试集上测试
-    y_val_pred = mb_kmeans.predict(X_train_pca)
+    y_val_pred = mb_kmeans.predict(X_train)
     logging.debug(y_val_pred.shape)
     
     #以前两维特征打印训练数据的分类结果
@@ -140,13 +140,13 @@ def K_cluster_analysis(K, X_train):
 
 def get_data_K_Means():
     files_name=[
-            '01_deviceid_packages.csv' ,
-                '02_deviceid_packages.csv',
+#            '01_deviceid_packages.csv' ,
+#                '02_deviceid_packages.csv',
 #                '03_deviceid_packages.csv',
-#                '05_deviceid_packages.csv',
+                '04_deviceid_packages.csv',
+                '05_deviceid_packages.csv',
                 '06_deviceid_packages.csv',
-                '07_deviceid_packages.csv',
-                '08_deviceid_packages.csv']
+                '09_deviceid_packages.csv']
     for i,file_name in enumerate(files_name):
         train_data=pd.read_csv(FLAGS.file_path +file_name,)
         device_id=train_data.ix[:,'device_id']

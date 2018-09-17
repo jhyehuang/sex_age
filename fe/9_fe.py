@@ -95,7 +95,7 @@ def app1_w(deviceid_packages,deviceid_train):
 #    deviceid_train=deviceid_train.fillna(-1)
     apps_list=[]
     all_app=reduce(operator.add, deviceid_packages.app_list.tolist())
-#    print(deviceid_train.app_list.tolist())
+    print(deviceid_train.app_list.tolist())
     train_app=reduce(operator.add, deviceid_train.app_list.tolist())
     no_train_app=list(set(all_app).difference(set(train_app)))
     for i in [1,2]:
@@ -180,10 +180,14 @@ def compute_date():
     def app_list(text):
         app_list=text.split('|')
     #        print (app_list)
+        if app_list=='':
+            app_list=[]
         return app_list
     deviceid_packages['app_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     result = []
+    deviceid_packages=deviceid_packages.fillna('')
+    deviceid_train=deviceid_train.fillna('')
     result.append(pool.apply_async(app1_w, (deviceid_packages,deviceid_train )))
     result.append(pool.apply_async(app2_w, (deviceid_packages,deviceid_train )))
     result.append(pool.apply_async(app3_w, (deviceid_packages,deviceid_train )))

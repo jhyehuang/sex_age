@@ -2,8 +2,8 @@
 # coding: utf-8
 
 # In[49]:
-
-
+import sys
+sys.path.append('..')
 import pandas as pd
 from flags import FLAGS, unparsed
 import numpy as np
