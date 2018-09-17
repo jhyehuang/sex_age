@@ -80,8 +80,8 @@ def get_all_nodes(brand,type_no, data):
                     sell_date=''
                     continue
 #            print(sell_date)
-            if sell_date=='':
-                continue
+#            if sell_date=='':
+#                continue
             print(price,sell_date)
             tag_objs['price']=price
             tag_objs['sell_date']=sell_date
