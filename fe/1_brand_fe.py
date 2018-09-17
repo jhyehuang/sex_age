@@ -58,7 +58,7 @@ def brand_type_no_onehot(deviceid_packages):
     Xtr_brand = csr_matrix((np.ones(deviceid_packages.shape[0]),
                            (deviceid_packages.trainrow, deviceid_packages.brand)))
     
-    m = deviceid_packages.apply(lambda line:line['brand']+line['type_no'],axis=1)
+    m = deviceid_packages.apply(lambda line:str(line['brand'])+str(line['type_no']),axis=1)
 
     modelencoder = LabelEncoder().fit(m)
     deviceid_packages['type_no'] = modelencoder.transform(m)
@@ -374,8 +374,8 @@ def type_no_w3(deviceid_packages):
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=8)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_brand.csv')
+    pool = multiprocessing.Pool(processes=9)
+    deviceid_packages=pd.read_csv(file_path+'new_deviceid_brand.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
 
@@ -383,7 +383,7 @@ def compute_date():
     deviceid_packages=deviceid_packages.fillna('未知')
     
     result = []
-#    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
+    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
 
     result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(brand_w, (deviceid_packages, )))
@@ -399,7 +399,7 @@ def compute_date():
         
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
                                  result[3].get(),result[4].get(),result[5].get(),result[6].get(), \
-                                 result[7].get()],axis=1)
+                                 result[7].get(),result[8].get()],axis=1)
 
     
     print(deviceid_packages.head(5))

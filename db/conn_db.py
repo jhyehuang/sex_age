@@ -53,8 +53,9 @@ def dict_from_mysql(sql):
     return ret
 
 def dev_id_train():
-    sql='select * from deviceid_train'
-    deviceid_train=data_from_mysql(sql)
+#    sql='select * from deviceid_train'
+#    deviceid_train=data_from_mysql(sql)
+    deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_train.csv')
     return deviceid_train
 
 def get_package_label(app_id,t):

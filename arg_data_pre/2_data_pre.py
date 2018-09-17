@@ -44,8 +44,9 @@ def define_n_class():
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
     
-    sql='select * from deviceid_train'
-    package_label=data_from_mysql(sql)
+#    sql='select * from deviceid_train'
+#    package_label=data_from_mysql(sql)
+    package_label=pd.read_csv(file_path+'deviceid_train.csv')
     
 #    sex=package_label['sex'].unique()
 #    age=package_label['age'].unique()
@@ -67,7 +68,7 @@ def define_n_class():
 #    package_label=data_augmentation(package_label)
     print(package_label.shape)
     truncate_table('deviceid_train')
-#    package_label.to_csv(file_path+'package_label.csv',index= False)
+    package_label.to_csv(file_path+'deviceid_train.csv',index= False)
     pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
     
     

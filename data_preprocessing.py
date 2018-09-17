@@ -101,7 +101,7 @@ def data_augmentation(deviceid_train):
 
 def get_train_data(flag='train'):
     if flag=='train':
-        deviceid_train=dev_id_train()
+        deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_train.csv')
     elif flag=='test':
         deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     '''
@@ -125,22 +125,22 @@ def get_train_data(flag='train'):
     app_len_t2 brand 出现的次数
     
     '''
-    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+#    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     
     
-    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
-    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
-#    deviceid_packages_08= pd.read_csv(FLAGS.file_path +'08_deviceid_packages.csv',)
-    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
+#    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+#    deviceid_packages_04= pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
+#    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_08,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left')
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
     
     return deviceid_train
 # flag  in ['all','sex','age','device_id']

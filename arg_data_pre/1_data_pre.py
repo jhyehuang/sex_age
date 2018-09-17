@@ -87,7 +87,7 @@ def tsv_to_txt():
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
     
-    cmd='echo device_id,add_id_list > '+file_path+'deviceid_packages.txt'
+    cmd='echo device_id,app_id_list > '+file_path+'deviceid_packages.txt'
     print(cmd) 
     p = Popen(cmd,stdin =  PIPE,stdout = PIPE, stderr = PIPE,cwd=cwd,shell=True)    
     
@@ -132,7 +132,7 @@ def pre_deviceid_packages():
             id_no=line_list[0]
             app_list=line_list[1:]
             id_dict['device_id']=id_no
-            id_dict['add_id_list']='|'.join(app_list)
+            id_dict['app_id_list']='|'.join(app_list)
     #        for i,x in enumerate(line_list):
     #            id_dict['app_'+str(i)]=x
             
@@ -185,8 +185,8 @@ if __name__=='__main__':
 
    
 #3、
-    for file_name in csv_file_names:
-        data_into_mysql(file_name)
+#    for file_name in csv_file_names:
+#        data_into_mysql(file_name)
 # id,
     end_time=time.time()
     print('耗时:',end_time-start_time)
