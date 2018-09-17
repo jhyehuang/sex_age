@@ -208,5 +208,6 @@ if __name__ == "__main__":
         deviceid_brand.loc[line[0],'price']=price
         deviceid_brand.loc[line[0],'sell_date']=sell_date
 #        break
+        time.sleep(0.5)
     print(deviceid_brand.head(2))
     deviceid_brand.to_csv(FLAGS.file_path+'new_deviceid_brand_price.csv',index= False)
