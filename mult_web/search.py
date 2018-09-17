@@ -73,8 +73,9 @@ def get_all_nodes(brand,type_no, data):
             sell_date=''
             for ae in aea:
                 sell_date=ae.xpath("string(.)")
-                if '上市时间' in sell_date:
+                if '时间' in sell_date:
                     sell_date=sell_date.replace('上市时间：','')
+                    break
                 else:
                     sell_date=''
                     continue
