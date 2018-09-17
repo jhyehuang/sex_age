@@ -34,7 +34,7 @@ def parse(brand,type_no, url_content):
     st = time.time()
     tag_objs = get_all_nodes(brand,type_no, url_content)
     if not tag_objs:
-        logging.DEBUG(no_hit)
+        logging.debug(no_hit)
         return False, price,sell_date
 
     price, sell_date = tag_objs['price'], tag_objs['sell_date']
@@ -83,13 +83,13 @@ def get_all_nodes(brand,type_no, data):
 #            print(sell_date)
 #            if sell_date=='':
 #                continue
-            logging.DEBUG(price+';'+sell_date)
+            logging.debug(price+' '+sell_date)
             tag_objs['price']=price
             tag_objs['sell_date']=sell_date
             break
     except:
         message = traceback.format_exc()
-        logging.DEBUG( message)
+        print( message)
     return tag_objs
 
 
@@ -139,7 +139,7 @@ def get_sub_content(url):
 #                print("----------get_content cost: ", time.time()-st, retry_times)
                 return resp.text
         except Exception as e:
-            logging.DEBUG(f"faild to get content: {url}, exceptions: {e}, ", '')
+            print(f"faild to get content: {url}, exceptions: {e}, ", '')
         retry_times -= 1
 #    print("=========get_content cost: ", time.time() - st, retry_times)
     return  url
@@ -192,9 +192,9 @@ def get_content(brand,type_no):
 #                print("----------get_content cost: ", time.time()-st, retry_times)
                 return parse(brand,type_no, resp.text)
         except Exception as e:
-            logging.DEBUG(f"faild to get content: {url}, exceptions: {e}, ", '')
+            print(f"faild to get content: {url}, exceptions: {e}, ", '')
         retry_times -= 1
-    logging.DEBUG("=========get_content cost: ", time.time() - st, retry_times)
+    print("=========get_content cost: ", time.time() - st, retry_times)
     return False,'', url
 
 
@@ -207,6 +207,6 @@ if __name__ == "__main__":
         flag,price,sell_date=get_content(line.brand,line.type_no)
         deviceid_brand.loc[line[0],'price']=price
         deviceid_brand.loc[line[0],'sell_date']=sell_date
-        break
-    logging.DEBUG(deviceid_brand.head(2))
+#        break
+    print(deviceid_brand.head(2))
     deviceid_brand.to_csv(FLAGS.file_path+'new_deviceid_brand_price.csv',index= False)
