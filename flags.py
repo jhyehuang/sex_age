@@ -7,9 +7,9 @@ import pytz
 
 FLAGS, unparsed='',''
 
-pad='win'
+#pad='win'
 #pad='tiny'
-#pad='linux'
+pad='linux'
 
 tz = pytz.timezone('Asia/Shanghai')
 current_time = datetime.datetime.now(tz)
