@@ -385,14 +385,14 @@ def compute_date():
     package_label['t2']=package_label['t2'].astype('category').values.codes
     result = []
     result.append(pool.apply_async(devid_app_count, (deviceid_packages,package_label, )))
-    result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
+#    result.append(pool.apply_async(devid_app_tx, (deviceid_packages,package_label, )))
     result.append(pool.apply_async(devid_app_tfidf, (deviceid_packages,package_label, )))
 #    result.append(pool.apply_async(devid_app_brand_tfidf, (deviceid_packages,deviceid_brand, )))
     pool.close()
     pool.join()
         
     deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left')
-    deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
+#    deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left')
 #    deviceid_packages=pd.merge(deviceid_packages,result[3].get(),on=['device_id'],how='left')
     deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
