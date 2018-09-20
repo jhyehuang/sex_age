@@ -68,11 +68,11 @@ def get_package_label(app_id,t):
     return ret
 
 def get_package_dict(app_id,t):
-#    sql='select '+t+' from package_label where app_id=\"'
-#    sql=sql+app_id+'\"'
-#    print (sql)
+    sql='select '+t+' from package_label where app_id=\"'
+    sql=sql+app_id+'\"'
+    print (sql)
     
-#    ret=dict_from_mysql(sql)
-    ret=pd.read_csv(FLAGS.file_path+'package_label.csv')
+    ret=dict_from_mysql(sql)
+#    ret=pd.read_csv(FLAGS.file_path+'package_label.csv')
 #    print(ret.to_dict('records'))
-    return ret.to_dict('records')
+    return ret
