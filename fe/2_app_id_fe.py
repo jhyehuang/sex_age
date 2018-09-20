@@ -305,10 +305,10 @@ def devid_app_tfidf(deviceid_packages,package_label):
     deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
     col=wc.columns.tolist()
     columns=columns+col
-    wc=word_to_countvectorizer(deviceid_packages['app_id_text'].tolist())
-    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
-    col=wc.columns.tolist()
-    columns=columns+col
+#    wc=word_to_countvectorizer(deviceid_packages['app_id_text'].tolist())
+#    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+#    col=wc.columns.tolist()
+#    columns=columns+col
     # 计算 t2 的主题概率
     logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
