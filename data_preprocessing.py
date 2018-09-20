@@ -113,7 +113,7 @@ def get_train_data(flag='train'):
     type_no2_w  type_no 在训练数据中 age为某以类别 出现的在总类别中占比
     type_no3_w  type_no 在训练数据中 n_class为某以类别 出现的在总类别中占比
     '''
-    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
     
     '''
     'app_id_weight','app_len_t1_43', 'app_len_t2_132', 'app_len_t1_36', 
@@ -134,7 +134,7 @@ def get_train_data(flag='train'):
 #    deviceid_packages_04= pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
 #    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
+#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left')
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
