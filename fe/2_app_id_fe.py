@@ -309,6 +309,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
 #    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
 #    col=wc.columns.tolist()
 #    columns=columns+col
+    print(deviceid_packages.head(5))
     # 计算 t2 的主题概率
     logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
