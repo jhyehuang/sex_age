@@ -59,6 +59,19 @@ def word_to_tfidf(word):
 #    logging.debug(weight)
     return weight
 
+def word_to_countvectorizer(word):
+    logging.debug(word)
+    if len(word)<1:
+        return 0
+    elif len(word)==1:
+       return [0]
+    elif len(list(set(word)))==1:
+       return [1 for x in range(len(word))]
+    transformer=CountVectorizer()
+    cv_fit=transformer.fit_transform(word,)
+    ret=pd.DataFrame(data=cv_fit.toarray(),columns=transformer.get_feature_names())
+    return ret
+
 def word_to_lda(word):
     logging.debug(len(word))
     if len(word)<1:
@@ -109,6 +122,7 @@ def app_get_t1(app_list):
         if len(t2)<1:
 #            print(t2)
             continue
+        print (t2)
         t2=t2[0]
         t1_dict['t1']=t2.get('t1','0')
         t1_dict['t2']=t2.get('t2','0')
@@ -160,11 +174,11 @@ def app_get_t2(app_list):
 
 def devid_app_tx(deviceid_packages,package_label):
     
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     #每一个app_list中 属于t1类型的size
-    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
-    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
+    deviceid_packages['t2_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t2(line))
     
     columns=[]
 
@@ -234,12 +248,12 @@ def devid_app_count(deviceid_packages,package_label):
     def app_count(text):
         app_list=text.split('|')
         return len(app_list)
-    deviceid_packages['app_len']=deviceid_packages['add_id_list'].apply(lambda line:app_count(line))
+    deviceid_packages['app_len']=deviceid_packages['app_id_list'].apply(lambda line:app_count(line))
 
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
-    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
-    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
+    deviceid_packages['t2_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t2(line))
     columns=[]
     def a(x):
         if x =={}:
@@ -269,24 +283,37 @@ def devid_app_tfidf(deviceid_packages,package_label):
         return text
 
     # 将分割的字符串变为shape[:,1]的数组
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line))
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line))
     #将app_list 转化为空格分割的字符串
-    deviceid_packages['add_id_text']=deviceid_packages['add_list'].apply(lambda line:list_to_text(line))
+    deviceid_packages['app_id_text']=deviceid_packages['app_list'].apply(lambda line:list_to_text(line))
 
-    deviceid_packages['t1_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t1(line))
+    deviceid_packages['t1_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t1(line))
     #每一个app_list中 属于t2类型的size
-    deviceid_packages['t2_app_len']=deviceid_packages['add_list'].apply(lambda line:app_get_t2(line))
+    deviceid_packages['t2_app_len']=deviceid_packages['app_list'].apply(lambda line:app_get_t2(line))
 
     def t1_concat(x):
         return ' '.join(x.keys())
     t1_mtrix=deviceid_packages['t1_app_len'].apply(lambda x:t1_concat(x))
     t2_mtrix=deviceid_packages['t2_app_len'].apply(lambda x:t1_concat(x))
     
+    columns=['device_id','app_id_weight','app_t1_weight','app_t2_weight']+['app_lda_t2_'+str(i) for i in range(1,6)]
     # 计算t1 字符串 和 t2 字符串 的词频 逆向文件频率
     deviceid_packages['app_t1_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['app_t2_weight']=word_to_tfidf(t2_mtrix)
-    deviceid_packages['app_id_weight']=word_to_tfidf(deviceid_packages['add_id_text'].tolist())
-    
+    deviceid_packages['app_id_weight']=word_to_tfidf(deviceid_packages['app_id_text'].tolist())
+    # 计算t1 字符串 和 t2 字符串 的词频 
+    wc=word_to_countvectorizer(t1_mtrix)
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=columns+col
+    wc=word_to_countvectorizer(t2_mtrix)
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=columns+col
+    wc=word_to_countvectorizer(deviceid_packages['app_id_text'].tolist())
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=columns+col
     # 计算 t2 的主题概率
     logging.debug(t2_mtrix)
     lda_pd=word_to_lda(t2_mtrix)
@@ -299,7 +326,7 @@ def devid_app_tfidf(deviceid_packages,package_label):
     
 
     
-    return deviceid_packages.ix[:, ['device_id','app_id_weight','app_t1_weight','app_t2_weight']+['app_lda_t2_'+str(i) for i in range(1,6)]]
+    return deviceid_packages.ix[:, columns]
 
 
 def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
@@ -323,15 +350,27 @@ def devid_app_brand_tfidf(deviceid_packages,deviceid_brand):
         if len(label)<1:
             return ''
         return ' '.join(label)
+    columns=['device_id','dev_brand_weight','dev_type_no_weight']
     app_mtrix=deviceid_packages['device_id'].tolist()
     t1_mtrix=list(map(get_brand,app_mtrix))
     t2_mtrix=list(map(get_type_no,app_mtrix))
     deviceid_packages['dev_brand_weight']=word_to_tfidf(t1_mtrix)
     deviceid_packages['dev_type_no_weight']=word_to_tfidf(t2_mtrix)
+ 
+    wc=word_to_countvectorizer(t2_mtrix)
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=columns+col
+    deviceid_packages.fillna(0)
+    
+    wc=word_to_countvectorizer(t2_mtrix)
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=columns+col
     deviceid_packages.fillna(0)
 
     
-    return deviceid_packages.ix[:, ['device_id','dev_brand_weight','dev_type_no_weight']]
+    return deviceid_packages.ix[:, columns]
 
 
 def compute_date():

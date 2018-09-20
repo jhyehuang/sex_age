@@ -35,7 +35,7 @@ def hot_package_label():
 #    sql='alter table deviceid_train add n_class int(4) default 0'
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
-    package_label=pd.read_csv(file_path+'package_label.csv')
+    package_label=pd.read_csv(file_path+'package_label.txt')
     package_label['t1']=package_label['t1'].astype('category').values.codes
     package_label['t2']=package_label['t2'].astype('category').values.codes
     print(len(package_label['t1'].unique()))

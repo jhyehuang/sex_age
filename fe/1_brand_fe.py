@@ -49,6 +49,18 @@ def word_to_tfidf(word):
     tfidf=transformer.fit_transform(word,)
     weight=np.sum(tfidf.toarray(),axis=1).reshape((-1,1))
     return weight
+def word_to_countvectorizer(word):
+    logging.debug(word)
+    if len(word)<1:
+        return 0
+    elif len(word)==1:
+       return [0]
+    elif len(list(set(word)))==1:
+       return [1 for x in range(len(word))]
+    transformer=CountVectorizer()
+    cv_fit=transformer.fit_transform(word,)
+    ret=pd.DataFrame(data=cv_fit.toarray(),columns=transformer.get_feature_names())
+    return ret
 
 def brand_type_no_onehot(deviceid_packages):
     deviceid_packages.drop('device_id', axis=1,inplace = True)
@@ -149,8 +161,11 @@ def brand_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
-    deviceid_packages['brand_tfidf_w']=word_to_tfidf(deviceid_packages['brand'].tolist())
-    columns=['brand_w','brand_tfidf_w']
+#    deviceid_packages['brand_tfidf_w']=word_to_countvectorizer(deviceid_packages['brand'].tolist())
+    wc=word_to_countvectorizer(deviceid_packages['brand'].tolist())
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=['brand_w']+col
     return  deviceid_packages.ix[:,columns]
 
 
@@ -189,8 +204,10 @@ def type_no_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x]) 
-    deviceid_packages['type_no_tfidf_w']=word_to_tfidf(deviceid_packages['type_no'].tolist())
-    columns=['type_no_w','type_no_tfidf_w']
+    wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=['type_no_w']+col
     return  deviceid_packages.ix[:,columns]
 
 def difference_list(type_list):
@@ -383,7 +400,7 @@ def compute_date():
     deviceid_packages=deviceid_packages.fillna('未知')
     
     result = []
-    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
+#    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
 
     result.append(pool.apply_async(type_no_w, (deviceid_packages, )))
     result.append(pool.apply_async(brand_w, (deviceid_packages, )))
@@ -399,7 +416,7 @@ def compute_date():
         
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
                                  result[3].get(),result[4].get(),result[5].get(),result[6].get(), \
-                                 result[7].get(),result[8].get()],axis=1)
+                                 result[7].get()],axis=1)
 
     
     print(deviceid_packages.head(5))

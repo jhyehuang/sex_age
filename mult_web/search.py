@@ -208,6 +208,9 @@ if __name__ == "__main__":
         deviceid_brand.loc[line[0],'price']=price
         deviceid_brand.loc[line[0],'sell_date']=sell_date
 #        break
-        time.sleep(0.5)
+        with open(FLAGS.file_path+'deviceid_price.txt','a') as fd:
+            w_str= line.device_id+','+str(price)+','+str(sell_date)+'\n'
+            fd.write(w_str)
+        time.sleep(0.2)
     print(deviceid_brand.head(2))
     deviceid_brand.to_csv(FLAGS.file_path+'new_deviceid_brand_price.csv',index= False)

@@ -61,3 +61,7 @@ create table IF NOT EXISTS `deviceid_train`(
 PRIMARY KEY ( `device_id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+create table IF NOT EXISTS `proxy_ip_pool`( `protocol` varchar(50) not null, `ip` varchar(50) , `port` varchar(50) , `speed` float(5,3) , `position` varchar(50) , `score` int(20),`failtimes` int(10)  )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

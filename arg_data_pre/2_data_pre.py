@@ -69,7 +69,7 @@ def define_n_class():
     print(package_label.shape)
     truncate_table('deviceid_train')
     package_label.to_csv(file_path+'deviceid_train.csv',index= False)
-    pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
+#    pd.io.sql.to_sql(package_label,'deviceid_train', engine,if_exists='append', index= False)
     
     
 if __name__=='__main__':
@@ -77,8 +77,8 @@ if __name__=='__main__':
     sql='select * from package_label'
 #    ret=data_from_mysql(sql)
 #    print(ret.head(3))
-    truncate_table('deviceid_train')
-    data_into_mysql()
+#    truncate_table('deviceid_train')
+#    data_into_mysql()
     define_n_class()
 
 # id,
