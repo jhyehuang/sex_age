@@ -264,8 +264,8 @@ def devid_app_count(deviceid_packages,package_label):
     columns.append('app_len')
     columns.append('device_id')
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
-    
- 
+    deviceid_packages['app_t1_pref']=deviceid_packages['app_t1_pref'].astype('category').values.codes
+    deviceid_packages['app_t2_pref']=deviceid_packages['app_t2_pref'].astype('category').values.codes
     
 #    print(deviceid_train.head(5))
     
