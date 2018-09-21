@@ -392,7 +392,7 @@ def compute_date():
     import multiprocessing
 
     pool = multiprocessing.Pool(processes=9)
-    deviceid_packages=pd.read_csv(file_path+'new_deviceid_brand.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_price_sell_date.csv')
     
 #    package_label=pd.read_csv(file_path+'package_label.csv')
 
@@ -416,7 +416,7 @@ def compute_date():
         
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
                                  result[3].get(),result[4].get(),result[5].get(),result[6].get(), \
-                                 result[7].get()],axis=1)
+                                 result[7].get(),deviceid_packages.ix[:,['price','sell_date']]],axis=1)
 
     
     print(deviceid_packages.head(5))
