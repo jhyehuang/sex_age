@@ -42,7 +42,7 @@ def deviceid_package_start_close_train(deviceid):
 
 def get_times_len(dev_id):
     ret_dict={}
-    logging.debug(dev_id)
+#    logging.debug(dev_id)
     ret=deviceid_package_start_close_train(dev_id,)
     if ret.shape[0]<1:
         return ret_dict
@@ -77,7 +77,7 @@ def devid_times(deviceid_packages):
 
     week_hour_bin_app_t1_columns=pd.read_csv(FLAGS.file_path+'week_hour_bin_app_t1_columns.csv')
     for col in week_hour_bin_app_t1_columns.columns:
-        logging.debug(col)
+#        logging.debug(col)
         def c(a,b):
             ert=(a in b.keys())
             return ert
