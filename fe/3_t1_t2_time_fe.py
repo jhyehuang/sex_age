@@ -42,7 +42,7 @@ def deviceid_package_start_close_train(deviceid):
 
 def get_times_len(dev_id):
     ret_dict={}
-#    logging.debug(dev_id)
+    logging.debug(dev_id)
     ret=deviceid_package_start_close_train(dev_id,)
     if ret.shape[0]<1:
         return ret_dict
@@ -79,7 +79,7 @@ def devid_times(deviceid_packages):
     week_hour_bin_app_t1_columns=pd.read_csv(FLAGS.file_path+'week_hour_bin_app_t1_columns.csv')
     columns=['device_id',]
     for col in week_hour_bin_app_t1_columns.columns:
-#        logging.debug(col)
+        logging.debug(col)
         col=col.replace(' ','')
         columns.append(col)
         def c(a,b):
@@ -97,7 +97,7 @@ def devid_times(deviceid_packages):
 #            print(t1_dict)
             return t1_dict[col]
         values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
-        logging.debug(values)
+#        logging.debug(values)
         deviceid_packages.loc[filte1,col]=values
     
     return deviceid_packages.ix[:, columns]
@@ -108,7 +108,7 @@ def compute_date():
     import multiprocessing
 
 #    pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
 
 #    result = []
 #    result.append(pool.apply_async(devid_times, (deviceid_packages, )))
