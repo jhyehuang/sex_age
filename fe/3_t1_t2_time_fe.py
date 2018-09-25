@@ -85,7 +85,7 @@ def devid_times(deviceid_packages):
     #        print(_x)
         _x=pd.DataFrame({'a':_x},dtype='category')
         a=list(map(c,_x['a'],deviceid_packages['times_len']))
-        filte1=np.logical_and(a)
+        filte1=np.logical_and(a,True)
         def get_values(t1_dict):
             return t1_dict[col]
     values=deviceid_packages['times_len'].apply(lambda x:get_values(x)) 
