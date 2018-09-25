@@ -128,11 +128,11 @@ def devid_app_times_tx(deviceid_packages,package_label):
         app_list=text.split('|')
 #        print (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     # 使用 t1 app 的时长
     # 使用 t2 app 的时长
-    deviceid_packages['t1_app_time']=deviceid_packages.apply(lambda line:app_get_t1(line['device_id'],line['add_list']),axis=1)
-    deviceid_packages['t2_app_time']=deviceid_packages.apply(lambda line:app_get_t2(line['device_id'],line['add_list']),axis=1)
+    deviceid_packages['t1_app_time']=deviceid_packages.apply(lambda line:app_get_t1(line['device_id'],line['app_list']),axis=1)
+    deviceid_packages['t2_app_time']=deviceid_packages.apply(lambda line:app_get_t2(line['device_id'],line['app_list']),axis=1)
     
     columns=[]
 #    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
@@ -207,11 +207,11 @@ def devid_times(deviceid_packages):
         app_list=text.split('|')
 #        print (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
 
 #    print(deviceid_packages.shape)
      
-    deviceid_packages['times_len']=deviceid_packages.apply(lambda line:get_times_len(line['device_id'],line['add_list']) ,axis=1)
+    deviceid_packages['times_len']=deviceid_packages.apply(lambda line:get_times_len(line['device_id'],line['app_list']) ,axis=1)
 
     return deviceid_packages.ix[:, ['device_id','times_len']]
     
