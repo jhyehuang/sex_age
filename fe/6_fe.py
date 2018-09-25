@@ -232,9 +232,9 @@ def devid_hour(deviceid_packages,package_label):
         app_list=text.split('|')
 #        print (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    deviceid_packages['t1_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t1(line['device_id'],line['add_list']),axis=1)
-    deviceid_packages['t2_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t2(line['device_id'],line['add_list']),axis=1)
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['t1_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t1(line['device_id'],line['app_list']),axis=1)
+    deviceid_packages['t2_hour_time']=deviceid_packages.apply(lambda line:get_dev_hour_info_t2(line['device_id'],line['app_list']),axis=1)
 
     columns=[]
     def get_values(t1_dict):
@@ -426,9 +426,9 @@ def devid_day(deviceid_packages,package_label):
         app_list=text.split('|')
 #        print (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    deviceid_packages['t1_day_time']=deviceid_packages.apply(lambda line:get_dev_day_info_t1(line['device_id'],line['add_list']),axis=1)
-    deviceid_packages['t2_day_time']=deviceid_packages.apply(lambda line:get_dev_day_info_t2(line['device_id'],line['add_list']),axis=1)
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['t1_day_time']=deviceid_packages.apply(lambda line:get_dev_day_info_t1(line['device_id'],line['app_list']),axis=1)
+    deviceid_packages['t2_day_time']=deviceid_packages.apply(lambda line:get_dev_day_info_t2(line['device_id'],line['app_list']),axis=1)
     
     columns=[]
 #    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))
@@ -636,9 +636,9 @@ def devid_mon(deviceid_packages,package_label):
         app_list=text.split('|')
 #        print (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
-    deviceid_packages['t1_mon_time']=deviceid_packages.apply(lambda line:get_dev_mon_info_t1(line['device_id'],line['add_list']),axis=1)
-    deviceid_packages['t2_mon_time']=deviceid_packages.apply(lambda line:get_dev_mon_info_t2(line['device_id'],line['add_list']),axis=1)
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['t1_mon_time']=deviceid_packages.apply(lambda line:get_dev_mon_info_t1(line['device_id'],line['app_list']),axis=1)
+    deviceid_packages['t2_mon_time']=deviceid_packages.apply(lambda line:get_dev_mon_info_t2(line['device_id'],line['app_list']),axis=1)
     
     columns=[]
 #    logging.debug(FLAGS.t1_feature.replace('\'','').split(','))

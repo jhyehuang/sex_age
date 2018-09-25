@@ -183,7 +183,7 @@ def compute_date():
         if app_list=='':
             app_list=[]
         return app_list
-    deviceid_packages['app_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     result = []
     deviceid_packages=deviceid_packages.fillna('')

@@ -99,7 +99,7 @@ def devid_hour(deviceid_packages):
         app_list=text.split('|')
 #        logging.debug (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     def get_max_our(dev_id,app_id_list):
         ret={}
         global c
@@ -135,7 +135,7 @@ def devid_hour(deviceid_packages):
 
         return hour,max_size_hour,int(time_len)
     logging.debug(deviceid_packages.shape)
-    deviceid_packages['close_hour']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
+    deviceid_packages['close_hour']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['app_list']) ,axis=1)
 
     logging.debug('============================hour  end==========================')
     logging.debug(deviceid_packages.head(2))
@@ -177,7 +177,7 @@ def devid_day(deviceid_packages):
         app_list=text.split('|')
 #        logging.debug (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     def get_max_our(dev_id,app_id_list):
         ret={}
         global c
@@ -216,7 +216,7 @@ def devid_day(deviceid_packages):
         
         return day,week_end_p,day_len
     columns=[]
-    deviceid_packages['close_day']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
+    deviceid_packages['close_day']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['app_list']) ,axis=1)
 #    deviceid_packages.to_csv(file_path+'0402_deviceid_train.csv')
     logging.debug('============================day  end==========================')
     deviceid_packages['app_list']=deviceid_packages['close_day'].apply(lambda x:set_app_dict_01(x))
@@ -254,7 +254,7 @@ def devid_mon(deviceid_packages):
         app_list=text.split('|')
 #        logging.debug (app_list)
         return app_list
-    deviceid_packages['add_list']=deviceid_packages['add_id_list'].apply(lambda line:app_list(line)).tolist()
+    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
     def get_max_our(dev_id,app_id_list):
         ret={}
         global c
@@ -287,7 +287,7 @@ def devid_mon(deviceid_packages):
 #        logging.debug(ret)
         return mon,mon_len
     columns=[]
-    deviceid_packages['close_mon']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['add_list']) ,axis=1)
+    deviceid_packages['close_mon']=deviceid_packages.apply(lambda line:get_max_our(line['device_id'],line['app_list']) ,axis=1)
     
 #    deviceid_packages.to_csv(file_path+'0403_deviceid_train.csv')
     print('============================mon  end==========================')
