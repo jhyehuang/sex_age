@@ -83,7 +83,7 @@ def devid_times(deviceid_packages):
         col=col.replace(' ','')
         columns.append(col)
         def c(a,b):
-            print(a,b)
+#            print(a,b)
             ert=(a in b.keys())
             return ert
         _x=[]
@@ -94,7 +94,7 @@ def devid_times(deviceid_packages):
         a=list(map(c,_x['a'],deviceid_packages['times_len']))
         filte1=np.logical_and(a,True)
         def get_values(t1_dict):
-            print(t1_dict)
+#            print(t1_dict)
             return t1_dict[col]
         values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
         logging.debug(values)
