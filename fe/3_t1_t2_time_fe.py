@@ -42,14 +42,14 @@ def deviceid_package_start_close_train(deviceid):
 
 def get_times_len(dev_id):
     ret_dict={}
-#    logging.debug(dev_id)
+    logging.debug(dev_id)
     ret=deviceid_package_start_close_train(dev_id,)
     if ret.shape[0]<1:
         return ret_dict
     gp=ret.groupby(['week','hour_bin','app_t1'])['time_len']
     for (week,hour_bin,app_t1),time_len in gp:
-        logging.debug(time_len)
-        logging.debug(len(time_len))
+#        logging.debug(time_len)
+#        logging.debug(len(time_len))
         ret_dict[week+'_'+hour_bin+'_'+app_t1]=sum(time_len)/len(time_len)
     # 获得时长最长 t1
     
@@ -77,7 +77,7 @@ def devid_times(deviceid_packages):
 
     week_hour_bin_app_t1_columns=pd.read_csv(FLAGS.file_path+'week_hour_bin_app_t1_columns.csv')
     for col in week_hour_bin_app_t1_columns.columns:
-#        logging.debug(col)
+        logging.debug(col)
         def c(a,b):
             ert=(a in b.keys())
             return ert
@@ -93,7 +93,7 @@ def devid_times(deviceid_packages):
     values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
     deviceid_packages.loc[filte1,col]=values
     
-    return deviceid_packages.ix[:, ['device_id',]+week_hour_bin_app_t1_columns.columns]
+    return deviceid_packages.ix[:, list('device_id')+week_hour_bin_app_t1_columns.columns]
     
  
     
