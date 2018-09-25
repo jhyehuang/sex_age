@@ -42,7 +42,7 @@ def deviceid_package_start_close_train(deviceid):
 
 def get_times_len(dev_id):
     ret_dict={}
-    print(dev_id)
+    logging.debug(dev_id)
     ret=deviceid_package_start_close_train(dev_id,)
     if ret.shape[0]<1:
         return ret_dict
@@ -75,7 +75,7 @@ def devid_times(deviceid_packages):
 
     week_hour_bin_app_t1_columns=pd.read_csv(FLAGS.file_path+'week_hour_bin_app_t1_columns.csv')
     for col in week_hour_bin_app_t1_columns.columns:
-    
+        logging.debug(col)
         def c(a,b):
             ert=(a in b.keys())
             return ert
@@ -98,7 +98,7 @@ def devid_times(deviceid_packages):
 def compute_date():
     import multiprocessing
 
-    pool = multiprocessing.Pool(processes=2)
+#    pool = multiprocessing.Pool(processes=2)
     deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
 
 #    result = []
@@ -110,7 +110,7 @@ def compute_date():
     deviceid_packages=deviceid_packages.fillna('0')
 #    deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left') 
     
-    print(deviceid_packages.head(5))
+    logging.debug(deviceid_packages.head(5))
     
     deviceid_packages.to_csv(file_path+'03_deviceid_packages.csv',index= False)
     
