@@ -42,6 +42,7 @@ def deviceid_package_start_close_train(deviceid):
 
 def get_times_len(dev_id):
     ret_dict={}
+    print(dev_id)
     ret=deviceid_package_start_close_train(dev_id,)
     if ret.shape[0]<1:
         return ret_dict
