@@ -48,6 +48,7 @@ def get_times_len(dev_id):
         return ret_dict
     gp=ret.groupby(['week','hour_bin','app_t1'])['time_len']
     for (week,hour_bin,app_t1),time_len in gp:
+        logging.debug(len(time_len))
         ret_dict[week+'_'+hour_bin+'_'+app_t1]=sum(time_len)/len(time_len)
     # 获得时长最长 t1
     
