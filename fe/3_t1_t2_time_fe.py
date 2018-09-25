@@ -88,7 +88,7 @@ def devid_times(deviceid_packages):
         filte1=np.logical_and(a,True)
         def get_values(t1_dict):
             return t1_dict[col]
-    values=deviceid_packages['times_len'].apply(lambda x:get_values(x)) 
+    values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
     deviceid_packages.loc[filte1,col]=values
     
     return deviceid_packages.ix[:, ['device_id']+week_hour_bin_app_t1_columns.columns]
