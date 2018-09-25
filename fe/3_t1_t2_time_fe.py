@@ -92,8 +92,9 @@ def devid_times(deviceid_packages):
             return t1_dict[col]
     values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
     deviceid_packages.loc[filte1,col]=values
-    
-    return deviceid_packages.ix[:, list('device_id')+week_hour_bin_app_t1_columns.columns]
+    columns=week_hour_bin_app_t1_columns.columns()
+    columns.append('device_id')
+    return deviceid_packages.ix[:, columns]
     
  
     
