@@ -48,7 +48,7 @@ def get_times_len(dev_id):
         return ret_dict
     gp=ret.groupby(['week','hour_bin','app_t1'])['time_len']
     for (week,hour_bin,app_t1),time_len in gp:
-        ret_dict[week+'_'+hour_bin+'_'+app_t1]=sum(time_len)
+        ret_dict[week+'_'+hour_bin+'_'+app_t1]=sum(time_len)/len(time_len)
     # 获得时长最长 t1
     
     # t1 时长
@@ -99,7 +99,7 @@ def compute_date():
     import multiprocessing
 
 #    pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
 
 #    result = []
 #    result.append(pool.apply_async(devid_times, (deviceid_packages, )))
