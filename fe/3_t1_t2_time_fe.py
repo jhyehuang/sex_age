@@ -50,6 +50,7 @@ def get_times_len(dev_id):
     for (week,hour_bin,app_t1),time_len in gp:
 #        logging.debug(time_len)
 #        logging.debug(len(time_len))
+        app_t1=app_t1.replace(' ', '')
         ret_dict[week+'_'+hour_bin+'_'+app_t1]=sum(time_len)/len(time_len)
     # 获得时长最长 t1
     
@@ -76,8 +77,11 @@ def devid_times(deviceid_packages):
     deviceid_packages['times_len']=deviceid_packages.apply(lambda line:get_times_len(line['device_id']) ,axis=1)
 
     week_hour_bin_app_t1_columns=pd.read_csv(FLAGS.file_path+'week_hour_bin_app_t1_columns.csv')
+    columns=['device_id',]
     for col in week_hour_bin_app_t1_columns.columns:
 #        logging.debug(col)
+        col=col.replace(' ','')
+        columns.append(col)
         def c(a,b):
             print(a,b)
             ert=(a in b.keys())
@@ -92,11 +96,10 @@ def devid_times(deviceid_packages):
         def get_values(t1_dict):
             print(t1_dict)
             return t1_dict[col]
-    values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
-    logging.debug(values)
-    deviceid_packages.loc[filte1,col]=values
-    columns=week_hour_bin_app_t1_columns.columns.tolist()
-    columns.append('device_id')
+        values=deviceid_packages.loc[filte1,'times_len'].apply(lambda x:get_values(x)) 
+        logging.debug(values)
+        deviceid_packages.loc[filte1,col]=values
+    
     return deviceid_packages.ix[:, columns]
     
  
