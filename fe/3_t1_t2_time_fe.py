@@ -79,6 +79,7 @@ def devid_times(deviceid_packages):
     for col in week_hour_bin_app_t1_columns.columns:
 #        logging.debug(col)
         def c(a,b):
+            print(a,b)
             ert=(a in b.keys())
             return ert
         _x=[]
