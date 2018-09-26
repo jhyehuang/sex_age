@@ -125,7 +125,7 @@ def get_train_data(flag='train'):
     app_len_t2 brand 出现的次数
     
     '''
-#    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
     
     
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
@@ -135,7 +135,7 @@ def get_train_data(flag='train'):
 #    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left')
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
