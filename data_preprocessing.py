@@ -132,7 +132,7 @@ def get_train_data(flag='train'):
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
     deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 #    deviceid_packages_04= pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
-#    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
+    deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
@@ -140,7 +140,7 @@ def get_train_data(flag='train'):
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
 #    deviceid_train=pd.merge(deviceid_train,deviceid_packages_04,on=['device_id'],how='left')
-#    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
+    deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
     
     return deviceid_train
 # flag  in ['all','sex','age','device_id']
