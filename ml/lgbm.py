@@ -320,13 +320,13 @@ def modelfit_cv(lgb_train,cv_type='max_depth',):
 def done(istrain=True):
     
 #    op=['num_trees','max_depth','max_bin','bagging_fraction','lambda']
-#    cv_params['num_trees'] = 315
-    cv_params['num_trees'] = 66
+    cv_params['num_trees'] = 315
+#    cv_params['num_trees'] = 66
 #    cv_params['num_leaves'] = 50
 #    cv_params['max_depth'] = 6
 #    op=['max_bin','bagging_fraction','lambda','x']
 #    op=['num_trees','max_depth','max_bin','bagging_fraction','lambda','x']
-    op=['max_depth']
+    op=['num_trees']
     ### 开始训练
     logging.debug('设置参数')
     if istrain:
