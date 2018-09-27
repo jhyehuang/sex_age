@@ -29,7 +29,7 @@ deviceid_packages=pd.read_csv(FLAGS.file_path+'deviceid_packages.csv',index_col=
 # In[3]:
 
 
-deviceid_package_start_close=pd.read_csv(FLAGS.file_path+'09_01_deviceid_package_start_close.csv')
+deviceid_package_start_close=pd.read_csv(FLAGS.file_path+'shichen_start_clost_times.csv')
 
 
 # In[4]:
