@@ -53,6 +53,13 @@ def time_to_week(timeStamp):
 #    logging.debug(day)
     return str(day)   # 2013
 
+def time_to_today(timeStamp):
+    timeArray =time.strptime(timeStamp,"%Y%m%d")
+#    date = datetime.datetime.fromtimestamp(timeArray)
+#    day=date.weekday()
+#    logging.debug(day)
+    return timeArray   # 2013
+
 def time_to_day(timeStamp):
     # 字符类型的时间
     timeArray = time.localtime(timeStamp)
@@ -205,11 +212,12 @@ def devid_day(deviceid_packages):
 #        ret.fillna(0)
         day=ret['day'].tolist().count('1')
         day_len=len(ret['day'].tolist())
+        ret['start_day']=ret['start'].apply(lambda x:time_to_today(x))
         ret['week_end']=ret['start_day'].apply(lambda x:time_to_week(x))
         week_end=ret['week_end'].tolist()
 #        logging.debug(week_end)
         week_end_p=(week_end.count('5')+week_end.count('6'))/len(week_end)
-        logging.debug(week_end_p)
+#        logging.debug(week_end_p)
 #        filte=ret['close_size'].values==max_hour
 #        ret=ret.ix[filte,'day'].unique().max()
 #        logging.debug(ret)
@@ -303,21 +311,21 @@ def devid_mon(deviceid_packages):
     
 def set_app_dict_01(app_list):
     app_dict={}
-    logging.debug(app_list)
+#    logging.debug(app_list)
     for x,x_value in app_list.items():
         app_dict[x]=int(x_value[0])
     return app_dict
 
 def set_app_dict_02(app_list):
     app_dict={}
-    logging.debug(app_list)
+#    logging.debug(app_list)
     for x,x_value in app_list.items():
         app_dict[x]=int(x_value[1])
     return app_dict
 
 def set_app_dict_03(app_list):
     app_dict={}
-    logging.debug(app_list)
+#    logging.debug(app_list)
     for x,x_value in app_list.items():
         app_dict[x]=int(x_value[2])
     return app_dict
@@ -331,7 +339,7 @@ def app_get_t1(app_list):
     for app_id in app_list.keys():
         
         t2=get_package_label(app_id,'t1')
-        logging.debug(t2)
+#        logging.debug(t2)
         if t2.shape[0]<1:
             continue
         t1_dict[t2['t1'].values[0]]=app_list[app_id]
@@ -346,7 +354,7 @@ def app_get_t2(app_list):
     for app_id in app_list.keys():
         
         t2=get_package_label(app_id,'t2')
-        logging.debug(t2)
+#        logging.debug(t2)
         if t2.shape[0]<1:
             continue
         t1_dict[t2['t2'].values[0]]=app_list[app_id]
