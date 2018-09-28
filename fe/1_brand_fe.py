@@ -62,6 +62,12 @@ def word_to_countvectorizer(word):
     ret=pd.DataFrame(data=cv_fit.toarray(),columns=transformer.get_feature_names())
     return ret
 
+def dict_get_values(x,_dict):
+    if x in _dict:
+        return _dict[x]
+    else:
+        return 0
+
 def brand_type_no_onehot(deviceid_packages):
     deviceid_packages.drop('device_id', axis=1,inplace = True)
     deviceid_packages['trainrow'] = np.arange(deviceid_packages.shape[0])
@@ -160,7 +166,7 @@ def brand_w(deviceid_packages):
             typeno_dict[x]=p1
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
-    deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+    deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:dict_get_values(x,typeno_dict))
 #    deviceid_packages['brand_tfidf_w']=word_to_countvectorizer(deviceid_packages['brand'].tolist())
     wc=word_to_countvectorizer(deviceid_packages['brand'].tolist())
     deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
@@ -203,7 +209,7 @@ def type_no_w(deviceid_packages):
             typeno_dict[x]=p1
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
-    deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x]) 
+    deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:dict_get_values(x,typeno_dict)) 
     wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
     deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
     col=wc.columns.tolist()
@@ -263,7 +269,7 @@ def brand_w2(deviceid_packages):
                 typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
-        deviceid_packages['brand2_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+        deviceid_packages['brand2_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:dict_get_values(x,typeno_dict))
         columns.append('brand2_w_'+str(i))
 
 #    deviceid_packages['brand2_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
@@ -317,7 +323,7 @@ def type_no_w2(deviceid_packages):
 
             else:
                 typeno_dict[x]=(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
-        deviceid_packages['type_no2_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
+        deviceid_packages['type_no2_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:dict_get_values(x,typeno_dict))
         columns.append('type_no2_w_'+str(i))
 
     
@@ -364,7 +370,7 @@ def brand_w3(deviceid_packages):
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
 
-        deviceid_packages['brand3_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+        deviceid_packages['brand3_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:dict_get_values(x,typeno_dict))
         columns.append('brand3_w_'+str(i))
     return  deviceid_packages.ix[:,columns]
 
@@ -408,7 +414,7 @@ def type_no_w3(deviceid_packages):
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
 
-        deviceid_packages['type_no3_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
+        deviceid_packages['type_no3_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:dict_get_values(x,typeno_dict))
         columns.append('type_no3_w_'+str(i))
     return  deviceid_packages.ix[:,columns]
 
