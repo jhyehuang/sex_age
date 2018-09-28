@@ -14,9 +14,13 @@ import traceback
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import lightgbm as lgb 
+from joblib import dump, load, Parallel, delayed
+
 
 # 数据标准化
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler,MinMaxScaler
+from sklearn.decomposition import PCA
+
 
 import logging
 sys.path.append('..')
@@ -366,6 +370,25 @@ def get_all_data_kmeans():
     deviceid_packages=deviceid_packages.fillna(0)
     return deviceid_packages
     
+def data_normalization(train):
+    try:
+        min_max_scaler = load(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
+    except:
+        min_max_scaler = MinMaxScaler() 
+        min_max_scaler.fit(train)
+    train = min_max_scaler.transform(train)  
+    ret=dump(min_max_scaler, FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
+    return train
+    
+def data_pca(train):
+    try:
+        pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
+    except:
+        pca = PCA(n_components=0.8)
+        pca.fit(train)
+    train = pca.transform(train)  
+    ret=dump(pca, FLAGS.tmp_data_path+'PCA_model.joblib_dat')
+    return train
 
 if __name__ == "__main__":
     gdbt_data_get_train()

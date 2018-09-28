@@ -17,6 +17,7 @@ from joblib import dump, load, Parallel, delayed
 import utils
 import gc
 from data_preprocessing import *
+from sklearn.preprocessing import StandardScaler,MinMaxScaler
 
 from model_cv import modelfit_multi_cv
 from feature_select import feature_selectfrommodel
@@ -94,6 +95,16 @@ def done(istrain='train'):
         X_train = train_save
 #        X_train = train_save.ix[:,columns]
         
+        """
+        归一化
+        """
+        X_train=data_normalization(X_train)
+        
+        """
+        PCA
+        """
+        X_train=data_pca(X_train)
+        
         
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
 #        n_estimators = [i for i in range(200,1000,1)]
@@ -122,6 +133,17 @@ def done(istrain='train'):
         X_eval.drop('n_class',axis=1,inplace=True)
         logging.debug(X_eval.shape)
 #        X_eval = X_eval.ix[:,columns]
+        
+        """
+        归一化
+        """
+        X_eval=data_normalization(X_eval)
+        
+        """
+        PCA
+        """
+        X_eval=data_pca(X_eval)
+        
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
@@ -147,7 +169,15 @@ def done(istrain='train'):
         print(X_test.shape)
 #        X_test = X_test.ix[:,columns]
 #        X_test.drop('click',axis=1,inplace=True)
-
+        """
+        归一化
+        """
+        X_test=data_normalization(X_test)
+        
+        """
+        PCA
+        """
+        X_test=data_pca(X_test)
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])
