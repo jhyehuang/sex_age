@@ -388,6 +388,7 @@ def data_pca(train):
         pca = PCA(n_components=0.8)
         pca.fit(train)
     train = pca.transform(train)  
+    logging.debug("pca后维度:"+str(train.shape))
     ret=dump(pca, FLAGS.tmp_data_path+'PCA_model.joblib_dat')
     return train
 
