@@ -454,6 +454,7 @@ def compute_date():
                                  result[7].get(),deviceid_packages.ix[:,['price','sell_date']]],axis=1)
 
     
+    deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
     
     deviceid_packages.to_csv(file_path+'01_deviceid_packages.csv',index= False)
