@@ -103,7 +103,7 @@ def done(istrain='train'):
         """
         PCA
         """
-#        X_train=data_pca(X_train)
+        X_train=data_pca(X_train)
         
         
 #        dtrain = xgb.DMatrix(X_train, label=y_train)
@@ -143,7 +143,7 @@ def done(istrain='train'):
         """
         PCA
         """
-#        X_eval=data_pca(X_eval)
+        X_eval=data_pca(X_eval)
         
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
@@ -178,7 +178,7 @@ def done(istrain='train'):
         """
         PCA
         """
-#        X_test=data_pca(X_test)
+        X_test=data_pca(X_test)
         for oper in op:
             xgb1 = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
             logging.debug(xgb1.get_params()['n_estimators'])

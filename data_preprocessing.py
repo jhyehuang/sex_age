@@ -385,7 +385,7 @@ def data_pca(train):
         
         pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
     except:
-        pca = PCA(n_components=0.8)
+        pca = PCA(n_components=0.7)
         pca.fit(train)
     train = pca.transform(train)  
     logging.debug("pca后维度:"+str(train.shape))
