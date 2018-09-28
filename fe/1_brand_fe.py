@@ -366,7 +366,7 @@ def brand_w3(deviceid_packages):
             if deviceid_train.ix[filte2,'brand'].shape[0]==0:
                 continue
             if x in list(typeno_dict.keys()):
-                typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
+                typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
 
@@ -410,7 +410,7 @@ def type_no_w3(deviceid_packages):
             if deviceid_train.ix[filte2,'type_no'].shape[0]==0:
                 continue
             if x in list(typeno_dict.keys()):
-                typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
+                typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
 
