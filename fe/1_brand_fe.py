@@ -154,7 +154,7 @@ def brand_w(deviceid_packages):
         p1=s1/(s1+s2)
         p2=1-p1
 #        p=p1 * np.log(p2)+p2 * np.log(p1)
-        if x in typeno_dict.keys():
+        if x in list(typeno_dict.keys()):
             typeno_dict[x]=min(typeno_dict[x],p1)
         else:
             typeno_dict[x]=p1
@@ -197,7 +197,7 @@ def type_no_w(deviceid_packages):
         p1=s1/(s1+s2)
         p2=1-p1
 #        p=p1 * np.log(p2)+p2 * np.log(p1)
-        if x in typeno_dict.keys():
+        if x in list(typeno_dict.keys()):
             typeno_dict[x]=min(typeno_dict[x],p1)
         else:
             typeno_dict[x]=p1
@@ -255,7 +255,7 @@ def brand_w2(deviceid_packages):
         for x in clist:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.brand==x)
             filte2=np.logical_and(True,deviceid_train.brand==x)
-            if x in typeno_dict.keys():
+            if x in list(typeno_dict.keys()):
                 typeno_dict[x]=sum(typeno_dict[x],(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]))
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
@@ -298,7 +298,7 @@ def type_no_w2(deviceid_packages):
             filte2=np.logical_and(True,deviceid_train.type_no==x)
             if x=='':
                 continue
-            if x in typeno_dict.keys():
+            if x in list(typeno_dict.keys()):
                 logging.debug(x)
                 logging.debug(typeno_dict)
                 logging.debug(typeno_dict[x])
@@ -345,7 +345,7 @@ def brand_w3(deviceid_packages):
         for x in clist:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.brand==x)
             filte2=np.logical_and(True,deviceid_train.brand==x)
-            if x in typeno_dict.keys():
+            if x in list(typeno_dict.keys()):
                 typeno_dict[x]=sum(typeno_dict[x],(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]))
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
@@ -386,7 +386,7 @@ def type_no_w3(deviceid_packages):
         for x in clist:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.type_no==x)
             filte2=np.logical_and(True,deviceid_train.type_no==x)
-            if x in typeno_dict.keys():
+            if x in list(typeno_dict.keys()):
                 typeno_dict[x]=sum(typeno_dict[x],(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]))
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
