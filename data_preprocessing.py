@@ -379,7 +379,7 @@ def data_normalization(train):
     return train
     
 def data_pca(train):
-    return train
+#    return train
     try:
         
         pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
