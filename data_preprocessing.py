@@ -394,7 +394,7 @@ def data_pca(train):
 
 def remove(file):
     import os
-    if not os.path.exists(file):
+    if  os.path.exists(file):
         os.remove(file)
 if __name__ == "__main__":
     gdbt_data_get_train()
