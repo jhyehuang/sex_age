@@ -121,7 +121,8 @@ def done(istrain='train'):
             ret=dump(xgb1, FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat') 
             logging.debug(ret)
             gc.collect()
-        feature_selectfrommodel(xgb1, X_train,y_train)
+        # 特征选择
+#        feature_selectfrommodel(xgb1, X_train,y_train)
         del train_save
         del X_train
         del y_train

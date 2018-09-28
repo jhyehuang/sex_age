@@ -382,6 +382,7 @@ def data_normalization(train):
     
 def data_pca(train):
     try:
+        
         pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
     except:
         pca = PCA(n_components=0.8)
