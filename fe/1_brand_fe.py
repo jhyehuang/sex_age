@@ -249,7 +249,9 @@ def brand_w2(deviceid_packages):
             else:
                 typeno_dict[li]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
     
-    
+    columns=[]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
     for i in range(0,11):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
@@ -258,13 +260,13 @@ def brand_w2(deviceid_packages):
             if deviceid_train.ix[filte2,'brand'].shape[0]==0:
                 continue
             if x in list(typeno_dict.keys()):
-                typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
+                typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
-    for x in no_train_typeno:
-        typeno_dict[x]=0
-    deviceid_packages['brand2_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
-    columns=['brand2_w']
+        deviceid_packages['brand2_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+        columns.append('brand2_w_'+str(i))
+
+#    deviceid_packages['brand2_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w2(deviceid_packages):
@@ -292,7 +294,9 @@ def type_no_w2(deviceid_packages):
             else:
                 typeno_dict[li]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
     
-    
+    columns=[]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
     for i in range(0,11):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         logging.debug(clist)
@@ -309,14 +313,14 @@ def type_no_w2(deviceid_packages):
 #                logging.debug(typeno_dict[x])
 #                logging.debug(deviceid_train.ix[filte1,'type_no'].shape[0])
 #                logging.debug(deviceid_train.ix[filte2,'type_no'].shape[0])
-                typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
+                typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
 
             else:
                 typeno_dict[x]=(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
-    for x in no_train_typeno:
-        typeno_dict[x]=0
-    deviceid_packages['type_no2_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
-    columns=['type_no2_w']
+        deviceid_packages['type_no2_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
+        columns.append('type_no2_w_'+str(i))
+
+    
     return  deviceid_packages.ix[:,columns]
     
 def brand_w3(deviceid_packages):
@@ -344,7 +348,9 @@ def brand_w3(deviceid_packages):
             else:
                 typeno_dict[li]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
     
-    
+    columns=[]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
     for i in range(0,23):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
@@ -357,10 +363,9 @@ def brand_w3(deviceid_packages):
                 typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'brand'].shape[0]/deviceid_train.ix[filte2,'brand'].shape[0]
-    for x in no_train_typeno:
-        typeno_dict[x]=0
-    deviceid_packages['brand3_w']=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
-    columns=['brand3_w']
+
+        deviceid_packages['brand3_w_'+str(i)]=deviceid_packages['brand'].apply(lambda x:typeno_dict[x])
+        columns.append('brand3_w_'+str(i))
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w3(deviceid_packages):
@@ -388,7 +393,9 @@ def type_no_w3(deviceid_packages):
             else:
                 typeno_dict[li]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
     
-    
+    columns=[]
+    for x in no_train_typeno:
+        typeno_dict[x]=0
     for i in range(0,23):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
@@ -400,10 +407,9 @@ def type_no_w3(deviceid_packages):
                 typeno_dict[x]=typeno_dict[x]*(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
             else:
                 typeno_dict[x]=deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]
-    for x in no_train_typeno:
-        typeno_dict[x]=0
-    deviceid_packages['type_no3_w']=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
-    columns=['type_no3_w']
+
+        deviceid_packages['type_no3_w_'+str(i)]=deviceid_packages['type_no'].apply(lambda x:typeno_dict[x])
+        columns.append('type_no3_w_'+str(i))
     return  deviceid_packages.ix[:,columns]
 
 def compute_date():
