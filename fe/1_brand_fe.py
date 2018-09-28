@@ -298,6 +298,7 @@ def type_no_w2(deviceid_packages):
             filte2=np.logical_and(True,deviceid_train.type_no==x)
             if x=='':
                 continue
+            typeno_dict.pop('nan')
             if x in typeno_dict.keys():
                 logging.debug(x)
                 logging.debug(typeno_dict)
