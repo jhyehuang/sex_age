@@ -296,7 +296,7 @@ def type_no_w2(deviceid_packages):
         for x in clist:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.type_no==x)
             filte2=np.logical_and(True,deviceid_train.type_no==x)
-            if x==None:
+            if x=='':
                 continue
             if x in typeno_dict.keys():
                 logging.debug(x)
