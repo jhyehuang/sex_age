@@ -297,9 +297,9 @@ def type_no_w2(deviceid_packages):
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.type_no==x)
             filte2=np.logical_and(True,deviceid_train.type_no==x)
             if x in typeno_dict:
-                print(typeno_dict[x])
-                print(deviceid_train.ix[filte1,'type_no'].shape[0])
-                print(deviceid_train.ix[filte2,'type_no'].shape[0])
+                logging.debug(typeno_dict[x])
+                logging.debug(deviceid_train.ix[filte1,'type_no'].shape[0])
+                logging.debug(deviceid_train.ix[filte2,'type_no'].shape[0])
                 typeno_dict[x]=np.sum(typeno_dict[x],(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]))
 
             else:
