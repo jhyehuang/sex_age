@@ -211,6 +211,11 @@ def done(istrain='train'):
         
         
 if __name__ == "__main__":
+    if FLAGS.del_maxmin_mod:
+        remove(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
+    if FLAGS.del_pca_mod:
+        remove(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
+    
     done(istrain='train')
     done(istrain='eval')
     done(istrain='test')
