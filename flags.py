@@ -47,6 +47,8 @@ def parse_args(check=True):
     parser.add_argument('--del_pca_mod', type=bool, default=True,
                         help='pca.')
 
+    parser.add_argument('--pca_rate', type=float, default=0.5,
+                        help='pca.')
 
     parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,31,17,19,4',
                         help='d')

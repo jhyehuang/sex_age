@@ -308,7 +308,7 @@ def type_no_w2(deviceid_packages):
     for i in range(0,11):
         tmp_typeno_dict=copy.deepcopy(typeno_dict)
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
-        logging.debug(clist)
+#        logging.debug(clist)
         for x in clist:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.type_no==x)
             filte2=np.logical_and(True,deviceid_train.type_no==x)
