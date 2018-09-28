@@ -305,7 +305,7 @@ def type_no_w2(deviceid_packages):
                 logging.debug(typeno_dict[x])
                 logging.debug(deviceid_train.ix[filte1,'type_no'].shape[0])
                 logging.debug(deviceid_train.ix[filte2,'type_no'].shape[0])
-                typeno_dict[x]=np.sum(typeno_dict[x],(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0]))
+                typeno_dict[x]=typeno_dict[x]+(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
 
             else:
                 typeno_dict[x]=(deviceid_train.ix[filte1,'type_no'].shape[0]/deviceid_train.ix[filte2,'type_no'].shape[0])
