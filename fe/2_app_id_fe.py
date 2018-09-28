@@ -254,6 +254,14 @@ def devid_app_count(deviceid_packages,package_label):
         if x =={}:
             return 0
         return max(x,key=x.get)
+    def b(x):
+        if x =={}:
+            return 0
+        return len(list(b.keys()))
+    deviceid_packages['t1_len']=deviceid_packages['t1_app_len'].apply(b)
+    columns.append('t1_len')
+    deviceid_packages['t2_len']=deviceid_packages['t2_app_len'].apply(b)
+    columns.append('t2_len')
 
     deviceid_packages['app_t1_pref']=deviceid_packages['t1_app_len'].apply(a)
     columns.append('app_t1_pref')
