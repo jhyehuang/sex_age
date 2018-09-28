@@ -225,8 +225,8 @@ def difference_list(type_list):
     return retlist
         
 def brand_w2(deviceid_packages):
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -266,8 +266,8 @@ def brand_w2(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w2(deviceid_packages):
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -298,7 +298,6 @@ def type_no_w2(deviceid_packages):
             filte2=np.logical_and(True,deviceid_train.type_no==x)
             if x=='':
                 continue
-            typeno_dict.pop('nan')
             if x in typeno_dict.keys():
                 logging.debug(x)
                 logging.debug(typeno_dict)
@@ -316,8 +315,8 @@ def type_no_w2(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
     
 def brand_w3(deviceid_packages):
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
@@ -357,8 +356,8 @@ def brand_w3(deviceid_packages):
     return  deviceid_packages.ix[:,columns]
 
 def type_no_w3(deviceid_packages):
-    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
-    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
+#    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
+#    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
     deviceid_train=deviceid_train.fillna(-1)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
