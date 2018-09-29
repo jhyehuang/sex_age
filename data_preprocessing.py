@@ -314,7 +314,7 @@ def lightgbm_data_get_test():
 
 def cnn_read_data():
     # 分别初始化对特征和目标值的标准化器
-#    ss_X = StandardScaler()    
+    ss_X = StandardScaler()    
     
     
     deviceid_train=dev_id_train()
@@ -351,9 +351,10 @@ def cnn_read_data():
         print(error_msg)
     deviceid_train=deviceid_train.fillna(0)
     deviceid_test=deviceid_test.fillna(0)
-        
-    deviceid_train = data_normalization(deviceid_train)
-    deviceid_test = data_normalization(deviceid_test)
+    ss_X.fit(pd.concat([deviceid_train,deviceid_test]))
+    
+    deviceid_train = ss_X.transform(deviceid_train)
+    deviceid_test = ss_X.transform(deviceid_test)
 
 
     
