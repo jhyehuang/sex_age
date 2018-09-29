@@ -104,7 +104,7 @@ def compute_date():
     import multiprocessing
 
 #    pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
 
 #    result = []
 #    result.append(pool.apply_async(devid_times, (deviceid_packages, )))
