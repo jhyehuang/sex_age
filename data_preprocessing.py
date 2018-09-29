@@ -375,7 +375,7 @@ def cnn_read_data():
         else:
             return 0
     def diy_one(col):
-        col=map(diy_two,col,)
+        col=list(map(diy_two,col,))
         return col
 #    deviceid_train = ss_X.transform(deviceid_train)
 #    deviceid_test = ss_X.transform(deviceid_test)
