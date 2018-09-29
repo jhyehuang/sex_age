@@ -365,10 +365,10 @@ def cnn_read_data():
         test_list.append(one.transform(deviceid_test[[col]]))
     deviceid_train=train_list[0]
     for x in train_list[1:]:
-        deviceid_train=np.hstack(tuple(deviceid_train,x))
+        deviceid_train=np.hstack((deviceid_train,x))
     deviceid_test=test_list[0]
     for x in train_list[1:]:
-        deviceid_test=np.hstack(tuple(deviceid_test,x))
+        deviceid_test=np.hstack((deviceid_test,x))
 #    deviceid_train = ss_X.transform(deviceid_train)
 #    deviceid_test = ss_X.transform(deviceid_test)
     
