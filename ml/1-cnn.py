@@ -33,6 +33,9 @@ if FLAGS.del_pca_mod:
 # Import data
 x_train,y_train,x_test = cnn_read_data()
 
+print(x_train.shape)
+print(y_train.shape)
+print(x_test.shape)
 
 # 一个非常非常简陋的模型
 
@@ -77,7 +80,7 @@ print (x,y)
 
 W_conv1 = weight_variable([5, 5, 1, 32])
 b_conv1 = bias_variable([32])
-x_image = tf.reshape(x, [-1,x_train.shape[1],1,1])
+x_image = tf.reshape(x, [-1,84,1,1])
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
 
