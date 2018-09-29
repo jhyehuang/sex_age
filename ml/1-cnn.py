@@ -48,6 +48,8 @@ x = tf.placeholder(tf.float32, [None, 84])
 #b = tf.Variable(tf.zeros([10]))
 y = tf.placeholder(tf.float32, [None, 22])
 
+#with tf.name_scope('reshape'):
+#  x_image = tf.reshape(x, [-1, 28, 28, 1])
 
 # ## 权重初始化
 # 权重初始化时，将标准差从0.1调整为0.71
