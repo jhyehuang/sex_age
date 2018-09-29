@@ -43,7 +43,7 @@ print(x_test.shape)
 
 
 # Create the model
-x = tf.placeholder(tf.float32, [None, x_train.shape[1]])
+x = tf.placeholder(tf.float32, [None, 84])
 #W = tf.Variable(tf.zeros([784, 10]))
 #b = tf.Variable(tf.zeros([10]))
 y = tf.placeholder(tf.float32, [None, 22])
