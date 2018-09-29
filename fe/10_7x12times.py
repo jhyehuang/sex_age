@@ -65,10 +65,10 @@ def get_times_len(dev_id):
 
 def devid_times(deviceid_packages):
 
-    def app_list(text):
-        app_list=text.split('|')
-        return app_list
-    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
+#    def app_list(text):
+#        app_list=text.split('|')
+#        return app_list
+#    deviceid_packages['app_list']=deviceid_packages['app_id_list'].apply(lambda line:app_list(line)).tolist()
      
     deviceid_packages['times_len']=deviceid_packages.apply(lambda line:get_times_len(line['device_id']) ,axis=1)
     
@@ -105,7 +105,7 @@ def compute_date():
     import multiprocessing
 
 #    pool = multiprocessing.Pool(processes=2)
-    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')
+    deviceid_packages=pd.read_csv(file_path+'deviceid_packages.csv')[:50]
 
 #    result = []
 #    result.append(pool.apply_async(devid_times, (deviceid_packages, )))
