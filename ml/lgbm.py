@@ -406,6 +406,10 @@ def done(istrain=True):
         del test_save
         
 if __name__ == "__main__":
+    if FLAGS.del_maxmin_mod:
+        remove(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
+    if FLAGS.del_pca_mod:
+        remove(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
     done()
     done(False)
         
