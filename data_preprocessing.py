@@ -379,8 +379,8 @@ def cnn_read_data():
         return col
 #    deviceid_train = ss_X.transform(deviceid_train)
 #    deviceid_test = ss_X.transform(deviceid_test)
-    deviceid_train=deviceid_train.apply(lambda x:diy_one(x),axis=0)
-    deviceid_test=deviceid_test.apply(lambda x:diy_one(x),axis=0)
+    deviceid_train=deviceid_train.apply(lambda x:diy_one(x),axis=1)
+    deviceid_test=deviceid_test.apply(lambda x:diy_one(x),axis=1)
     
 
     
