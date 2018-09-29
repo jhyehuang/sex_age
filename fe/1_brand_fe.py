@@ -133,7 +133,8 @@ def calcLeaveOneOut(df, vn,gby ):
     columns=[vn_cnt]
     df.ix[df[vn_cnt].values<100,vn_cnt]=100
     df.ix[df[vn_cnt].values>5000,vn_cnt]=5000
-    df[vn_cnt]=int(df[vn_cnt]/100)*100
+    df[vn_cnt]=df[vn_cnt]/100
+    df[vn_cnt]=df[vn_cnt].map(int)*100
     return  df.ix[:,columns]
 
 def brand_w(deviceid_packages):
