@@ -50,6 +50,9 @@ def parse_args(check=True):
     parser.add_argument('--pca_rate', type=float, default=0.7,
                         help='pca.')
 
+    parser.add_argument('--cv_n_job', type=float, default=3,
+                        help='pca.')
+    
     parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,31,17,19,4',
                         help='d')
 
