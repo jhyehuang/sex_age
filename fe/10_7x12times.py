@@ -51,7 +51,9 @@ def get_times_len(dev_id):
     for (week,hour_bin),time_len in gp:
 #        logging.debug(time_len)
 #        logging.debug(len(time_len))
-        ret_dict[week+'_'+hour_bin]=sum(time_len)/len(time_len)
+        key=int(sum(time_len)/len(time_len)/10)*10
+        key=min(100,max(10,key))
+        ret_dict[week+'_'+hour_bin]=key
     # 获得时长最长 t1
     
     # t1 时长
