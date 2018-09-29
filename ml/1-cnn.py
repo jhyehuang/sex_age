@@ -23,9 +23,12 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 import tensorflow as tf
 
-FLAGS = None
 
-
+if FLAGS.del_maxmin_mod:
+    remove(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
+if FLAGS.del_pca_mod:
+    remove(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
+    
 
 # Import data
 x_train,y_train,x_test = cnn_read_data()
