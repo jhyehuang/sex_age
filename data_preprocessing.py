@@ -314,23 +314,23 @@ def lightgbm_data_get_test():
 
 def cnn_read_data():
     # 分别初始化对特征和目标值的标准化器
-    ss_X = StandardScaler()    
+#    ss_X = StandardScaler()    
     
     
     deviceid_train=dev_id_train()
     deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
 #    return
-#    deviceid_packages_01 = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
-    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
+    deviceid_packages = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+#    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
 #    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
-    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
-    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
+#    deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
+#    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
 
 #    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_03,on=['device_id'],how='left') 
-    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_05,on=['device_id'],how='left') 
-    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
+#    deviceid_packages=pd.merge(deviceid_packages_02,deviceid_packages_05,on=['device_id'],how='left') 
+#    deviceid_packages=pd.merge(deviceid_packages,deviceid_packages_06,on=['device_id'],how='left') 
     logging.debug(deviceid_packages.columns)
     logging.debug(deviceid_packages.shape)
     
@@ -341,7 +341,6 @@ def cnn_read_data():
     deviceid_train.drop('n_class', axis=1,inplace = True)
 
     try:        
-        deviceid_train.drop('add_list', axis=1,inplace = True)
         deviceid_train.drop('device_id', axis=1,inplace = True)
         deviceid_train.drop('sex', axis=1,inplace = True)
         deviceid_train.drop('age', axis=1,inplace = True)
@@ -351,9 +350,8 @@ def cnn_read_data():
         error_msg = traceback.format_exc()
         print(error_msg)
         
-    
-    deviceid_train = ss_X.fit_transform(deviceid_train)
-    deviceid_test = ss_X.fit_transform(deviceid_test)
+    deviceid_train = data_normalization(deviceid_train)
+    deviceid_test = data_normalization(deviceid_test)
 
 
     
