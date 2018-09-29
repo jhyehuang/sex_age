@@ -363,8 +363,8 @@ def cnn_read_data():
         one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test])[[col]])
         train_list.append(one.transform(deviceid_train[[col]]))
         test_list.append(one.transform(deviceid_test[[col]]))
-    deviceid_train=np.concatenate(train_list,axis=0)
-    deviceid_test=np.concatenate(test_list,axis=0)
+    deviceid_train=np.hstack(tuple(train_list))
+    deviceid_test=np.hstack(tuple(test_list))
 #    deviceid_train = ss_X.transform(deviceid_train)
 #    deviceid_test = ss_X.transform(deviceid_test)
     
