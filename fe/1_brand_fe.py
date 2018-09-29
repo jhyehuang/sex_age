@@ -423,6 +423,20 @@ def type_no_w3(deviceid_packages):
         columns.append('type_no3_w_'+str(i))
     return  deviceid_packages.ix[:,columns]
 
+def price_bins(price):
+    if price <1:
+        return 0
+    elif price>0 and price <= 500:
+        return 1
+    elif price>500 and price <= 1500:
+        return 2
+    elif price>1500 and price <=2500:
+        return 3
+    elif price>2500 and price <=4000:
+        return 4
+    elif price>4000 :
+        return 5
+
 def compute_date():
     import multiprocessing
 
@@ -449,6 +463,9 @@ def compute_date():
     pool.close()
     pool.join()
         
+    
+    deviceid_packages['price']=deviceid_packages.price.apply(lambda x:price_bins(x))
+    deviceid_packages['sell_date']=deviceid_packages.sell_date.astype('category').values.codes
     deviceid_packages=pd.concat([device_id,result[0].get(),result[1].get(),result[2].get(), \
                                  result[3].get(),result[4].get(),result[5].get(),result[6].get(), \
                                  result[7].get(),deviceid_packages.ix[:,['price','sell_date']]],axis=1)
