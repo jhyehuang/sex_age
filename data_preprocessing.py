@@ -136,14 +136,12 @@ def get_train_data(flag='train'):
     
     deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
     deviceid_packages_05= pd.read_csv(FLAGS.file_path +'05_deviceid_packages.csv',)
-    deviceid_packages_06= pd.read_csv(FLAGS.file_path +'06_deviceid_packages.csv',)
     deviceid_packages_09= pd.read_csv(FLAGS.file_path +'09_deviceid_packages.csv',)
 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_01,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_02,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_03,on=['device_id'],how='left')
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_05,on=['device_id'],how='left')
-    deviceid_train=pd.merge(deviceid_train,deviceid_packages_06,on=['device_id'],how='left') 
     deviceid_train=pd.merge(deviceid_train,deviceid_packages_09,on=['device_id'],how='left')
     deviceid_train=deviceid_train.fillna(0)
     return deviceid_train
@@ -268,7 +266,7 @@ def lightgbm_data_get_train():
     """
     PCA
     """
-    X_train=data_pca(X_train)
+#    X_train=data_pca(X_train)
     
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = 0)
 #    logging.debug(X_train_part.head(1))
@@ -305,7 +303,7 @@ def lightgbm_data_get_test():
     """
     PCA
     """
-    deviceid_test=data_pca(deviceid_test)
+#    deviceid_test=data_pca(deviceid_test)
 
     return deviceid_test
 
