@@ -356,14 +356,20 @@ def cnn_read_data():
         print(error_msg)
     deviceid_train=deviceid_train.fillna(0)
     deviceid_test=deviceid_test.fillna(0)
-    ss_X.fit(pd.concat([deviceid_train,deviceid_test]))
+#    ss_X.fit(pd.concat([deviceid_train,deviceid_test]))
+    train_list=[]
+    test_list=[]
+    for col in deviceid_train.columns():
+        one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test])[col])
+        train_list.append(one.transform(deviceid_train[col]))
+        test_list.append(one.transform(deviceid_test[col]))
+    deviceid_train=np.concatenate(train_list,axis=0)
+    deviceid_test=np.concatenate(test_list,axis=0)
+#    deviceid_train = ss_X.transform(deviceid_train)
+#    deviceid_test = ss_X.transform(deviceid_test)
     
-    deviceid_train = ss_X.transform(deviceid_train)
-    deviceid_test = ss_X.transform(deviceid_test)
+    
 
-    one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test]))
-    deviceid_train=one.transform(deviceid_train)
-    deviceid_test=one.transform(deviceid_test)
     
     logging.debug(deviceid_train.shape)
     logging.debug(y_train.shape)
