@@ -71,7 +71,7 @@ def bias_variable(shape):
 def conv2d(x, W):
     return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 def max_pool_2x2(x):
-    return tf.nn.max_pool(x, ksize=[1, 2, 1, 1],strides=[1, 2, 1, 1], padding='SAME')
+    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],strides=[1, 2, 2, 1], padding='SAME')
 
 
 print (x,y)
@@ -80,7 +80,7 @@ print (x,y)
 
 W_conv1 = weight_variable([5, 5, 1, 32])
 b_conv1 = bias_variable([32])
-x_image = tf.reshape(x, [-1,84,1,1])
+x_image = tf.reshape(x, [-1,12,7,1])
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
 
