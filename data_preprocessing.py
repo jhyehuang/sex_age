@@ -15,6 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import lightgbm as lgb 
 from joblib import dump, load, Parallel, delayed
+from sklearn.preprocessing import OneHotEncoder
 
 
 # 数据标准化
@@ -337,7 +338,8 @@ def cnn_read_data():
     
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages,on=['device_id'],how='left') 
-    y_train=deviceid_train['n_class']
+#    y_train=deviceid_train['n_class']
+    y_train=OneHotEncoder(sparse = False).fit_transform(deviceid_train[['n_class']])
     deviceid_train.drop('n_class', axis=1,inplace = True)
 
     try:        
@@ -356,7 +358,7 @@ def cnn_read_data():
     deviceid_train = ss_X.transform(deviceid_train)
     deviceid_test = ss_X.transform(deviceid_test)
 
-
+    
     
     logging.debug(deviceid_train.shape)
     logging.debug(y_train.shape)
