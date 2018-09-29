@@ -14,6 +14,9 @@ from __future__ import print_function
 
 import argparse
 import sys
+sys.path.append('..')
+from data_preprocessing import *
+from flags import FLAGS, unparsed
 
 
 from tensorflow.examples.tutorials.mnist import input_data
