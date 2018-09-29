@@ -271,8 +271,8 @@ def lightgbm_data_get_train():
     X_train=data_pca(X_train)
     
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = 0)
-    logging.debug(X_train_part.head(1))
-    logging.debug(y_train_part.head(1))
+#    logging.debug(X_train_part.head(1))
+#    logging.debug(y_train_part.head(1))
     ### 数据转换
     lgb_train = lgb.Dataset(X_train_part, y_train_part, free_raw_data=False)
     lgb_eval = lgb.Dataset(X_val, y_val, reference=lgb_train,free_raw_data=False)
