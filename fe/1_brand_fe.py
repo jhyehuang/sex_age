@@ -342,7 +342,7 @@ def brand_w3(deviceid_packages):
     all_typeno=deviceid_packages.brand.tolist()
     train_typeno=deviceid_train.brand.tolist()
     no_train_typeno=list(set(all_typeno).difference(set(train_typeno)))
-    for i in range(0,23):
+    for i in range(0,22):
         type_list1=deviceid_train.ix[deviceid_train['n_class'].values==i,'brand'].tolist()
         type_list.append(type_list1)
     
@@ -360,7 +360,7 @@ def brand_w3(deviceid_packages):
     columns=[]
     for x in no_train_typeno:
         typeno_dict[x]=0
-    for i in range(0,23):
+    for i in range(0,22):
         tmp_typeno_dict=copy.deepcopy(typeno_dict)
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
@@ -388,7 +388,7 @@ def type_no_w3(deviceid_packages):
     all_typeno=deviceid_packages.type_no.tolist()
     train_typeno=deviceid_train.type_no.tolist()
     no_train_typeno=list(set(all_typeno).difference(set(train_typeno)))
-    for i in range(0,23):
+    for i in range(0,22):
         type_list1=deviceid_train.ix[deviceid_train['n_class'].values==i,'type_no'].tolist()
         type_list.append(type_list1)
     
@@ -406,7 +406,7 @@ def type_no_w3(deviceid_packages):
     columns=[]
     for x in no_train_typeno:
         typeno_dict[x]=0
-    for i in range(0,23):
+    for i in range(0,22):
         tmp_typeno_dict=copy.deepcopy(typeno_dict)
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
