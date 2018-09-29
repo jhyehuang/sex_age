@@ -108,6 +108,8 @@ def get_train_data(flag='train'):
         deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_train.csv')
     elif flag=='test':
         deviceid_train=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
+    else:
+        deviceid_train=pd.read_csv(FLAGS.file_path+'device_id.csv')
     '''
     brand 编码
     type_no 编码
@@ -369,23 +371,43 @@ def get_all_data_kmeans():
     return deviceid_packages
     
 def data_normalization(train):
+#    return train
     try:
         min_max_scaler = load(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
     except:
-        min_max_scaler = MinMaxScaler() 
-        min_max_scaler.fit(train)
+        train_save = get_train_data('all')
+        
+#        np.random.seed(999)
+#        train_save = train_save.ix[r1 < 0.2, :]
+        print(train_save.shape)
+        y_train = train_save['n_class']
+        train_save.drop('n_class',axis=1,inplace=True)
+        train_save.drop('device_id',axis=1,inplace=True)
+        X_train = train_save
+#        min_max_scaler = MinMaxScaler() 
+        min_max_scaler = StandardScaler() 
+        min_max_scaler.fit(X_train)
     train = min_max_scaler.transform(train)  
     ret=dump(min_max_scaler, FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
     return train
     
 def data_pca(train):
-#    return train
+    return train
     try:
         
         pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
     except:
+        train_save = get_train_data('all')
+        
+#        np.random.seed(999)
+#        train_save = train_save.ix[r1 < 0.2, :]
+        print(train_save.shape)
+        y_train = train_save['n_class']
+        train_save.drop('n_class',axis=1,inplace=True)
+        train_save.drop('device_id',axis=1,inplace=True)
+        X_train = train_save
         pca = PCA(n_components=FLAGS.pca_rate)
-        pca.fit(train)
+        pca.fit(X_train)
     train = pca.transform(train)  
     logging.debug("pca后维度:"+str(train.shape))
     ret=dump(pca, FLAGS.tmp_data_path+'PCA_model.joblib_dat')

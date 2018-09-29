@@ -96,7 +96,7 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
         min_child_weight = range(1,6,1)
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=4,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -199,8 +199,8 @@ def modelfit_binary_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_roun
     except:
         pass
 
-def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_rounds=50,cv_type='n_estimators',random_state=173):
-    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = random_state)
+def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_rounds=50,cv_type='n_estimators',random_state=9):
+    X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.9,random_state = random_state)
     
     X_train=X_train_part
     y_train=y_train_part
@@ -250,7 +250,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
 #        min_child_weight = range(1,6,2)
         param_cv = dict(max_depth=max_depth)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=3,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
@@ -278,7 +278,7 @@ def modelfit_multi_cv(alg, X_train, y_train,cv_folds=kfold, early_stopping_round
         min_child_weight = [ i for i in range(1,6,1)]
         param_cv = dict(min_child_weight=min_child_weight)
 
-        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=8,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
+        cvresult = GridSearchCV(alg,param_grid=param_cv, scoring='neg_log_loss',n_jobs=4,pre_dispatch='n_jobs',cv=cv_folds,verbose=2)
         cvresult.fit(X_train,y_train)
         pd.DataFrame(cvresult.cv_results_).to_csv(FLAGS.tmp_data_path+'my_preds_maxdepth_min_child_weights_1.csv')
     #  
