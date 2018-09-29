@@ -359,7 +359,7 @@ def cnn_read_data():
 #    ss_X.fit(pd.concat([deviceid_train,deviceid_test]))
     train_list=[]
     test_list=[]
-    for col in deviceid_train.columns():
+    for col in deviceid_train.columns:
         one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test])[col])
         train_list.append(one.transform(deviceid_train[col]))
         test_list.append(one.transform(deviceid_test[col]))
