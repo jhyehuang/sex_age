@@ -169,10 +169,10 @@ def brand_w(deviceid_packages):
         typeno_dict[x]=0
     deviceid_packages['brand_w']=deviceid_packages['brand'].apply(lambda x:dict_get_values(x,typeno_dict))
 #    deviceid_packages['brand_tfidf_w']=word_to_countvectorizer(deviceid_packages['brand'].tolist())
-    wc=word_to_countvectorizer(deviceid_packages['brand'].tolist())
-    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
-    col=wc.columns.tolist()
-    columns=['brand_w']+col
+#    wc=word_to_countvectorizer(deviceid_packages['brand'].tolist())
+#    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+#    col=wc.columns.tolist()
+    columns=['brand_w']
     return  deviceid_packages.ix[:,columns]
 
 
@@ -211,10 +211,10 @@ def type_no_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:dict_get_values(x,typeno_dict)) 
-    wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
-    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
-    col=wc.columns.tolist()
-    columns=['type_no_w']+col
+#    wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
+#    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+#    col=wc.columns.tolist()
+    columns=['type_no_w']
     return  deviceid_packages.ix[:,columns]
 
 def difference_list(type_list):
