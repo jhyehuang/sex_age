@@ -95,7 +95,7 @@ def compute_date():
     deviceid_packages['every_app_len']=deviceid_packages['times_len']/deviceid_packages['app_len']
 
     deviceid_packages=deviceid_packages.fillna(0)
-    columns=['device_id','every_app_len','times_len','app_len']
+    columns=['device_id','every_app_len','times_len']
     print(deviceid_packages.head(5))
     
     deviceid_packages.to_csv(file_path+'07_deviceid_packages.csv',columns=columns,index= False)
