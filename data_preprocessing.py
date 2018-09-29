@@ -324,7 +324,7 @@ def cnn_read_data():
     deviceid_test=pd.read_csv(FLAGS.file_path+'deviceid_test.csv')
     
 #    return
-    deviceid_packages = pd.read_csv(FLAGS.file_path +'01_deviceid_packages.csv',)
+    deviceid_packages = pd.read_csv(FLAGS.file_path +'10_deviceid_packages.csv',)
 #    deviceid_packages_02 = pd.read_csv(FLAGS.file_path +'02_deviceid_packages.csv',)
 #    deviceid_packages_03 = pd.read_csv(FLAGS.file_path +'03_deviceid_packages.csv',)
 #    deviceid_packages_04 = pd.read_csv(FLAGS.file_path +'04_deviceid_packages.csv',)
@@ -341,6 +341,7 @@ def cnn_read_data():
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     deviceid_test=pd.merge(deviceid_test,deviceid_packages,on=['device_id'],how='left') 
 #    y_train=deviceid_train['n_class']
+
     y_train=OneHotEncoder(sparse = False).fit_transform(deviceid_train[['n_class']])
     deviceid_train.drop('n_class', axis=1,inplace = True)
 
@@ -360,7 +361,9 @@ def cnn_read_data():
     deviceid_train = ss_X.transform(deviceid_train)
     deviceid_test = ss_X.transform(deviceid_test)
 
-    
+    one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test]))
+    deviceid_train=one.transform(deviceid_train)
+    deviceid_test=one.transform(deviceid_test)
     
     logging.debug(deviceid_train.shape)
     logging.debug(y_train.shape)
