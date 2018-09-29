@@ -349,6 +349,8 @@ def cnn_read_data():
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
+    deviceid_train=deviceid_train.fillna(0)
+    deviceid_test=deviceid_test.fillna(0)
         
     deviceid_train = data_normalization(deviceid_train)
     deviceid_test = data_normalization(deviceid_test)
