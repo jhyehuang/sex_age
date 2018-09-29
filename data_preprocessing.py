@@ -357,21 +357,30 @@ def cnn_read_data():
     deviceid_train=deviceid_train.fillna(0)
     deviceid_test=deviceid_test.fillna(0)
 #    ss_X.fit(pd.concat([deviceid_train,deviceid_test]))
-    train_list=[]
-    test_list=[]
-    for col in deviceid_train.columns:
-        one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test])[[col]])
-        train_list.append(one.transform(deviceid_train[[col]]))
-        test_list.append(one.transform(deviceid_test[[col]]))
-    deviceid_train=train_list[0]
-    for x in train_list[1:]:
-        deviceid_train=np.hstack((deviceid_train,x))
-    deviceid_test=test_list[0]
-    for x in train_list[1:]:
-        deviceid_test=np.hstack((deviceid_test,x))
+#    train_list=[]
+#    test_list=[]
+#    for col in deviceid_train.columns:
+#        one=OneHotEncoder(sparse = False).fit(pd.concat([deviceid_train,deviceid_test])[[col]])
+#        train_list.append(one.transform(deviceid_train[[col]]))
+#        test_list.append(one.transform(deviceid_test[[col]]))
+#    deviceid_train=train_list[0]
+#    for x in train_list[1:]:
+#        deviceid_train=np.hstack((deviceid_train,x))
+#    deviceid_test=test_list[0]
+#    for x in train_list[1:]:
+#        deviceid_test=np.hstack((deviceid_test,x))
+    def diy_two(x):
+        if x>0:
+            return 1
+        else:
+            return 0
+    def diy_one(col):
+        col=map(diy_two,col,)
+        return col
 #    deviceid_train = ss_X.transform(deviceid_train)
 #    deviceid_test = ss_X.transform(deviceid_test)
-    
+    deviceid_train=deviceid_train.apply(lambda x:diy_one(x),axis=0)
+    deviceid_test=deviceid_test.apply(lambda x:diy_one(x),axis=0)
     
 
     
