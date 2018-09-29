@@ -136,7 +136,7 @@ def calcLeaveOneOut(df, vn,gby ):
 def brand_w(deviceid_packages):
     deviceid_train=dev_id_train()
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     typeno_1=deviceid_train.ix[deviceid_train['sex'].values==1,'brand'].tolist()
     typeno_2=deviceid_train.ix[deviceid_train['sex'].values==2,'brand'].tolist()
     all_typeno=deviceid_packages['brand'].tolist()
@@ -179,7 +179,7 @@ def brand_w(deviceid_packages):
 def type_no_w(deviceid_packages):
     deviceid_train=dev_id_train()
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     typeno_1=deviceid_train.ix[deviceid_train['sex'].values==1,'type_no'].tolist()
     typeno_2=deviceid_train.ix[deviceid_train['sex'].values==2,'type_no'].tolist()
     all_typeno=deviceid_packages['type_no'].tolist()
@@ -235,7 +235,7 @@ def brand_w2(deviceid_packages):
 #    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
 #    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     type_list=[]
     all_typeno=deviceid_packages['brand'].tolist()
@@ -281,7 +281,7 @@ def type_no_w2(deviceid_packages):
 #    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
 #    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     type_list=[]
     all_typeno=deviceid_packages['type_no'].tolist()
@@ -336,7 +336,7 @@ def brand_w3(deviceid_packages):
 #    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
 #    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     type_list=[]
     all_typeno=deviceid_packages.brand.tolist()
@@ -382,7 +382,7 @@ def type_no_w3(deviceid_packages):
 #    deviceid_packages['brand']=deviceid_packages['brand'].astype('category').values.codes
 #    deviceid_packages['type_no']=deviceid_packages['type_no'].astype('category').values.codes
     deviceid_train=dev_id_train()
-    deviceid_train=deviceid_train.fillna(-1)
+    deviceid_train=deviceid_train.fillna(0)
     deviceid_train=pd.merge(deviceid_train,deviceid_packages,on=['device_id'],how='left') 
     type_list=[]
     all_typeno=deviceid_packages.type_no.tolist()

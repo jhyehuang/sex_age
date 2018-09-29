@@ -196,7 +196,7 @@ def compute_date():
         
     deviceid_packages=pd.merge(result[0].get(),result[1].get(),on=['device_id'],how='left')
     deviceid_packages=pd.merge(deviceid_packages,result[2].get(),on=['device_id'],how='left') 
-    deviceid_packages=deviceid_packages.fillna(-1)
+    deviceid_packages=deviceid_packages.fillna(0)
     print(deviceid_packages.head(5))
     
     deviceid_packages.to_csv(file_path+'09_deviceid_packages.csv',index= False)
