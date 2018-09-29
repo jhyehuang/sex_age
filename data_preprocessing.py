@@ -260,6 +260,15 @@ def lightgbm_data_get_train():
     deviceid_train.drop('n_class',axis=1,inplace=True)
     X_train = deviceid_train
     
+    """
+    归一化
+    """
+    X_train=data_normalization(X_train)
+    
+    """
+    PCA
+    """
+    X_train=data_pca(X_train)
     
     X_train_part, X_val, y_train_part, y_val = train_test_split(X_train, y_train, train_size = 0.8,random_state = 0)
     logging.debug(X_train_part.head(1))
@@ -288,7 +297,15 @@ def lightgbm_data_get_test():
         error_msg = traceback.format_exc()
         print(error_msg)
     
-
+    """
+    归一化
+    """
+    deviceid_test=data_normalization(deviceid_test)
+    
+    """
+    PCA
+    """
+    deviceid_test=data_pca(deviceid_test)
 
     return deviceid_test
 
@@ -384,15 +401,15 @@ def data_normalization(train):
         train_save.drop('n_class',axis=1,inplace=True)
         train_save.drop('device_id',axis=1,inplace=True)
         X_train = train_save
-#        min_max_scaler = MinMaxScaler() 
-        min_max_scaler = StandardScaler() 
+        min_max_scaler = MinMaxScaler() 
+#        min_max_scaler = StandardScaler() 
         min_max_scaler.fit(X_train)
     train = min_max_scaler.transform(train)  
     ret=dump(min_max_scaler, FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
     return train
     
 def data_pca(train):
-    return train
+#    return train
     try:
         
         pca = load(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
