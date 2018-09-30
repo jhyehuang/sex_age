@@ -215,10 +215,10 @@ def type_no_w(deviceid_packages):
     for x in typeno_1notypeno_2:
         typeno_dict[x]=0
     deviceid_packages['type_no_w']=deviceid_packages['type_no'].apply(lambda x:dict_get_values(x,typeno_dict)) 
-#    wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
-#    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
-#    col=wc.columns.tolist()
-    columns=['type_no_w']
+    wc=word_to_countvectorizer(deviceid_packages['type_no'].tolist())
+    deviceid_packages=pd.concat([deviceid_packages,wc],axis=1)
+    col=wc.columns.tolist()
+    columns=['type_no_w']+col
     return  deviceid_packages.ix[:,columns]
 
 def difference_list(type_list):
@@ -254,7 +254,7 @@ def brand_w2(deviceid_packages):
     for i,x in enumerate(diff_list):
         for li in x:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.brand==li)
-            filte2=np.logical_and(True,deviceid_train.brand==li)
+            filte2=np.logical_and(True,deviceid_train.brand!='unknown')
             if deviceid_train.ix[filte1,'brand'].shape[0]==0:
                 typeno_dict[li]=0
             else:
@@ -268,7 +268,7 @@ def brand_w2(deviceid_packages):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.brand==x)
-            filte2=np.logical_and(True,deviceid_train.brand==x)
+            filte2=np.logical_and(True,deviceid_train.brand!='unknown')
             if deviceid_train.ix[filte2,'brand'].shape[0]==0:
                 continue
             if x in list(tmp_typeno_dict.keys()):
@@ -300,7 +300,7 @@ def type_no_w2(deviceid_packages):
     for i,x in enumerate(diff_list):
         for li in x:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.type_no==li)
-            filte2=np.logical_and(True,deviceid_train.type_no==li)
+            filte2=np.logical_and(True,deviceid_train.type_no!='unknown')
             if deviceid_train.ix[filte1,'type_no'].shape[0]==0:
                 typeno_dict[li]=0
             else:
@@ -315,7 +315,7 @@ def type_no_w2(deviceid_packages):
 #        logging.debug(clist)
         for x in clist:
             filte1=np.logical_and(deviceid_train.age==i,deviceid_train.type_no==x)
-            filte2=np.logical_and(True,deviceid_train.type_no==x)
+            filte2=np.logical_and(True,deviceid_train.type_no!='unknown')
             if deviceid_train.ix[filte2,'type_no'].shape[0]==0:
                 continue
             if x=='':
@@ -355,7 +355,7 @@ def brand_w3(deviceid_packages):
     for i,x in enumerate(diff_list):
         for li in x:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.brand==li)
-            filte2=np.logical_and(True,deviceid_train.brand==li)
+            filte2=np.logical_and(True,deviceid_train.brand!='unknown')
             if deviceid_train.ix[filte1,'brand'].shape[0]==0:
                 typeno_dict[li]=0
             else:
@@ -369,7 +369,7 @@ def brand_w3(deviceid_packages):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.brand==x)
-            filte2=np.logical_and(True,deviceid_train.brand==x)
+            filte2=np.logical_and(True,deviceid_train.brand!='unknown')
             
             if deviceid_train.ix[filte2,'brand'].shape[0]==0:
                 continue
@@ -401,7 +401,7 @@ def type_no_w3(deviceid_packages):
     for i,x in enumerate(diff_list):
         for li in x:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.type_no==li)
-            filte2=np.logical_and(True,deviceid_train.type_no==li)
+            filte2=np.logical_and(True,deviceid_train.type_no!='unknown')
             if deviceid_train.ix[filte1,'type_no'].shape[0]==0:
                 typeno_dict[li]=0
             else:
@@ -415,7 +415,7 @@ def type_no_w3(deviceid_packages):
         clist=list(set(type_list[i]).difference(set(diff_list[i]+no_train_typeno)))
         for x in clist:
             filte1=np.logical_and(deviceid_train.n_class==i,deviceid_train.type_no==x)
-            filte2=np.logical_and(True,deviceid_train.type_no==x)
+            filte2=np.logical_and(True,deviceid_train.type_no!='unknown')
             if deviceid_train.ix[filte2,'type_no'].shape[0]==0:
                 continue
             if x in list(tmp_typeno_dict.keys()):
@@ -450,7 +450,7 @@ def compute_date():
 #    package_label=pd.read_csv(file_path+'package_label.csv')
 
     device_id=deviceid_packages.ix[:,'device_id']
-    deviceid_packages=deviceid_packages.fillna('未知')
+    deviceid_packages=deviceid_packages.fillna('unknown')
     
     result = []
 #    result.append(pool.apply_async(brand_type_no_onehot, (deviceid_packages, )))
