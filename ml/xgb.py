@@ -165,6 +165,61 @@ def done(istrain='train'):
         
 
         del X_eval
+    elif 'train_predict'==istrain:
+        
+        train_save = gdbt_data_get_train('n_class')
+        train_save.drop('n_class',axis=1,inplace=True)
+        xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+        xgb_leaves = xgb_test_basis.predict(train_save, pred_leaf = True)
+        FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
+        new_pd = pd.DataFrame()
+        logging.debug(xgb_leaves.shape)
+        for i in range(FLAGS.n_trees):
+            pred2 = xgb_leaves[:, i]
+            logging.debug(i, np.unique(pred2).size)
+            new_pd['xgb_basis'+str(i)] = pred2
+    
+    #    train_save = gdbt_data_get_train(799)
+    
+        idx_base = 0
+        for vn in ['xgb_basis' + str(i) for i in range(FLAGS.n_trees)]:
+            _cat = np.asarray(new_pd[vn].astype('category').values.codes, dtype='int32')
+            _cat1 = _cat + idx_base
+            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
+            new_pd[vn] = _cat1
+            idx_base += _cat.max() + 1
+        logging.debug(new_pd.shape)
+        logging.debug(new_pd.head(3))
+        new_pd.to_csv(FLAGS.tmp_data_path+'xgb_new_train_features.csv',index=False)
+        del new_pd,dtv
+        gc.collect()
+        
+        
+    elif 'test_predict'==istrain:
+        X_test = gdbt_data_get_test()
+        logging.debug(X_test.shape)
+        xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+        xgb_leaves = xgb_test_basis.predict(X_test, pred_leaf = True)
+        FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
+        new_pd = pd.DataFrame()
+        logging.debug(xgb_leaves.shape)
+        for i in range(FLAGS.n_trees):
+            pred2 = xgb_leaves[:, i]
+            logging.debug(i, np.unique(pred2).size)
+            new_pd['xgb_basis'+str(i)] = pred2
+    
+    #    train_save = gdbt_data_get_train(799)
+    
+        idx_base = 0
+        for vn in ['xgb_basis' + str(i) for i in range(FLAGS.n_trees)]:
+            _cat = np.asarray(new_pd[vn].astype('category').values.codes, dtype='int32')
+            _cat1 = _cat + idx_base
+            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
+            new_pd[vn] = _cat1
+            idx_base += _cat.max() + 1
+        logging.debug(new_pd.shape)
+        logging.debug(new_pd.head(3))
+        new_pd.to_csv(FLAGS.tmp_data_path+'xgb_new_test_features.csv',index=False)
     elif istrain=='test':
         X_test = gdbt_data_get_test()
         print(X_test.shape)
@@ -215,9 +270,20 @@ if __name__ == "__main__":
         remove(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
     if FLAGS.del_pca_mod:
         remove(FLAGS.tmp_data_path+'PCA_model.joblib_dat')
+    try:
+        remove(FLAGS.tmp_data_path+'xgb_new_train_features.csv')
+    except:
+        pass
+    try:
+        remove(FLAGS.tmp_data_path+'xgb_new_test_features.csv')
+    except:
+        pass
     
     done(istrain='train')
     done(istrain='eval')
+    done(istrain='train_predict')
+    done(istrain='test_predict')
+    done(istrain='train')
     done(istrain='test')
         
 

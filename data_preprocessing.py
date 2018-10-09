@@ -174,6 +174,11 @@ def gdbt_data_get_train(flag='all'):
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
+    try:
+        xgb_new_features= pd.read_csv(FLAGS.file_path +'xgb_new_train_features.csv',)
+        deviceid_train=pd.concat([deviceid_train,xgb_new_features],axis=1)
+    except:
+        pass
     
     logging.debug(deviceid_train.columns)
     logging.debug(deviceid_train.shape)
@@ -229,6 +234,11 @@ def gdbt_data_get_test(flag='all'):
     except:
         error_msg = traceback.format_exc()
         print(error_msg)
+    try:
+        xgb_new_features= pd.read_csv(FLAGS.file_path +'xgb_new_test_features.csv',)
+        deviceid_test=pd.concat([deviceid_test,xgb_new_features],axis=1)
+    except:
+        pass
     logging.debug(deviceid_test.columns)
     logging.debug(deviceid_test.shape)
     logging.debug(deviceid_test.head(2))

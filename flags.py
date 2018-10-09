@@ -52,9 +52,12 @@ def parse_args(check=True):
 
     parser.add_argument('--cv_n_job', type=float, default=3,
                         help='pca.')
+
+    parser.add_argument('--cv_n_job', type=float, default=3,
+                        help='pca.')
     
-    parser.add_argument('--t1_feature', type=str, default='32,33,36,43,42,31,17,19,4',
-                        help='d')
+    parser.add_argument('--n_trees', type=int, default=100,
+                        help='100')
 
     parser.add_argument('--t2_feature', type=str, default='132,11,124,251,223,94,158,83,246,187,218,103,159,37,200,243,102',
                         help='d')
