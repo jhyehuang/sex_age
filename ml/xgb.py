@@ -39,7 +39,7 @@ logging.basicConfig(
 
 #gpu_dict={'gpu_id':0,'max_bin':16,'tree_method':['gpu_hist'],'predictor':['gpu_predictor']}
 #gpu_dict={'gpu_id':0,'tree_method':'gpu_hist','updater':'grow_gpu'}
-gpu_dict={'tree_method':'gpu_hist',}
+gpu_dict={'tree_method':'gpu_hist','predictor':'gpu_predictor'}
 
 
 #  gblinear  
