@@ -196,7 +196,7 @@ def done(istrain='train'):
         logging.debug(xgb_leaves.shape)
         for i in range(FLAGS.n_trees):
             pred2 = xgb_leaves[:, i]
-            logging.debug(i, np.unique(pred2).size)
+#            logging.debug(i, np.unique(pred2).size)
             new_pd['xgb_basis'+str(i)] = pred2
     
     #    train_save = gdbt_data_get_train(799)
@@ -229,7 +229,7 @@ def done(istrain='train'):
         logging.debug(xgb_leaves.shape)
         for i in range(FLAGS.n_trees):
             pred2 = xgb_leaves[:, i]
-            logging.debug(i, np.unique(pred2).size)
+#            logging.debug(i, np.unique(pred2).size)
             new_pd['xgb_basis'+str(i)] = pred2
     
     #    train_save = gdbt_data_get_train(799)
