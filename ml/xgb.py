@@ -180,7 +180,7 @@ def done(istrain='train'):
     
         watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
     #    logging.debug (X_train_part.shape, y_train_part.shape)
-        plst = list(gbtree_param.items()) + [('eval_metric', 'logloss')]
+        plst = list(gbtree_param.items()) + [('eval_metric', 'mlogloss')]
         FLAGS.n_trees=gbtree_param['n_estimators']
         xgb_test_basis = xgb.train(plst, dtrain, FLAGS.n_trees, watchlist)
         xgb_test_basis.save_model(FLAGS.tmp_data_path+'xgb_new_features.model')
@@ -189,7 +189,7 @@ def done(istrain='train'):
         xgb_test_basis = xgb.Booster({'nthread':-1}) #init model
         xgb_test_basis.load_model(FLAGS.tmp_data_path+'xgb_new_features.model') # load data
 #        xgb_test_basis = load(FLAGS.tmp_data_path+'xgb_new_features.model')
-        xgb_leaves = xgb_test_basis.predict(train_save, pred_leaf = True)
+        xgb_leaves = xgb_test_basis.predict(X_train, pred_leaf = True)
         
         new_pd = pd.DataFrame()
         logging.debug(xgb_leaves.shape)
