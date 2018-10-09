@@ -205,13 +205,12 @@ def done(istrain='train'):
         for vn in ['xgb_basis' + str(i) for i in range(FLAGS.n_trees)]:
             _cat = np.asarray(new_pd[vn].astype('category').values.codes, dtype='int32')
             _cat1 = _cat + idx_base
-            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
+#            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
             new_pd[vn] = _cat1
             idx_base += _cat.max() + 1
         logging.debug(new_pd.shape)
         logging.debug(new_pd.head(3))
         new_pd.to_csv(FLAGS.tmp_data_path+'xgb_new_train_features.csv',index=False)
-        del new_pd,dtv
         gc.collect()
         
         
@@ -239,7 +238,7 @@ def done(istrain='train'):
         for vn in ['xgb_basis' + str(i) for i in range(FLAGS.n_trees)]:
             _cat = np.asarray(new_pd[vn].astype('category').values.codes, dtype='int32')
             _cat1 = _cat + idx_base
-            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
+#            logging.debug(vn, idx_base, _cat1.min(), _cat1.max(), np.unique(_cat).size)
             new_pd[vn] = _cat1
             idx_base += _cat.max() + 1
         logging.debug(new_pd.shape)
