@@ -121,6 +121,7 @@ def done(istrain='train'):
             ret=dump(xgb1, FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat') 
             logging.debug(ret)
             gc.collect()
+            xgb1.save_model(FLAGS.tmp_data_path+'xgb_new_features.model')
         # 特征选择
 #        feature_selectfrommodel(xgb1, X_train,y_train)
         del train_save
@@ -170,7 +171,9 @@ def done(istrain='train'):
         train_save = gdbt_data_get_train('n_class')
         train_save.drop('n_class',axis=1,inplace=True)
         oper=op[0]
-        xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+        xgb_test_basis = xgb.Booster({'nthread':-1}) #init model
+        xgb_test_basis.load_model(FLAGS.tmp_data_path+'xgb_new_features.model') # load data
+#        xgb_test_basis = load(FLAGS.tmp_data_path+'xgb_new_features.model')
         xgb_leaves = xgb_test_basis.predict(train_save, pred_leaf = True)
         FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
         new_pd = pd.DataFrame()
@@ -200,7 +203,10 @@ def done(istrain='train'):
         X_test = gdbt_data_get_test()
         logging.debug(X_test.shape)
         oper=op[0]
-        xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
+        xgb_test_basis = xgb.Booster({'nthread':-1}) #init model
+        xgb_test_basis.load_model(FLAGS.tmp_data_path+'xgb_new_features.model') # load data
+
+#        xgb_test_basis = load(FLAGS.tmp_data_path+'xgb_new_features.model')
         xgb_leaves = xgb_test_basis.predict(X_test, pred_leaf = True)
         FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
         new_pd = pd.DataFrame()
@@ -281,8 +287,8 @@ if __name__ == "__main__":
     except:
         pass
     
-#    done(istrain='train')
-#    done(istrain='eval')
+    done(istrain='train')
+    done(istrain='eval')
     done(istrain='train_predict')
     done(istrain='test_predict')
     done(istrain='train')
