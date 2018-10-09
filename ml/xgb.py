@@ -178,18 +178,19 @@ def done(istrain='train'):
         dvalid = xgb.DMatrix(X_val, label=y_val)
     #    del y_train  
     
-        watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
-    #    logging.debug (X_train_part.shape, y_train_part.shape)
-        plst = list(gbtree_param.items()) + [('eval_metric', 'mlogloss')]
-        FLAGS.n_trees=gbtree_param['n_estimators']
-        xgb_test_basis = xgb.train(plst, dtrain, FLAGS.n_trees, watchlist)
-        xgb_test_basis.save_model(FLAGS.tmp_data_path+'xgb_new_features.model')
-        del dtrain,dvalid
-        gc.collect()
+#        watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
+#    #    logging.debug (X_train_part.shape, y_train_part.shape)
+#        plst = list(gbtree_param.items()) + [('eval_metric', 'mlogloss')]
+#        FLAGS.n_trees=gbtree_param['n_estimators']
+#        xgb_test_basis = xgb.train(plst, dtrain, FLAGS.n_trees, watchlist)
+#        xgb_test_basis.save_model(FLAGS.tmp_data_path+'xgb_new_features.model')
+#        del dtrain,dvalid
+#        gc.collect()
         xgb_test_basis = xgb.Booster({'nthread':-1}) #init model
         xgb_test_basis.load_model(FLAGS.tmp_data_path+'xgb_new_features.model') # load data
 #        xgb_test_basis = load(FLAGS.tmp_data_path+'xgb_new_features.model')
-        xgb_leaves = xgb_test_basis.predict(X_train, pred_leaf = True)
+        dtrain = xgb.DMatrix(X_train, label=y_train)
+        xgb_leaves = xgb_test_basis.predict(dtrain, pred_leaf = True)
         
         new_pd = pd.DataFrame()
         logging.debug(xgb_leaves.shape)
@@ -221,8 +222,9 @@ def done(istrain='train'):
         xgb_test_basis = xgb.Booster({'nthread':-1}) #init model
         xgb_test_basis.load_model(FLAGS.tmp_data_path+'xgb_new_features.model') # load data
 
+        dtrain = xgb.DMatrix(X_test)
 #        xgb_test_basis = load(FLAGS.tmp_data_path+'xgb_new_features.model')
-        xgb_leaves = xgb_test_basis.predict(X_test, pred_leaf = True)
+        xgb_leaves = xgb_test_basis.predict(dtrain, pred_leaf = True)
         FLAGS.n_trees=gbtree_param['n_estimators']
         new_pd = pd.DataFrame()
         logging.debug(xgb_leaves.shape)
