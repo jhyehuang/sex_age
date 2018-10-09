@@ -169,6 +169,7 @@ def done(istrain='train'):
         
         train_save = gdbt_data_get_train('n_class')
         train_save.drop('n_class',axis=1,inplace=True)
+        oper=op[0]
         xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
         xgb_leaves = xgb_test_basis.predict(train_save, pred_leaf = True)
         FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
@@ -198,6 +199,7 @@ def done(istrain='train'):
     elif 'test_predict'==istrain:
         X_test = gdbt_data_get_test()
         logging.debug(X_test.shape)
+        oper=op[0]
         xgb_test_basis = load(FLAGS.tmp_data_path+'xgboost.cv_'+oper+'.model.joblib_dat')
         xgb_leaves = xgb_test_basis.predict(X_test, pred_leaf = True)
         FLAGS.n_trees=xgb_test_basis.get_params()['n_estimators']
