@@ -426,7 +426,7 @@ def get_all_data_kmeans():
     return deviceid_packages
     
 def data_normalization(train):
-#    return train
+    return train
     try:
         min_max_scaler = load(FLAGS.tmp_data_path+'MinMaxScaler_model.joblib_dat')
     except:
