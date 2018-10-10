@@ -305,8 +305,8 @@ if __name__ == "__main__":
     
 #    done(istrain='train')
 #    done(istrain='eval')
-    done(istrain='train_predict')
-    done(istrain='test_predict')
+#    done(istrain='train_predict')
+#    done(istrain='test_predict')
     done(istrain='train')
     done(istrain='test')
         
